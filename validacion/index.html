@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Ignorar esta página en buscadores por seguridad -->
+  <meta name="robots" content="noindex, nofollow">
+  <title>Validación de Comercios | Club Hogga</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body { background-color: var(--primary-subtle); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: var(--space-4); }
+    .val-container { background: white; width: 100%; max-width: 450px; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-hover); }
+    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: var(--radius-pill); font-weight: bold; font-size: 0.875rem; margin-bottom: var(--space-4); }
+    .status-active { background: #dcfce7; color: #166534; }
+    .status-inactive { background: #fee2e2; color: #991b1b; }
+    .status-notfound { background: #fef3c7; color: #92400e; }
+    #result-box { display: none; margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--border-light); text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="val-container">
+    <div style="text-align: center; margin-bottom: var(--space-6);">
+      <div class="logo" style="justify-content: center;"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</div>
+      <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Panel Privado para Comercios</p>
+    </div>
+
+    <!-- Si no hay token en la url -->
+    <div id="no-token-alert" style="display: none; color: red; text-align: center; margin-bottom: var(--space-4);">
+      Acceso denegado: Token de comercio no proporcionado en la URL (?k=...).
+    </div>
+
+    <!-- Formulario validación -->
+    <form id="validate-form">
+      <label class="font-medium" style="display: block; margin-bottom: var(--space-2);">RUT del Socio</label>
+      <input type="text" id="rut-input" class="btn btn-full" style="border: 1px solid var(--border-strong); text-align: left; background: white; margin-bottom: var(--space-4);" placeholder="Ej: 12345678-9" required>
+      <button type="submit" class="btn btn-primary btn-full" id="validate-btn">Buscar y Validar</button>
+    </form>
+
+    <div id="error-msg" style="color: red; text-align: center; margin-top: var(--space-4); display: none;"></div>
+
+    <!-- Resultados -->
+    <div id="result-box">
+      <div id="status-badge" class="status-badge"></div>
+      <h3 id="member-name" style="margin-bottom: var(--space-4);"></h3>
+
+      <!-- Contenedor uso de beneficio -->
+      <div id="use-benefit-container" style="display: none;">
+        <label class="font-medium" style="display: block; margin-bottom: var(--space-2); text-align: left;">Selecciona el beneficio aplicado:</label>
+        <select id="benefit-select" class="btn btn-full" style="border: 1px solid var(--border-strong); text-align: left; background: var(--bg-main); margin-bottom: var(--space-4);"></select>
+        
+        <button id="register-use-btn" class="btn btn-accent btn-full">Registrar Uso</button>
+        <div id="use-success-msg" style="color: green; font-weight: bold; display: none; margin-top: var(--space-4);">¡Uso registrado correctamente!</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/validation.js"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
--- Enable UUID extension
-create extension if not exists "uuid-ossp";
+-- Enable pgcrypto for UUID generation
+create extension if not exists pgcrypto;
 
 -- 5.1 cities
 create table cities (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null,
   slug text unique not null,
   active boolean default true,
@@ -12,7 +12,7 @@ create table cities (
 
 -- 5.2 categories
 create table categories (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null,
   slug text unique not null,
   active boolean default true,
@@ -21,7 +21,7 @@ create table categories (
 
 -- 5.3 partners
 create table partners (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   business_name text not null,
   city_id uuid references cities(id),
   category_id uuid references categories(id),
@@ -46,7 +46,7 @@ where active = true;
 
 -- 5.4 benefits
 create table benefits (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   partner_id uuid references partners(id) on delete cascade,
   title text not null,
   description text,
@@ -61,7 +61,7 @@ create table benefits (
 
 -- 5.5 plans
 create table plans (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null,
   price_clp integer not null,
   billing_cycle text not null,
@@ -71,7 +71,7 @@ create table plans (
 
 -- 5.6 members
 create table members (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   full_name text not null,
   email text,
   phone text,
@@ -91,7 +91,7 @@ create table members (
 
 -- 5.7 validation_logs
 create table validation_logs (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   partner_id uuid references partners(id),
   member_id uuid references members(id),
   rut_entered text,
@@ -103,13 +103,40 @@ create table validation_logs (
 
 -- 5.8 benefit_uses
 create table benefit_uses (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   member_id uuid references members(id),
   partner_id uuid references partners(id),
   benefit_id uuid references benefits(id),
   notes text,
   created_at timestamptz default now()
 );
+
+-- Trigger for members updated_at
+create or replace function set_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger trg_members_updated_at
+before update on members
+for each row
+execute function set_updated_at();
+
+-- Indexes for foreign keys and performance optimization
+create index idx_partners_city_id on partners(city_id);
+create index idx_partners_category_id on partners(category_id);
+create index idx_benefits_partner_id on benefits(partner_id);
+create index idx_members_rut_normalized on members(rut_normalized);
+create index idx_members_city_id on members(city_id);
+create index idx_members_plan_id on members(plan_id);
+create index idx_validation_logs_partner_id on validation_logs(partner_id);
+create index idx_validation_logs_member_id on validation_logs(member_id);
+create index idx_benefit_uses_member_id on benefit_uses(member_id);
+create index idx_benefit_uses_partner_id on benefit_uses(partner_id);
+create index idx_benefit_uses_benefit_id on benefit_uses(benefit_id);
 
 -- 9.3 Row Level Security
 alter table cities enable row level security;

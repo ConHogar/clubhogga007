@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beneficios Locales | Club Hogga</title>
+  <meta name="description" content="Explora todos los beneficios y promociones activas por categoría y ciudad en el Club Hogga.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      padding: var(--space-4);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      align-items: center;
+    }
+    .filter-select {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      background: white;
+      min-width: 200px;
+    }
+    .benefit-conditions {
+      font-size: 0.875rem;
+      background: var(--primary-subtle);
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-4);
+      color: var(--primary-hover);
+    }
+    #benefits-loading { text-align: center; padding: var(--space-8); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</a>
+      <nav class="nav-links">
+        <a href="/beneficios/" class="text-primary font-bold">Beneficios</a>
+        <a href="/ciudades/">Ciudades</a>
+        <a href="/faq/">Preguntas Frecuentes</a>
+        <a href="/hazte-socio/" class="btn btn-primary" style="padding: 0.5rem 1rem;">Hazte Socio</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Abrir menú">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: var(--space-8);">
+        <h1 style="font-size: 3rem; margin-bottom: var(--space-2);">Directorio de Beneficios</h1>
+        <p class="text-muted text-lg max-w-2xl mx-auto">Descubre todos los lugares donde puedes ahorrar siendo socio del Club Hogga.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <strong style="margin-right: auto;">Filtrar por:</strong>
+        <select class="filter-select" id="city-filter">
+          <option value="all">Todas las ciudades</option>
+          <option value="puerto-varas" selected>Puerto Varas</option>
+        </select>
+        
+        <select class="filter-select" id="category-filter">
+          <option value="all">Todas las categorías</option>
+          <option value="gastronomia">Gastronomía</option>
+          <option value="servicios">Servicios</option>
+          <option value="bienestar">Bienestar general</option>
+        </select>
+      </div>
+
+      <!-- Benefits Grid -->
+      <div id="benefits-loading">Cargando beneficios...</div>
+      
+      <div class="grid-3" id="benefits-grid" style="display: none;">
+        <!-- Card 1 -->
+        <article class="card" data-city="puerto-varas" data-category="gastronomia">
+          <div style="margin-bottom: var(--space-4);">
+            <span class="chip">Gastronomía</span>
+            <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.5rem;">Puerto Varas</span>
+          </div>
+          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">20% Dcto en toda la carta</h3>
+          <p class="text-muted" style="margin-bottom: var(--space-2); flex-grow: 1;"><strong>Cafetería El Faro.</strong> Disfruta de la mejor repostería del sur con vista al lago.</p>
+          <div class="benefit-conditions">Condiciones: Válido de Lunes a Jueves comprando presencial, no sumable a otras promociones.</div>
+          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card" data-city="puerto-varas" data-category="servicios">
+          <div style="margin-bottom: var(--space-4);">
+            <span class="chip">Servicios</span>
+            <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.5rem;">Puerto Varas</span>
+          </div>
+          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Lavado Premium 50% Dcto</h3>
+          <p class="text-muted" style="margin-bottom: var(--space-2); flex-grow: 1;"><strong>Mecánica del Sur.</strong> Lavado interior y exterior con cera tortuga.</p>
+          <div class="benefit-conditions">Condiciones: Válido 1 vez al mes por socio. Agendar con rut activo.</div>
+          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/benefits.js"></script>
+  <script defer src="/js/layout.js"></script>
+</body>
+</html>
