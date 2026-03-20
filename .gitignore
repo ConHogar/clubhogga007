@@ -1,0 +1,12 @@
+# Mac OS
+.DS_Store
+
+# Entornos y variables secretas
+.env
+.env.local
+.env.*
+
+# Dependencias y builds (por si escalamos y usamos NodeJS / Wrangler para Cloudflare)
+node_modules/
+dist/
+.wrangler/
