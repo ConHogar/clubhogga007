@@ -42,31 +42,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Inject Mobile Sticky CTA
-  if (!document.getElementById('mobile-sticky-cta')) {
-    const cta = document.createElement('div');
-    cta.id = 'mobile-sticky-cta';
-    cta.className = 'mobile-sticky-cta';
-    cta.innerHTML = '<a href="/hazte-socio/" style="display:block; text-decoration:none; color:white; font-weight:700; font-size:1.125rem;">✨ Únete Hoy y Ahorra Mensualmente</a>';
-    document.body.appendChild(cta);
-
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .mobile-sticky-cta {
-        display: none;
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        background: var(--accent);
-        padding: 1rem;
-        text-align: center;
-        z-index: 100;
-        box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
-      }
-      @media (max-width: 768px) {
-        .mobile-sticky-cta { display: block; }
-        body { padding-bottom: 64px; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
 });
