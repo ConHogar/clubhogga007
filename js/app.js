@@ -43,7 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ==== SMART SNACKBAR CTA ====
   // Aparece a los 10 segundos. Si el usuario lo cierra, no lo volvemos a molestar.
-  if (!document.getElementById('smart-snackbar') && !sessionStorage.getItem('hogga_snackbar_dismissed')) {
+  const isExcludedPage = window.location.pathname.includes('/hazte-socio') || 
+                         window.location.pathname.includes('/exito') || 
+                         window.location.pathname.includes('/validacion');
+
+  if (!isExcludedPage && !document.getElementById('smart-snackbar') && !sessionStorage.getItem('hogga_snackbar_dismissed')) {
     setTimeout(() => {
       const snackbar = document.createElement('div');
       snackbar.id = 'smart-snackbar';
@@ -54,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div>
             <strong style="display:block; color:var(--text-main); font-size:1.05rem; margin-bottom:0.25rem;">Precio Lanzamiento Activo</strong>
             <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem; line-height:1.4;">Asegura tu membresía por solo <b>$3.490/mes</b> antes de que se acaben los últimos 27 cupos.</p>
-            <a href="/hazte-socio/" class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.9rem; width:100%; display:block;">Asegurar mi cupo</a>
+            <a href="/hazte-socio/" id="snackbar-cta-btn" class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.9rem; width:100%; display:block;">Asegurar mi cupo</a>
           </div>
         </div>
       `;
@@ -102,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         snackbar.classList.remove('show');
         sessionStorage.setItem('hogga_snackbar_dismissed', 'true');
         setTimeout(() => snackbar.remove(), 500); 
+      });
+
+      // Click CTA logic (saves in session so it doesn't pop up again)
+      document.getElementById('snackbar-cta-btn')?.addEventListener('click', () => {
+        sessionStorage.setItem('hogga_snackbar_dismissed', 'true');
       });
 
     }, 10000); // 10 segundos
