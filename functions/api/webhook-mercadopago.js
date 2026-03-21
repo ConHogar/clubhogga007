@@ -57,11 +57,15 @@ export async function onRequestPost({ request, env }) {
         wasPending = true;
       }
 
-      // 4. Actualizar el estado en Supabase a 'active' usando el correo como puente
+      // 4. Actualizar estado y fecha de vencimiento (+31 días)
+      const validUntil = new Date();
+      validUntil.setDate(validUntil.getDate() + 31);
+
       const updatePayload = {
         status: 'active',
         payment_status: resourceStatus,
-        subscription_id: resourceId
+        subscription_id: resourceId,
+        valid_until: validUntil.toISOString()
       };
 
       await fetch(`${env.SUPABASE_URL}/rest/v1/members?email=eq.${payerEmail}`, {
