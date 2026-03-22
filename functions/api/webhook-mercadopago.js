@@ -98,7 +98,7 @@ export async function onRequestPost({ request, env }) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            from: 'Club Hogga <onboarding@resend.dev>', // Cambia esto por tu correo real de @clubhogga cuando valides tu dominio.
+            from: 'Club Hogga <club@hogga.cl>', 
             to: [payerEmail],
             subject: '¡Tu membresía Club Hogga está activa! 🎉',
             html: emailHtml
