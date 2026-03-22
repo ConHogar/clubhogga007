@@ -83,18 +83,18 @@ export async function onRequestPost({ request, env }) {
             </div>
             <!-- Body -->
             <div style="padding: 30px 24px;">
-              <h2 style="color: #ea580c; font-size: 22px; margin-top: 0; margin-bottom: 16px;">¡Bienvenido/a al Club! 🎉</h2>
+              <h2 style="color: #0a2e46; font-size: 22px; margin-top: 0; margin-bottom: 16px;">¡Bienvenido/a al Club! 🎉</h2>
               <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">Hola, tu suscripción ha sido confirmada exitosamente y ya eres oficialmente parte de la red de beneficios.</p>
               
-              <div style="background-color: #fff7ed; padding: 20px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #ea580c;">
-                <h3 style="color: #9a3412; font-size: 16px; margin-top: 0; margin-bottom: 8px;">¿Cómo cobro mis beneficios?</h3>
-                <p style="font-size: 15px; line-height: 1.5; margin: 0; color: #c2410c;">
+              <div style="background-color: #f0fdfa; padding: 20px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #108f8e;">
+                <h3 style="color: #0a2e46; font-size: 16px; margin-top: 0; margin-bottom: 8px;">¿Cómo cobro mis beneficios?</h3>
+                <p style="font-size: 15px; line-height: 1.5; margin: 0; color: #0f766e;">
                   Es súper simple: visita cualquier comercio asociado, menciona que eres socio y <strong>dicta tu RUT</strong> al momento de pedir la cuenta. El local validará tu membresía en segundos para aplicar tu descuento.
                 </p>
               </div>
               
               <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
-                <a href="https://clubhogga.cl/beneficios/" style="background-color: #ea580c; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
+                <a href="https://clubhogga.cl/beneficios/" style="background-color: #108f8e; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
               </div>
             </div>
             <!-- Footer -->
