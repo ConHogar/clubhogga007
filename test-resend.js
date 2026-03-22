@@ -21,17 +21,32 @@ if (MI_CORREO_DE_RESEND.includes("TU_CORREO_AQUI")) {
 }
 
 const emailHtml = `
-  <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1f2937;">
-    <h2 style="color: #ea580c;">¡Bienvenido/a a Club Hogga! 🎉</h2>
-    <p>Hola, tu suscripción ha sido confirmada exitosamente y ya eres oficialmente parte del club.</p>
-    <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-      <strong>¿Cómo cobro mis beneficios?</strong><br>
-      Es súper simple: visita cualquier comercio asociado, menciona que eres del Club Hogga y dicta tu RUT al momento de pagar. El comercio validará tu RUT en su sistema para aplicar el descuento en el acto.
+  <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #1e293b; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+    <!-- Header -->
+    <div style="background-color: #f8fafc; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e2e8f0;">
+      <img src="https://club-hogga.pages.dev/images/logo.webp" alt="Club Hogga Logo" style="height: 48px; margin-bottom: 0;">
     </div>
-    <p>Explora todos los beneficios activos de tu ciudad aquí: <br>
-    <a href="https://clubhogga.cl/beneficios/" style="color: #ea580c; font-weight: bold; text-decoration:none;">Directorio de Beneficios &rarr;</a></p>
-    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-    <p style="font-size: 12px; color: #9ca3af;">Si tienes alguna duda con tu membresía, puedes responder directamente a este correo.</p>
+    <!-- Body -->
+    <div style="padding: 30px 24px;">
+      <h2 style="color: #ea580c; font-size: 22px; margin-top: 0; margin-bottom: 16px;">¡Bienvenido/a al Club! 🎉</h2>
+      <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">Hola, tu suscripción ha sido confirmada exitosamente y ya eres oficialmente parte de la red de beneficios.</p>
+      
+      <div style="background-color: #fff7ed; padding: 20px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #ea580c;">
+        <h3 style="color: #9a3412; font-size: 16px; margin-top: 0; margin-bottom: 8px;">¿Cómo cobro mis beneficios?</h3>
+        <p style="font-size: 15px; line-height: 1.5; margin: 0; color: #c2410c;">
+          Es súper simple: visita cualquier comercio asociado, menciona que eres socio y <strong>dicta tu RUT</strong> al momento de pedir la cuenta. El local validará tu membresía en segundos para aplicar tu descuento.
+        </p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
+        <a href="https://clubhogga.pages.dev/beneficios/" style="background-color: #ea580c; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+      <p style="font-size: 13px; color: #64748b; margin: 0;">Si tienes alguna duda, responde a este correo o escríbenos a club@hogga.cl.</p>
+      <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">© 2026 Club Hogga. Todos los derechos reservados.</p>
+    </div>
   </div>
 `;
 
