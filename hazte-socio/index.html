@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hazte Socio | Club Hogga</title>
   <meta name="description" content="Suscríbete al Club Hogga y accede a descuentos exclusivos en tu ciudad.">
   <link rel="stylesheet" href="/css/styles.css">
-  
+
   <!-- Cloudflare Turnstile -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  
+
   <style>
-    .form-group { margin-bottom: var(--space-4); }
-    .form-label { display: block; font-weight: 500; margin-bottom: var(--space-2); color: var(--text-main); }
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: var(--space-2);
+      color: var(--text-main);
+    }
+
     .form-control {
       width: 100%;
       padding: 0.75rem 1rem;
@@ -22,7 +32,13 @@
       font-size: 1rem;
       transition: var(--transition);
     }
-    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
     .pricing-box {
       background: var(--primary-subtle);
       border: 1px solid var(--primary-light);
@@ -31,18 +47,40 @@
       text-align: center;
       margin-bottom: var(--space-8);
     }
-    .price-value { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
-    .checkbox-group { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: var(--space-4); }
-    .checkbox-group input { margin-top: 0.25rem; }
-    .checkbox-group label { font-size: 0.875rem; color: var(--text-muted); line-height: 1.4; }
+
+    .price-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      margin-bottom: var(--space-4);
+    }
+
+    .checkbox-group input {
+      margin-top: 0.25rem;
+    }
+
+    .checkbox-group label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Header -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</a>
+      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"
+          style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span
+          class="logo-club">Club</span>hogga</a>
       <nav class="nav-links">
         <a href="/beneficios/">Beneficios</a>
         <a href="/ciudades/">Ciudades</a>
@@ -60,21 +98,28 @@
   <main class="section">
     <div class="container">
       <div style="max-width: 600px; margin: 0 auto;">
-        
+
         <div style="text-align: center; margin-bottom: var(--space-8);">
-          <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2);">Ahorra más de lo que pagas, desde el primer uso</h1>
+          <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2);">Ahorra más de lo que pagas, desde el primer uso
+          </h1>
           <p class="text-muted text-lg">Accede a beneficios en tu ciudad y empieza a ahorrar hoy.</p>
         </div>
 
-        <div class="pricing-box" style="position: relative; overflow: hidden; border-color: #f43f5e; border-width: 2px;">
-          <div style="background: #f43f5e; color: white; font-weight: bold; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 0.5rem;">🔥 Solo 27 cupos disponibles a precio fundadores</div>
+        <div class="pricing-box"
+          style="position: relative; overflow: hidden; border-color: #f43f5e; border-width: 2px;">
+          <div
+            style="background: #f43f5e; color: white; font-weight: bold; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 0.5rem;">
+            🔥 Últimos 27 cupos disponibles a precio fundadores</div>
           <h3 style="margin-bottom: var(--space-2);">Membresía Club Hogga</h3>
           <div class="price-value" style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-            <span style="text-decoration: line-through; color: var(--text-muted); font-size: 1.25rem; font-weight: normal;">$5.990</span>
+            <span
+              style="text-decoration: line-through; color: var(--text-muted); font-size: 1.25rem; font-weight: normal;">$5.990</span>
             <div>$3.990 <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/ mes</span></div>
-            <div style="font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-top: 0.25rem;">Lo recuperas en una sola salida</div>
+            <div style="font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-top: 0.25rem;">Lo recuperas
+              en una sola salida</div>
           </div>
-          <ul style="text-align: left; margin-top: var(--space-4); display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-main); list-style: none; padding: 0;">
+          <ul
+            style="text-align: left; margin-top: var(--space-4); display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-main); list-style: none; padding: 0;">
             <li>✓ Usa los beneficios todas las veces que quieras</li>
             <li>✓ Disponible en distintas categorías de tu ciudad</li>
             <li>✓ Cancela cuando quieras</li>
@@ -82,33 +127,40 @@
           </ul>
         </div>
 
-        <div style="background: rgba(244, 63, 94, 0.05); border: 1px dashed var(--primary); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-4); text-align: center;">
-          <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);"><strong>Ejemplo:</strong> 10% en una salida a comer = <strong style="color: var(--primary);">ahorras $4.000 o más</strong></p>
+        <div
+          style="background: rgba(244, 63, 94, 0.05); border: 1px dashed var(--primary); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-4); text-align: center;">
+          <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);"><strong>Ejemplo:</strong> 10% en una salida
+            a comer = <strong style="color: var(--primary);">ahorras $4.000 o más</strong></p>
         </div>
 
         <div style="text-align: center; margin-bottom: var(--space-8);">
-          <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Estamos sumando nuevos beneficios constantemente.<br>Más opciones cada semana.</p>
+          <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Estamos sumando nuevos beneficios
+            constantemente.<br>Más opciones cada semana.</p>
         </div>
 
         <div class="card" style="padding: var(--space-8);">
-          <h2 style="margin-bottom: var(--space-6); font-size: 1.4rem; text-align: center;">Completa tus datos y activa tu membresía</h2>
-          
+          <h2 style="margin-bottom: var(--space-6); font-size: 1.4rem; text-align: center;">Completa tus datos y activa
+            tu membresía</h2>
+
           <form id="signup-form">
             <div class="form-group">
               <label class="form-label" for="full_name">Nombre completo</label>
-              <input type="text" id="full_name" name="full_name" class="form-control" required placeholder="Ej. Juan Pérez">
+              <input type="text" id="full_name" name="full_name" class="form-control" required
+                placeholder="Ej. Juan Pérez">
             </div>
 
             <div class="form-group">
               <label class="form-label" for="rut">RUT</label>
               <input type="text" id="rut" name="rut" class="form-control" required placeholder="Ej. 12.345.678-9">
-              <small class="text-muted" style="display: block; margin-top: 0.25rem;">Lo usaremos en los comercios para validar tu descuento.</small>
+              <small class="text-muted" style="display: block; margin-top: 0.25rem;">Lo usaremos en los comercios para
+                validar tu descuento.</small>
             </div>
 
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
               <div>
                 <label class="form-label" for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" class="form-control" required placeholder="juan@ejemplo.com">
+                <input type="email" id="email" name="email" class="form-control" required
+                  placeholder="juan@ejemplo.com">
               </div>
               <div>
                 <label class="form-label" for="phone">Teléfono (opcional)</label>
@@ -127,7 +179,8 @@
             <div style="margin-top: var(--space-6);">
               <div class="checkbox-group">
                 <input type="checkbox" id="terms" required>
-                <label for="terms">Acepto los <a href="/terminos/">Términos y Condiciones</a> y confirmo que soy mayor de 18 años.</label>
+                <label for="terms">Acepto los <a href="/terminos/">Términos y Condiciones</a> y confirmo que soy mayor
+                  de 18 años.</label>
               </div>
               <div class="checkbox-group">
                 <input type="checkbox" id="privacy" required>
@@ -135,7 +188,8 @@
               </div>
               <div class="checkbox-group">
                 <input type="checkbox" id="marketing">
-                <label for="marketing">Quiero recibir correos con nuevos beneficios, novedades y descuentos exclusivos.</label>
+                <label for="marketing">Quiero recibir correos con nuevos beneficios, novedades y descuentos
+                  exclusivos.</label>
               </div>
             </div>
 
@@ -143,13 +197,16 @@
               <!-- Turnstile Widget Invisible -->
               <div class="cf-turnstile" data-sitekey="0x4AAAAAACvYbNIV6pFi-RtU"></div>
 
-              <button type="submit" class="btn btn-primary btn-full" id="submit-btn" style="font-size: 1.125rem; padding: 1rem;">
+              <button type="submit" class="btn btn-primary btn-full" id="submit-btn"
+                style="font-size: 1.125rem; padding: 1rem;">
                 Quiero empezar a ahorrar
               </button>
             </div>
-            
-            <div id="form-error" style="color: red; margin-top: var(--space-4); display: none; text-align: center;"></div>
-            <div id="form-success" style="color: var(--primary); margin-top: var(--space-4); display: none; text-align: center; font-weight: bold;">
+
+            <div id="form-error" style="color: red; margin-top: var(--space-4); display: none; text-align: center;">
+            </div>
+            <div id="form-success"
+              style="color: var(--primary); margin-top: var(--space-4); display: none; text-align: center; font-weight: bold;">
               ¡Registro exitoso! Redirigiendo al pago...
             </div>
           </form>
@@ -165,4 +222,5 @@
   <script src="/js/signup.js"></script>
   <script defer src="/js/layout.js"></script>
 </body>
+
 </html>
