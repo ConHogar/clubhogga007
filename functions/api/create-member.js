@@ -2,6 +2,26 @@ export async function onRequestPost({ request, env }) {
   try {
     const data = await request.json();
     
+    // 0. Verificar Turnstile Anti-Spam Invisible
+    const turnstileToken = data['cf-turnstile-response'];
+    if (!turnstileToken) {
+      return new Response(JSON.stringify({ error: 'Validación de seguridad requerida. Por favor recarga la página.' }), { status: 400 });
+    }
+
+    const verifyData = new FormData();
+    verifyData.append('secret', env.TURNSTILE_SECRET_KEY);
+    verifyData.append('response', turnstileToken);
+    verifyData.append('remoteip', request.headers.get('CF-Connecting-IP') || '');
+
+    const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: verifyData
+    });
+    const outcome = await turnstileRes.json();
+    if (!outcome.success) {
+      return new Response(JSON.stringify({ error: 'Fallo en la validación anti-spam o token expirado. Intenta de nuevo.' }), { status: 403 });
+    }
+
     if (!data.rut || !data.email) {
       return new Response(JSON.stringify({ error: 'RUT y Correo son obligatorios.' }), { status: 400 });
     }

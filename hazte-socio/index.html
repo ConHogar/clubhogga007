@@ -6,6 +6,10 @@
   <title>Hazte Socio | Club Hogga</title>
   <meta name="description" content="Suscríbete al Club Hogga y accede a descuentos exclusivos en tu ciudad.">
   <link rel="stylesheet" href="/css/styles.css">
+  
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  
   <style>
     .form-group { margin-bottom: var(--space-4); }
     .form-label { display: block; font-weight: 500; margin-bottom: var(--space-2); color: var(--text-main); }
@@ -58,27 +62,36 @@
       <div style="max-width: 600px; margin: 0 auto;">
         
         <div style="text-align: center; margin-bottom: var(--space-8);">
-          <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2);">Únete al Club Hogga</h1>
-          <p class="text-muted text-lg">Accede inmediatamente a la red de beneficios locales y comienza a ahorrar hoy.</p>
+          <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2);">Ahorra más de lo que pagas, desde el primer uso</h1>
+          <p class="text-muted text-lg">Accede a beneficios en tu ciudad y empieza a ahorrar hoy.</p>
         </div>
 
         <div class="pricing-box" style="position: relative; overflow: hidden; border-color: #f43f5e; border-width: 2px;">
-          <div style="background: #f43f5e; color: white; font-weight: bold; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 0.5rem;">🔥 PRECIO LANZAMIENTO (Quedan 27 de 150 cupos)</div>
-          <h3 style="margin-bottom: var(--space-2);">Suscripción Mensual</h3>
+          <div style="background: #f43f5e; color: white; font-weight: bold; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 0.5rem;">🔥 Solo 27 cupos disponibles a precio fundadores</div>
+          <h3 style="margin-bottom: var(--space-2);">Membresía Club Hogga</h3>
           <div class="price-value" style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-            <span style="text-decoration: line-through; color: var(--text-muted); font-size: 1.25rem; font-weight: normal;">$4.990</span>
-            <div>$3.490 <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/ mes</span></div>
+            <span style="text-decoration: line-through; color: var(--text-muted); font-size: 1.25rem; font-weight: normal;">$5.990</span>
+            <div>$3.990 <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/ mes</span></div>
+            <div style="font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-top: 0.25rem;">Lo recuperas en una sola salida</div>
           </div>
-          <ul style="text-align: left; margin-top: var(--space-4); display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-main);">
-            <li>✓ Uso ilimitado de beneficios activos</li>
-            <li>✓ Válido en todas las ciudades del club</li>
+          <ul style="text-align: left; margin-top: var(--space-4); display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-main); list-style: none; padding: 0;">
+            <li>✓ Usa los beneficios todas las veces que quieras</li>
+            <li>✓ Disponible en distintas categorías de tu ciudad</li>
             <li>✓ Cancela cuando quieras</li>
-            <li style="color: #f43f5e; font-weight: bold;">✓ Congelamos la tarifa para siempre</li>
+            <li style="color: #f43f5e; font-weight: bold;">🔒 Tu precio queda congelado para siempre</li>
           </ul>
         </div>
 
+        <div style="background: rgba(244, 63, 94, 0.05); border: 1px dashed var(--primary); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-4); text-align: center;">
+          <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);"><strong>Ejemplo:</strong> 10% en una salida a comer = <strong style="color: var(--primary);">ahorras $4.000 o más</strong></p>
+        </div>
+
+        <div style="text-align: center; margin-bottom: var(--space-8);">
+          <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Estamos sumando nuevos beneficios constantemente.<br>Más opciones cada semana.</p>
+        </div>
+
         <div class="card" style="padding: var(--space-8);">
-          <h2 style="margin-bottom: var(--space-6);">Tus Datos</h2>
+          <h2 style="margin-bottom: var(--space-6); font-size: 1.4rem; text-align: center;">Completa tus datos y activa tu membresía</h2>
           
           <form id="signup-form">
             <div class="form-group">
@@ -127,8 +140,11 @@
             </div>
 
             <div style="margin-top: var(--space-8);">
+              <!-- Turnstile Widget Invisible -->
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAACvYbNIV6pFi-RtU"></div>
+
               <button type="submit" class="btn btn-primary btn-full" id="submit-btn" style="font-size: 1.125rem; padding: 1rem;">
-                Suscribirme y Pagar
+                Quiero empezar a ahorrar
               </button>
             </div>
             

@@ -117,3 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+// ==== CLOUDFLARE WEB ANALYTICS ====
+(function() {
+  if (!document.querySelector('script[src*="cloudflareinsights.com"]')) {
+    const script = document.createElement('script');
+    script.defer = true;
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    script.setAttribute('data-cf-beacon', '{"token": "31af3fd8f9a9411ca2c2734daaa527b5"}');
+    document.body.appendChild(script);
+  }
+})();

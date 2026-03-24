@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
           email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
           city_slug: document.getElementById('city_slug').value,
-          marketing_opt_in: document.getElementById('marketing').checked
+          marketing_opt_in: document.getElementById('marketing').checked,
+          'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || ''
         };
 
         const response = await fetch('/api/create-member', {
