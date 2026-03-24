@@ -43,10 +43,10 @@ export async function onRequestPost({ request, env }) {
     }
 
     // 2. Definir precio contando los socios activos
-    // Para no gastar memoria, tomamos solo hasta 150 registros. Si hay 150, ya llegamos al limite.
-    const countRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id&status=eq.active&limit=150`, { headers: supabaseHeaders });
+    // Para no gastar memoria, tomamos solo hasta 100 registros. Si hay 100, ya llegamos al limite.
+    const countRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id&status=eq.active&limit=100`, { headers: supabaseHeaders });
     const actives = await countRes.json();
-    const isLaunchOffer = (actives && actives.length < 150);
+    const isLaunchOffer = (actives && actives.length < 100);
 
     // Links estáticos de suscripción de MercadoPago cargados desde variables de entorno
     const MP_LAUNCH_URL = env.MP_LINK_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227'; // URL por defecto si falta
