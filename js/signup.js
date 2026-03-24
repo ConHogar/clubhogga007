@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
           full_name: document.getElementById('full_name').value.trim(),
           rut: rut,
           email: document.getElementById('email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
+          phone: normalizePhone(document.getElementById('phone').value.trim()),
           city_slug: document.getElementById('city_slug').value,
           marketing_opt_in: document.getElementById('marketing').checked,
           'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || ''
@@ -82,5 +82,32 @@ document.addEventListener('DOMContentLoaded', () => {
   function showError(msg) {
     errorDiv.innerText = msg;
     errorDiv.style.display = 'block';
+  }
+
+  function normalizePhone(phoneStr) {
+    if (!phoneStr) return ''; // Phone is optional
+    
+    // Remove spaces, dashes, and everything except digits and plus sign
+    let clean = phoneStr.replace(/[^\d+]/g, '');
+    
+    // Remove leading '+' for easier length checking
+    if (clean.startsWith('+')) {
+      clean = clean.substring(1);
+    }
+    
+    // Handle different Chilean number lengths
+    if (clean.length === 8) {
+      // User entered 12345678 -> +56912345678
+      return '+569' + clean;
+    } else if (clean.length === 9 && clean.startsWith('9')) {
+      // User entered 912345678 -> +56912345678
+      return '+56' + clean;
+    } else if (clean.length === 11 && clean.startsWith('56')) {
+      // User entered 56912345678 -> +56912345678
+      return '+' + clean;
+    }
+    
+    // If it's a foreign number or weird format, just make sure it has a plus sign
+    return phoneStr.startsWith('+') ? phoneStr.replace(/[^\d+]/g, '') : '+' + clean;
   }
 });

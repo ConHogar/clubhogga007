@@ -71,6 +71,7 @@
         <select class="filter-select" id="city-filter">
           <option value="all">Todas las ciudades</option>
           <option value="puerto-varas" selected>Puerto Varas</option>
+          <option value="llanquihue">Llanquihue</option>
         </select>
         
         <select class="filter-select" id="category-filter">
@@ -78,6 +79,7 @@
           <option value="gastronomia">Gastronomía</option>
           <option value="servicios">Servicios</option>
           <option value="bienestar">Bienestar general</option>
+          <option value="tiendas">Tiendas</option>
         </select>
       </div>
 
@@ -85,29 +87,106 @@
       <div id="benefits-loading">Cargando beneficios...</div>
       
       <div class="grid-3" id="benefits-grid" style="display: none;">
-        <!-- Card 1 -->
+        <!-- Card 1: Bargual -->
         <article class="card" data-city="puerto-varas" data-category="gastronomia">
-          <div style="margin-bottom: var(--space-4);">
-            <span class="chip">Gastronomía</span>
-            <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.5rem;">Puerto Varas</span>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/bargual-pv-clubbhogga.webp" alt="Bargual Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Gastronomía</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0;">Bargual</h3>
+            </div>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">20% Dcto en toda la carta</h3>
-          <p class="text-muted" style="margin-bottom: var(--space-2); flex-grow: 1;"><strong>Cafetería El Faro.</strong> Disfruta de la mejor repostería del sur con vista al lago.</p>
-          <div class="benefit-conditions">Condiciones: Válido de Lunes a Jueves comprando presencial, no sumable a otras promociones.</div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Pje. Ricke 108, Puerto Varas</div>
           <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
             <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
           </div>
         </article>
 
-        <!-- Card 2 -->
-        <article class="card" data-city="puerto-varas" data-category="servicios">
-          <div style="margin-bottom: var(--space-4);">
-            <span class="chip">Servicios</span>
-            <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.5rem;">Puerto Varas</span>
+        <!-- Card 2: Juguetería Recórcholis! -->
+        <article class="card" data-city="puerto-varas" data-category="tiendas">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/recorcholis-pv-clubbhogga.webp" alt="Juguetería Recórcholis Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Tiendas</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Juguetería Recórcholis!</h3>
+            </div>
           </div>
-          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Lavado Premium 50% Dcto</h3>
-          <p class="text-muted" style="margin-bottom: var(--space-2); flex-grow: 1;"><strong>Mecánica del Sur.</strong> Lavado interior y exterior con cera tortuga.</p>
-          <div class="benefit-conditions">Condiciones: Válido 1 vez al mes por socio. Agendar con rut activo.</div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 San Francisco 666, Local S106</div>
+          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          </div>
+        </article>
+
+        <!-- Card 3: DMOOV Puerto Varas -->
+        <article class="card" data-city="puerto-varas" data-category="bienestar">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-surface); font-weight: bold; font-size: 1.5rem; color: var(--text-muted);">
+              D
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Bienestar</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">DMOOV</h3>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Ricardo Neumann Wittwer 1001</div>
+          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          </div>
+        </article>
+
+        <!-- Card 4: Chester Beer -->
+        <article class="card" data-city="llanquihue" data-category="gastronomia">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/chester-llanquihue-clubbhogga.webp" alt="Chester Beer Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Gastronomía</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Llanquihue</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Chester Beer</h3>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Parcela 11, Linea Nueva</div>
+          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          </div>
+        </article>
+
+        <!-- Card 5: Estacion Rock -->
+        <article class="card" data-city="puerto-varas" data-category="gastronomia">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/estacion-rock-pv-clubbhogga.webp" alt="Estacion Rock Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Gastronomía</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Estacion Rock</h3>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Estación 48, Puerto Varas</div>
           <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
             <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
           </div>
