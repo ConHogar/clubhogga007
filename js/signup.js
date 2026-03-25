@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const originalBtnText = btn.innerText;
-      btn.innerText = 'Redirigiendo al pago seguro...';
+      btn.innerText = 'Procesando...';
       btn.disabled = true;
       errorDiv.style.display = 'none';
 
