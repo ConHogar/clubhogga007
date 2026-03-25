@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuBtn = document.querySelector('.mobile-menu-btn');
   const navLinks = document.querySelector('.nav-links');
 
-  if(menuBtn && navLinks) {
+  if (menuBtn && navLinks) {
     menuBtn.addEventListener('click', () => {
       // In a real scenario we'd use a class toggle, but simple inline style for MVP
-      if(navLinks.style.display === 'flex') {
+      if (navLinks.style.display === 'flex') {
         navLinks.style.display = 'none';
       } else {
         navLinks.style.display = 'flex';
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle resize to fix inline styles
     window.addEventListener('resize', () => {
-      if(window.innerWidth > 768) {
+      if (window.innerWidth > 768) {
         navLinks.style.display = 'flex';
         navLinks.style.flexDirection = 'row';
         navLinks.style.position = 'static';
@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ==== SMART SNACKBAR CTA ====
   // Aparece a los 10 segundos. Si el usuario lo cierra, no lo volvemos a molestar.
-  const isExcludedPage = window.location.pathname.includes('/hazte-socio') || 
-                         window.location.pathname.includes('/exito') || 
-                         window.location.pathname.includes('/validacion');
+  const isExcludedPage = window.location.pathname.includes('/hazte-socio') ||
+    window.location.pathname.includes('/exito') ||
+    window.location.pathname.includes('/validacion');
 
   if (!isExcludedPage && !document.getElementById('smart-snackbar') && !sessionStorage.getItem('hogga_snackbar_dismissed')) {
     setTimeout(() => {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="font-size:2.5rem; flex-shrink:0;">🎁</div>
           <div>
             <strong style="display:block; color:var(--text-main); font-size:1.05rem; margin-bottom:0.25rem;">Precio Lanzamiento Activo</strong>
-            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem; line-height:1.4;">Asegura tu membresía por solo <b>$3.490/mes</b> antes de que se acaben los últimos 27 cupos.</p>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem; line-height:1.4;">Asegura tu membresía por solo <b>$3.990/mes</b> antes de que se acaben los últimos 27 cupos.</p>
             <a href="/hazte-socio/" id="snackbar-cta-btn" class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.9rem; width:100%; display:block;">Asegurar mi cupo</a>
           </div>
         </div>
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       `;
-      
+
       document.head.appendChild(style);
       document.body.appendChild(snackbar);
 
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('close-snackbar').addEventListener('click', () => {
         snackbar.classList.remove('show');
         sessionStorage.setItem('hogga_snackbar_dismissed', 'true');
-        setTimeout(() => snackbar.remove(), 500); 
+        setTimeout(() => snackbar.remove(), 500);
       });
 
       // Click CTA logic (saves in session so it doesn't pop up again)
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==== CLOUDFLARE WEB ANALYTICS ====
-(function() {
+(function () {
   if (!document.querySelector('script[src*="cloudflareinsights.com"]')) {
     const script = document.createElement('script');
     script.defer = true;
