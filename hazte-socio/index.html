@@ -10,67 +10,6 @@
 
   <!-- Cloudflare Turnstile -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-
-  <style>
-    .form-group {
-      margin-bottom: var(--space-4);
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: var(--space-2);
-      color: var(--text-main);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light);
-    }
-
-    .pricing-box {
-      background: var(--primary-subtle);
-      border: 1px solid var(--primary-light);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      text-align: center;
-      margin-bottom: var(--space-8);
-    }
-
-    .price-value {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .checkbox-group {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      margin-bottom: var(--space-4);
-    }
-
-    .checkbox-group input {
-      margin-top: 0.25rem;
-    }
-
-    .checkbox-group label {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-  </style>
 </head>
 
 <body>
@@ -78,14 +17,13 @@
   <!-- Header -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"
-          style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span
+      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"><span
           class="logo-club">Club</span>hogga</a>
       <nav class="nav-links">
         <a href="/beneficios/">Beneficios</a>
         <a href="/ciudades/">Ciudades</a>
         <a href="/faq/">Preguntas Frecuentes</a>
-        <a href="/hazte-socio/" class="btn btn-primary" style="padding: 0.5rem 1rem;">Hazte Socio</a>
+        <a href="/hazte-socio/" class="btn btn-primary btn-sm">Hazte Socio</a>
       </nav>
       <button class="mobile-menu-btn" aria-label="Abrir menú">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24" height="24">
@@ -97,63 +35,58 @@
 
   <main class="section">
     <div class="container">
-      <div style="max-width: 600px; margin: 0 auto;">
+      <div class="max-w-600 mx-auto">
 
-        <div style="text-align: center; margin-bottom: var(--space-8);">
-          <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2);">Empieza a aprovechar beneficios en tu ciudad desde hoy</h1>
+        <div class="text-center mb-8">
+          <h1 class="heading-lg mb-2">Empieza a aprovechar beneficios en tu ciudad desde hoy</h1>
           <p class="text-muted text-lg">Accede a beneficios en tu ciudad y úsalos cuando quieras.</p>
         </div>
 
-        <div class="pricing-box"
-          style="position: relative; overflow: hidden; border-color: #f43f5e; border-width: 2px;">
-          <div
-            style="background: #f43f5e; color: white; font-weight: bold; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 0.5rem;">
+        <div class="pricing-box pricing-box-promoted">
+          <div class="badge-promoted">
             🔥 Precio fundadores por tiempo limitado</div>
-          <h3 style="margin-bottom: var(--space-2);">Membresía Club Hogga</h3>
-          <div class="price-value" style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
-            <span
-              style="text-decoration: line-through; color: var(--text-muted); font-size: 1.25rem; font-weight: normal;">$5.990</span>
-            <div>$3.990 <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/ mes</span></div>
-            <div style="font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-top: 0.25rem;">Muchos socios recuperan su membresía en sus primeras salidas</div>
+          <h3 class="mb-2">Membresía Club Hogga</h3>
+          <div class="price-value price-value-container">
+            <span class="price-old">$5.990</span>
+            <div>$3.990 <span class="price-period">/ mes</span></div>
+            <div class="price-assurance">Muchos socios recuperan su membresía en sus primeras salidas</div>
           </div>
-          <ul
-            style="text-align: left; margin-top: var(--space-4); display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-main); list-style: none; padding: 0;">
+          <ul class="pricing-list">
             <li>✓ Usa los beneficios todas las veces que quieras</li>
             <li>✓ Disponible en distintas categorías de tu ciudad</li>
             <li>✓ Cancela cuando quieras</li>
-            <li style="color: #f43f5e; font-weight: bold;">🔒 Tu precio se mantiene mientras mantengas tu suscripción activa</li>
+            <li class="pricing-list-item-highlight">🔒 Tu precio se mantiene mientras mantengas tu suscripción activa</li>
           </ul>
         </div>
-        <div style="margin-top:1rem; font-size:0.95rem; color:var(--text-muted); text-align: center;">
+        <div class="mt-4 text-center text-muted" style="font-size:0.95rem;">
           Usa tu RUT en comercios asociados y accede a beneficios al instante.
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">
+        <p class="text-sm text-center text-muted mt-2">
           Los beneficios dependen de cada comercio asociado y pueden variar en el tiempo.
         </p>
-        <div style="margin-top: 1.5rem; text-align: center;">
-          <p style="font-weight: 600; margin-bottom: 0.5rem;">Ejemplos reales:</p>
+        <div class="text-center mt-6">
+          <p class="font-semibold mb-2">Ejemplos reales:</p>
           <p class="text-muted">🍔 10% en restaurantes<br>✂️ Descuentos en peluquerías<br>☕ Beneficios en cafeterías</p>
         </div>
 
-        <div
-          style="background: rgba(244, 63, 94, 0.05); border: 1px dashed var(--primary); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-4); text-align: center;">
+        <div class="alert-warning-light">
           <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);"><strong>Ejemplo:</strong> 10% en una salida
             a comer = <strong style="color: var(--primary);">podrías ahorrar $4.000 o más</strong></p>
         </div>
 
-        <div style="text-align: center; margin-bottom: var(--space-8);">
-          <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">Estamos sumando nuevos beneficios
+        <div class="text-center mb-8">
+          <p style="margin: 0; font-size: 0.95rem;" class="text-muted">Estamos sumando nuevos beneficios
             constantemente.<br>Más opciones cada semana.</p>
-          <p style="text-align:center; font-size:0.9rem; color:var(--text-muted); margin-top:1rem; font-weight:500;">
+          <p class="text-center text-muted mt-4 font-medium" style="font-size:0.9rem;">
             Cada semana se suman nuevos socios
           </p>
         </div>
 
         <div class="card" style="padding: var(--space-8);">
-          <h3 style="text-align:center; margin-bottom:1rem;">
+          <h3 class="text-center mb-4">
             Activa tu membresía en menos de 1 minuto
           </h3>
-          <h2 style="margin-bottom: var(--space-6); font-size: 1.4rem; text-align: center;">Completa tus datos y activa tu membresía</h2>
+          <h2 class="text-center mb-6" style="font-size: 1.4rem;">Completa tus datos y activa tu membresía</h2>
 
           <form id="signup-form">
             <div class="form-group">
@@ -165,10 +98,10 @@
             <div class="form-group">
               <label class="form-label" for="rut">RUT</label>
               <input type="text" id="rut" name="rut" class="form-control" required placeholder="Ej. 12.345.678-9">
-              <small class="text-muted" style="display: block; margin-top: 0.25rem;">Se utiliza solo para validar tu membresía en comercios. Nunca compartimos tus datos.</small>
+              <small class="text-muted mt-1" style="display: block;">Se utiliza solo para validar tu membresía en comercios. Nunca compartimos tus datos.</small>
             </div>
 
-            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+            <div class="form-group form-grid-2">
               <div>
                 <label class="form-label" for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" class="form-control" required
@@ -189,7 +122,7 @@
               </select>
             </div>
 
-            <div style="margin-top: var(--space-6);">
+            <div class="mt-6">
               <div class="checkbox-group">
                 <input type="checkbox" id="terms" required>
                 <label for="terms">Acepto los <a href="/terminos/">Términos y Condiciones</a> y confirmo que soy mayor
@@ -206,16 +139,16 @@
               </div>
             </div>
 
-            <div style="margin-top: var(--space-8);">
+            <div class="mt-8">
               <!-- Turnstile Widget Invisible -->
               <div class="cf-turnstile" data-sitekey="0x4AAAAAACvYbNIV6pFi-RtU"></div>
 
-              <p style="text-align:center; font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">
+              <p class="text-center text-muted mb-4" style="font-size:0.9rem;">
                 ✔ Cancelas cuando quieras<br>
                 ✔ Sin contratos<br>
                 ✔ Activo en minutos
               </p>
-              <p style="text-align:center; font-size:0.85rem; color:var(--text-main); margin-bottom:1rem; font-weight:600;">
+              <p class="text-center mb-4 font-semibold" style="font-size:0.85rem;">
                 Activación inmediata tras el pago
               </p>
               <button type="submit" class="btn btn-primary btn-full" id="submit-btn"
@@ -224,10 +157,9 @@
               </button>
             </div>
 
-            <div id="form-error" style="color: red; margin-top: var(--space-4); display: none; text-align: center;">
+            <div id="form-error" class="mt-4 text-center" style="color: red; display: none;">
             </div>
-            <div id="form-success"
-              style="color: var(--primary); margin-top: var(--space-4); display: none; text-align: center; font-weight: bold;">
+            <div id="form-success" class="mt-4 text-center text-primary font-bold" style="display: none;">
               ¡Registro exitoso! Redirigiendo al pago...
             </div>
           </form>
