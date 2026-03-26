@@ -81,6 +81,18 @@ img {
 }
 
 /* Layout Utilities */
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-8 { margin-bottom: var(--space-8); }
+.mb-12 { margin-bottom: var(--space-12); }
+.max-w-600 { max-width: 600px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.border-t-light { border-top: 1px solid var(--border-light); }
+.bg-white { background-color: var(--bg-surface); }
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -101,6 +113,7 @@ img {
 .font-bold { font-weight: 700; }
 .text-lg { font-size: 1.125rem; }
 .text-sm { font-size: 0.875rem; }
+.heading-lg { font-size: 2.5rem; }
 
 /* Buttons */
 .btn {
@@ -163,6 +176,10 @@ img {
   width: 100%;
 }
 
+.btn-sm {
+  padding: 0.5rem 1rem;
+}
+
 /* HEADER / NAV */
 .site-header {
   position: sticky;
@@ -189,6 +206,13 @@ img {
   align-items: center;
   gap: 0.5rem;
   letter-spacing: -0.03em;
+}
+
+.logo img {
+  height: 32px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .logo-club {
@@ -251,6 +275,11 @@ img {
   margin-right: auto;
 }
 
+.hero-note {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
 .hero-ctas {
   display: flex;
   gap: var(--space-4);
@@ -303,6 +332,13 @@ img {
   gap: var(--space-6);
 }
 
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--space-8);
+}
+
 /* CHIPS / BADGES */
 .chip {
   display: inline-block;
@@ -312,6 +348,48 @@ img {
   font-weight: 500;
   background: var(--primary-light);
   color: var(--primary-hover);
+}
+
+.chip-secondary {
+  background: var(--bg-main);
+  color: var(--text-muted);
+  margin-left: 0.25rem;
+}
+
+.card-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+  background: white;
+}
+
+.card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-tags {
+  margin-bottom: var(--space-1);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.card-description {
+  margin-bottom: var(--space-4);
+  flex-grow: 1;
+}
+
+.card-footer {
+  border-top: 1px solid var(--border-light);
+  padding-top: var(--space-4);
 }
 
 /* HOW IT WORKS */

@@ -26,45 +26,92 @@
   </header>
 
   <main>
-    <section class="hero" style="padding: var(--space-16) 0;">
-      <div class="container text-center">
-        <h1 style="margin-bottom: var(--space-2);">Beneficios en Puerto Varas</h1>
-        <p class="text-muted text-lg">Descubre dónde ahorrar y disfrutar en la ciudad de las rosas.</p>
-        <div style="margin-top: var(--space-6);">
-          <a href="/hazte-socio/" class="btn btn-accent">Hazte Socio para usar estos beneficios</a>
+    <section class="hero" style="padding: var(--space-16) 0; background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url('/images/puerto-varas-lago-llanquihue-osorno.webp') center/cover no-repeat; border-bottom: 1px solid var(--border-light);">
+      <div class="container text-center" style="max-width: 800px;">
+        <span class="chip" style="margin-bottom: var(--space-4); background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);">📍 Puerto Varas</span>
+        <h1 style="margin-bottom: var(--space-4); font-size: 3.5rem; line-height: 1.1; color: white;">Los mejores descuentos y panoramas en Puerto Varas</h1>
+        <p class="text-lg" style="margin-bottom: var(--space-8); color: rgba(255,255,255,0.9);">Descubre los comercios locales adheridos a Club Hogga. Desde gastronomía hasta bienestar y servicios técnicos, aprovecha tus beneficios exclusivos en la ciudad de las rosas.</p>
+        <div>
+          <a href="/hazte-socio/" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 1.5rem; background: white; color: var(--text-main);">Unirme a Club Hogga</a>
+          <a href="/beneficios/?city=puerto-varas" class="btn btn-outline" style="font-size: 1.1rem; padding: 0.75rem 1.5rem; margin-left: var(--space-2); color: white; border-color: rgba(255,255,255,0.4);">Ver directorio completo</a>
         </div>
+      </div>
+    </section>
+
+    <section class="section" style="background: white; border-bottom: 1px solid var(--border-light); padding: var(--space-12) 0;">
+      <div class="container" style="max-width: 800px; text-align: left;">
+        <h2 style="font-size: 2rem; margin-bottom: var(--space-4); color: var(--text-main);">Disfruta más de Puerto Varas con Club Hogga</h2>
+        <p class="text-muted" style="margin-bottom: var(--space-4); line-height: 1.6; font-size: 1.1rem;">Conocida como la <strong>"Ciudad de las Rosas"</strong>, Puerto Varas no solo cautiva por sus impresionantes vistas a los volcanes Osorno y Calbuco y la inmensidad del lago Llanquihue, sino también por su vibrante vida gastronómica, panoramas al aire libre y cultura local.</p>
+        <p class="text-muted" style="line-height: 1.6; font-size: 1.1rem;">Ya sea que reserves en un bar de especialidad como Bargual, necesites relajarte en un centro de bienestar premium como Le Park, o quieras entrenar con tecnología de punta en DMOOV, tu membresía activa te garantiza <strong>descuentos reales y exclusivos</strong> que no encontrarás en otro lugar. Apoyamos el comercio en la cuenca del lago mientras te ayudamos a ahorrar en lo que más te gusta hacer.</p>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
+        <div style="margin-bottom: var(--space-8); text-align: center;">
+          <h2 style="font-size: 2rem;">Comercios Destacados en Puerto Varas</h2>
+        </div>
         <div class="grid-3">
-          <!-- Card 1 -->
-          <article class="card">
-            <div style="margin-bottom: var(--space-4);">
-              <span class="chip">Gastronomía</span>
+          <!-- Card 1: Bargual -->
+          <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="gastronomia">
+            <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+              <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+                <img src="/images/asociados/bargual-pv-clubbhogga.webp" alt="Bargual Logo" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <div>
+                <div style="margin-bottom: 0.25rem;">
+                  <span class="chip">Gastronomía</span>
+                </div>
+                <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Bargual</h3>
+              <a href="https://www.instagram.com/bargualpv/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @bargualpv</a>
+              </div>
             </div>
-            <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">20% Dcto en toda la carta</h3>
-            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">Cafetería El Faro. Válido de Lunes a Jueves comprando presencial.</p>
-            <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-              <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
-            </div>
+            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+            <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Pje. Ricke 108, Puerto Varas</div>
           </article>
-          <!-- Card 2 -->
-          <article class="card">
-            <div style="margin-bottom: var(--space-4);">
-              <span class="chip">Servicios</span>
+
+          <!-- Card 2: DMOOV -->
+          <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="bienestar">
+            <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+              <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-surface); font-weight: bold; font-size: 1.5rem; color: var(--text-muted);">
+                D
+              </div>
+              <div>
+                <div style="margin-bottom: 0.25rem;">
+                  <span class="chip">Bienestar</span>
+                </div>
+                <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">DMOOV</h3>
+                <a href="https://www.instagram.com/dmoovpuertovaras/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @dmoovpuertovaras</a>
+              </div>
             </div>
-            <h3 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Lavado Automotriz Premium 50% Dcto</h3>
-            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">Mecánica del Sur. Válido una vez al mes por socio activo.</p>
-            <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-              <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+            <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Ricardo Neumann Wittwer 1001</div>
+          </article>
+
+          <!-- Card 3: Le Park -->
+          <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="bienestar">
+            <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+              <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+                <img src="/images/asociados/lepark-pv-clubhogga.webp" alt="Le Park Logo" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <div>
+                <div style="margin-bottom: 0.25rem;">
+                  <span class="chip">Bienestar</span>
+                </div>
+                <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Le Park</h3>
+                <a href="https://www.instagram.com/lepark.puertovaras/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @lepark.puertovaras</a>
+              </div>
             </div>
+            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+            <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Av. las Torres 18, Puerto Varas</div>
           </article>
         </div>
         
         <div class="text-center" style="margin-top: var(--space-12);">
-          <a href="/beneficios/" class="btn btn-outline">Ver todos los beneficios globales</a>
+          <a href="/beneficios/?city=puerto-varas" class="btn btn-outline" style="font-size: 1.1rem; padding: 0.75rem 2rem;">Ver todos los beneficios en Puerto Varas &rarr;</a>
         </div>
       </div>
     </section>

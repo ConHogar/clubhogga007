@@ -56,15 +56,14 @@
   <!-- Header -->
   <header class="site-header">
     <div class="container nav-container">
-      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"
-          style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span
+      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"><span
           class="logo-club">Club</span>hogga</a>
 
       <nav class="nav-links">
         <a href="/beneficios/">Beneficios</a>
         <a href="/ciudades/">Ciudades</a>
         <a href="/faq/">Preguntas Frecuentes</a>
-        <a href="/hazte-socio/" class="btn btn-primary" style="padding: 0.5rem 1rem;">Hazte Socio</a>
+        <a href="/hazte-socio/" class="btn btn-primary btn-sm">Hazte Socio</a>
       </nav>
 
       <button class="mobile-menu-btn" aria-label="Abrir menú">
@@ -85,10 +84,10 @@
           <a href="/hazte-socio/" class="btn btn-accent">Suscribirme ahora</a>
           <a href="/beneficios/" class="btn btn-outline">Ver beneficios</a>
         </div>
-        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <p class="hero-note mt-4">
           Los beneficios pueden variar según el comercio y su disponibilidad.
         </p>
-        <p style="text-align:center; margin-top: 1.5rem; color: var(--text-muted);">
+        <p class="text-center text-muted mt-6">
           Comercios seleccionados y beneficios en constante actualización.
         </p>
       </div>
@@ -97,23 +96,23 @@
     <!-- How it works -->
     <section class="section bg-white">
       <div class="container">
-        <h2 class="text-center" style="margin-bottom: var(--space-12);">¿Cómo funciona?</h2>
+        <h2 class="text-center mb-12">¿Cómo funciona?</h2>
         <div class="grid-3">
           <div class="step-card">
             <div class="step-number">1</div>
             <h3>Hazte Socio</h3>
-            <p class="text-muted" style="margin-top: var(--space-2);">Regístrate en línea completando tus datos en solo
+            <p class="text-muted mt-2">Regístrate en línea completando tus datos en solo
               1 minuto.</p>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <h3>Encuentra Beneficios</h3>
-            <p class="text-muted" style="margin-top: var(--space-2);">Explora los beneficios disponibles en tu ciudad desde tu teléfono.</p>
+            <p class="text-muted mt-2">Explora los beneficios disponibles en tu ciudad desde tu teléfono.</p>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
             <h3>Muestra tu RUT y accede al beneficio</h3>
-            <p class="text-muted" style="margin-top: var(--space-2);">Indica tu RUT en el comercio asociado. Ellos
+            <p class="text-muted mt-2">Indica tu RUT en el comercio asociado. Ellos
               validan tu suscripción en segundos.</p>
           </div>
         </div>
@@ -123,8 +122,7 @@
     <!-- Featured Benefits (Static Teaser) -->
     <section class="section">
       <div class="container">
-        <div
-          style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-8);">
+        <div class="section-header-row">
           <h2>Beneficios Destacados</h2>
           <a href="/beneficios/" class="text-primary font-medium">Ver todos &rarr;</a>
         </div>
@@ -132,74 +130,68 @@
         <div class="grid-3">
           <!-- Card 1: Bargual -->
           <article class="card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
-              <div
-                style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
-                <img src="/images/asociados/bargual-pv-clubbhogga.webp" alt="Bargual Logo"
-                  style="width: 100%; height: 100%; object-fit: contain;">
+            <div class="card-header">
+              <div class="card-avatar">
+                <img src="/images/asociados/bargual-pv-clubbhogga.webp" alt="Bargual Logo">
               </div>
               <div>
-                <div style="margin-bottom: 0.25rem;">
+                <div class="card-tags">
                   <span class="chip">Gastronomía</span>
-                  <span class="chip"
-                    style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto
+                  <span class="chip chip-secondary">Puerto
                     Varas</span>
                 </div>
-                <h3 style="font-size: 1.25rem; margin: 0;">Bargual</h3>
+                <h3 class="card-title" style="margin-bottom: 0;">Bargual</h3>
+                <a href="https://www.instagram.com/bargualpv/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @bargualpv</a>
               </div>
             </div>
-            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará
+            <p class="text-muted card-description"><strong>Beneficio se anunciará
                 pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
-            <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <div class="card-footer">
               <a href="/hazte-socio/" class="btn btn-primary btn-full">Activar membresía</a>
             </div>
           </article>
 
           <!-- Card 2: Recorcholis -->
           <article class="card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
-              <div
-                style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
-                <img src="/images/asociados/recorcholis-pv-clubbhogga.webp" alt="Juguetería Recórcholis Logo"
-                  style="width: 100%; height: 100%; object-fit: contain;">
+            <div class="card-header">
+              <div class="card-avatar">
+                <img src="/images/asociados/recorcholis-pv-clubbhogga.webp" alt="Juguetería Recórcholis Logo">
               </div>
               <div>
-                <div style="margin-bottom: 0.25rem;">
+                <div class="card-tags">
                   <span class="chip">Tiendas</span>
-                  <span class="chip"
-                    style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto
+                  <span class="chip chip-secondary">Puerto
                     Varas</span>
                 </div>
-                <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Juguetería Recórcholis!</h3>
+                <h3 class="card-title" style="margin-bottom: 0;">Juguetería Recórcholis!</h3>
+                <a href="https://www.instagram.com/recorcholis.cl/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @recorcholis.cl</a>
               </div>
             </div>
-            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará
+            <p class="text-muted card-description"><strong>Beneficio se anunciará
                 pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
-            <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <div class="card-footer">
               <a href="/hazte-socio/" class="btn btn-primary btn-full">Activar membresía</a>
             </div>
           </article>
 
           <!-- Card 3: Chester Beer -->
           <article class="card">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
-              <div
-                style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
-                <img src="/images/asociados/chester-llanquihue-clubbhogga.webp" alt="Chester Beer Logo"
-                  style="width: 100%; height: 100%; object-fit: contain;">
+            <div class="card-header">
+              <div class="card-avatar">
+                <img src="/images/asociados/chester-llanquihue-clubbhogga.webp" alt="Chester Beer Logo">
               </div>
               <div>
-                <div style="margin-bottom: 0.25rem;">
+                <div class="card-tags">
                   <span class="chip">Gastronomía</span>
-                  <span class="chip"
-                    style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Llanquihue</span>
+                  <span class="chip chip-secondary">Llanquihue</span>
                 </div>
-                <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Chester Beer</h3>
+                <h3 class="card-title" style="margin-bottom: 0;">Chester Beer</h3>
+                <a href="https://www.instagram.com/chesterbeer.cerveceria/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @chesterbeer.cerveceria</a>
               </div>
             </div>
-            <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará
+            <p class="text-muted card-description"><strong>Beneficio se anunciará
                 pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
-            <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
+            <div class="card-footer">
               <a href="/hazte-socio/" class="btn btn-primary btn-full">Activar membresía</a>
             </div>
           </article>
@@ -208,10 +200,10 @@
     </section>
 
     <!-- CTAs Bottom -->
-    <section class="section bg-white" style="border-top: 1px solid var(--border-light);">
+    <section class="section bg-white border-t-light">
       <div class="container text-center">
-        <h2 style="font-size: 2.5rem; margin-bottom: var(--space-4);">¿Tienes un comercio local?</h2>
-        <p class="text-muted" style="max-width: 600px; margin: 0 auto var(--space-8);">Intégrate al Club Hogga y atrae nuevos clientes mostrando tu negocio a usuarios activos en tu ciudad.</p>
+        <h2 class="heading-lg mb-4">¿Tienes un comercio local?</h2>
+        <p class="text-muted max-w-600 mx-auto mb-8">Intégrate al Club Hogga y atrae nuevos clientes mostrando tu negocio a usuarios activos en tu ciudad.</p>
         <a href="mailto:hola@hogga.cl" class="btn btn-outline">Postular comercio</a>
       </div>
     </section>

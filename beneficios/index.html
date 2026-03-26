@@ -61,8 +61,8 @@
   <main class="section">
     <div class="container">
       <div style="text-align: center; margin-bottom: var(--space-8);">
-        <h1 style="font-size: 3rem; margin-bottom: var(--space-2);">Directorio de Beneficios</h1>
-        <p class="text-muted text-lg max-w-2xl mx-auto">Descubre todos los lugares donde puedes ahorrar siendo socio del Club Hogga.</p>
+        <h1 style="font-size: 3rem; margin-bottom: var(--space-2);">Beneficios activos para socios Club Hogga</h1>
+        <p class="text-muted text-lg max-w-2xl mx-auto">Estos beneficios no son un listado completo de negocios.<br>Son convenios exclusivos para socios Club Hogga.</p>
       </div>
 
       <!-- Filters -->
@@ -72,6 +72,7 @@
           <option value="all">Todas las ciudades</option>
           <option value="puerto-varas" selected>Puerto Varas</option>
           <option value="llanquihue">Llanquihue</option>
+          <option value="frutillar">Frutillar</option>
         </select>
         
         <select class="filter-select" id="category-filter">
@@ -88,7 +89,8 @@
       
       <div class="grid-3" id="benefits-grid" style="display: none;">
         <!-- Card 1: Bargual -->
-        <article class="card" data-city="puerto-varas" data-category="gastronomia">
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="gastronomia">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
               <img src="/images/asociados/bargual-pv-clubbhogga.webp" alt="Bargual Logo" style="width: 100%; height: 100%; object-fit: contain;">
@@ -99,17 +101,17 @@
                 <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
               </div>
               <h3 style="font-size: 1.25rem; margin: 0;">Bargual</h3>
+              <a href="https://www.instagram.com/bargualpv/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @bargualpv</a>
             </div>
           </div>
-          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
           <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Pje. Ricke 108, Puerto Varas</div>
-          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
-          </div>
+          <!-- CTA removed to reduce button fatigue -->
         </article>
 
         <!-- Card 2: Juguetería Recórcholis! -->
-        <article class="card" data-city="puerto-varas" data-category="tiendas">
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="tiendas">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
               <img src="/images/asociados/recorcholis-pv-clubbhogga.webp" alt="Juguetería Recórcholis Logo" style="width: 100%; height: 100%; object-fit: contain;">
@@ -120,17 +122,17 @@
                 <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
               </div>
               <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Juguetería Recórcholis!</h3>
+              <a href="https://www.instagram.com/recorcholis.cl/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @recorcholis.cl</a>
             </div>
           </div>
-          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
           <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 San Francisco 666, Local S106</div>
-          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
-          </div>
+          <!-- CTA removed to reduce button fatigue -->
         </article>
 
         <!-- Card 3: DMOOV Puerto Varas -->
-        <article class="card" data-city="puerto-varas" data-category="bienestar">
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="bienestar">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-surface); font-weight: bold; font-size: 1.5rem; color: var(--text-muted);">
               D
@@ -141,17 +143,17 @@
                 <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
               </div>
               <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">DMOOV</h3>
+              <a href="https://www.instagram.com/dmoovpuertovaras/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @dmoovpuertovaras</a>
             </div>
           </div>
-          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
           <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Ricardo Neumann Wittwer 1001</div>
-          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
-          </div>
+          <!-- CTA removed to reduce button fatigue -->
         </article>
 
         <!-- Card 4: Chester Beer -->
-        <article class="card" data-city="llanquihue" data-category="gastronomia">
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="llanquihue" data-category="gastronomia">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
               <img src="/images/asociados/chester-llanquihue-clubbhogga.webp" alt="Chester Beer Logo" style="width: 100%; height: 100%; object-fit: contain;">
@@ -162,34 +164,117 @@
                 <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Llanquihue</span>
               </div>
               <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Chester Beer</h3>
+              <a href="https://www.instagram.com/chesterbeer.cerveceria/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @chesterbeer.cerveceria</a>
             </div>
           </div>
-          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
           <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Parcela 11, Linea Nueva</div>
-          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
-          </div>
+          <!-- CTA removed to reduce button fatigue -->
         </article>
 
         <!-- Card 5: Estacion Rock -->
-        <article class="card" data-city="puerto-varas" data-category="gastronomia">
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="servicios">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
               <img src="/images/asociados/estacion-rock-pv-clubbhogga.webp" alt="Estacion Rock Logo" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
             <div>
               <div style="margin-bottom: 0.25rem;">
-                <span class="chip">Gastronomía</span>
+                <span class="chip">Servicios</span>
                 <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
               </div>
               <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Estacion Rock</h3>
+              <a href="https://www.instagram.com/estacionrockpv/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @estacionrockpv</a>
             </div>
           </div>
-          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;"><strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>50% de descuento</strong> exclusivo para socios Club Hogga</p>
           <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Estación 48, Puerto Varas</div>
-          <div style="border-top: 1px solid var(--border-light); padding-top: var(--space-4);">
-            <a href="/hazte-socio/" class="btn btn-primary btn-full">Suscribirme para usar</a>
+          <!-- CTA removed to reduce button fatigue -->
+        </article>
+
+        <!-- Card 6: Stoffe Deco -->
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="tiendas">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/stoffe-pv-clubhogga.webp" alt="Stoffe Deco Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Tiendas</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Stoffe Deco</h3>
+              <a href="https://www.instagram.com/stoffe_pv/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @stoffe_pv</a>
+            </div>
           </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Av. Gramado 7, Puerto Varas</div>
+          <!-- CTA removed to reduce button fatigue -->
+        </article>
+
+        <!-- Card 7: Catherine Kinast -->
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="servicios">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/cathykinast-pv-clubhogga.webp" alt="Catherine Kinast Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Servicios</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Catherine Kinast</h3>
+              <a href="https://www.instagram.com/catherinekinast/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @catherinekinast</a>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Av. Los Colonos 1176, 2º piso</div>
+          <!-- CTA removed to reduce button fatigue -->
+        </article>
+
+        <!-- Card 8: Le Park -->
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="puerto-varas" data-category="bienestar">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; background: white;">
+              <img src="/images/asociados/lepark-pv-clubhogga.webp" alt="Le Park Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Bienestar</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Puerto Varas</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Le Park</h3>
+              <a href="https://www.instagram.com/lepark.puertovaras/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @lepark.puertovaras</a>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 Av. las Torres 18, Puerto Varas</div>
+          <!-- CTA removed to reduce button fatigue -->
+        </article>
+
+        <!-- Card 9: Espacio Blu -->
+        <article class="card" onclick="window.location.href='/hazte-socio/'" style="cursor: pointer; position: relative; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)';" data-city="frutillar" data-category="bienestar">
+          <div style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); padding: 0.25rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: bold; color: var(--text-main); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); z-index: 2;">🔒 Exclusivo</div>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: var(--space-4);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-surface); font-weight: bold; font-size: 1.5rem; color: var(--text-muted);">
+              E
+            </div>
+            <div>
+              <div style="margin-bottom: 0.25rem;">
+                <span class="chip">Bienestar</span>
+                <span class="chip" style="background: var(--bg-main); color: var(--text-muted); margin-left: 0.25rem;">Frutillar</span>
+              </div>
+              <h3 style="font-size: 1.25rem; margin: 0; line-height: 1.2;">Espacio Blu</h3>
+              <a href="https://www.instagram.com/soyblu.cl/" target="_blank" onclick="event.stopPropagation()" style="display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; margin-top: 0.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @soyblu.cl</a>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-bottom: var(--space-4); flex-grow: 1;">👉 <strong>Beneficio se anunciará pronto.</strong> Estamos finalizando los detalles para ofrecerte el mejor descuento.</p>
+          <div class="benefit-conditions" style="margin-bottom: var(--space-4);">📍 C. Anibal Pinto 251, Frutillar</div>
+          <!-- CTA removed to reduce button fatigue -->
         </article>
       </div>
     </div>
