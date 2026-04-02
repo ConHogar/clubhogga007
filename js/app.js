@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         #smart-snackbar {
           position: fixed;
           bottom: 20px;
-          right: 20px;
+          left: 20px;
           background: var(--bg-surface);
           border: 1px solid var(--border-light);
           box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         @media (max-width: 768px) {
           #smart-snackbar {
             bottom: 15px;
-            right: 20px; 
+            left: 20px; 
           }
         }
       `;
