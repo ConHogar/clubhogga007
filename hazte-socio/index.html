@@ -43,12 +43,12 @@
         </div>
 
         <div class="pricing-box pricing-box-promoted">
-          <div class="badge-promoted">
-            🔥 Precio fundadores por tiempo limitado</div>
+          <div class="badge-promoted" style="background-color: var(--primary); color: white;">
+            🚀 Precio Pre-Lanzamiento (Primeros 50 socios)</div>
           <h3 class="mb-2">Membresía Club Hogga</h3>
           <div class="price-value price-value-container">
             <span class="price-old">$5.990</span>
-            <div>$3.990 <span class="price-period">/ mes</span></div>
+            <div>$2.990 <span class="price-period">/ mes</span></div>
             <div class="price-assurance">Muchos socios recuperan su membresía en sus primeras salidas</div>
           </div>
           <ul class="pricing-list">
@@ -113,13 +113,19 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label" for="city_slug">Ciudad principal</label>
-              <select id="city_slug" name="city_slug" class="form-control" required>
-                <option value="" disabled selected>Selecciona tu ciudad...</option>
-                <option value="puerto-varas">Puerto Varas</option>
-                <option value="llanquihue">Llanquihue</option>
-              </select>
+            <div class="form-group form-grid-2">
+              <div>
+                <label class="form-label" for="region">Región de Residencia</label>
+                <select id="region" name="region" class="form-control" required>
+                  <option value="" disabled selected>Selecciona tu región...</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="comuna">Comuna</label>
+                <select id="comuna" name="comuna" class="form-control" required disabled>
+                  <option value="" disabled selected>Elige una región primero...</option>
+                </select>
+              </div>
             </div>
 
             <div class="mt-6">
@@ -172,6 +178,7 @@
   <div id="site-footer"></div>
 
   <script src="/js/app.js"></script>
+  <script src="/js/chile-regions.js"></script>
   <script src="/js/signup.js"></script>
   <script defer src="/js/layout.js"></script>
 </body>

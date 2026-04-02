@@ -3,6 +3,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('submit-btn');
   const errorDiv = document.getElementById('form-error');
   const successDiv = document.getElementById('form-success');
+  const regionSelect = document.getElementById('region');
+  const comunaSelect = document.getElementById('comuna');
+
+  // Populate Regions and Comunas if the element exists
+  if (regionSelect && comunaSelect && typeof chileData !== 'undefined') {
+    Object.keys(chileData).forEach(region => {
+      const option = document.createElement('option');
+      option.value = region;
+      option.textContent = region;
+      regionSelect.appendChild(option);
+    });
+
+    regionSelect.addEventListener('change', (e) => {
+      const selectedRegion = e.target.value;
+      comunaSelect.innerHTML = '<option value="" disabled selected>Selecciona tu comuna...</option>';
+      if (selectedRegion && chileData[selectedRegion]) {
+        chileData[selectedRegion].forEach(comuna => {
+          const option = document.createElement('option');
+          option.value = comuna;
+          option.textContent = comuna;
+          comunaSelect.appendChild(option);
+        });
+        comunaSelect.disabled = false;
+      } else {
+        comunaSelect.disabled = true;
+      }
+    });
+  }
 
   if(form) {
     form.addEventListener('submit', async (e) => {
@@ -32,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
           rut: rut,
           email: document.getElementById('email').value.trim(),
           phone: normalizePhone(document.getElementById('phone').value.trim()),
-          city_slug: document.getElementById('city_slug').value,
+          region: document.getElementById('region').value,
+          comuna: document.getElementById('comuna').value,
           marketing_opt_in: document.getElementById('marketing').checked,
           'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || ''
         };

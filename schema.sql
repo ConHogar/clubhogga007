@@ -78,6 +78,8 @@ create table members (
   rut text not null,
   rut_normalized text unique not null,
   city_id uuid references cities(id),
+  region text,
+  comuna text,
   plan_id uuid references plans(id),
   status text not null default 'pending',
   start_date date,

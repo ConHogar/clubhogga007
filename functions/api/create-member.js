@@ -34,25 +34,36 @@ export async function onRequestPost({ request, env }) {
       'Prefer': 'return=representation'
     };
 
-    // 1. Obtener el ID de la ciudad seleccionada
+    // 1. (Obsoleto) Obtener el ID de la ciudad seleccionada
+    // Ya no vinculamos estrictamente a una "ciudad Hogga" al resgistro,
+    // guardamos su región y comuna geográfica real.
     let city_id = null;
-    if (data.city_slug) {
-      const cityRes = await fetch(`${env.SUPABASE_URL}/rest/v1/cities?select=id&slug=eq.${data.city_slug}`, { headers: supabaseHeaders });
-      const cities = await cityRes.json();
-      if (cities && cities.length > 0) city_id = cities[0].id;
-    }
 
-    // 2. Definir precio contando los socios activos
-    // Para no gastar memoria, tomamos solo hasta 100 registros. Si hay 100, ya llegamos al limite.
-    const countRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id&status=eq.active&limit=100`, { headers: supabaseHeaders });
+    // 2. Definir precio según la cantidad de socios activos (Sistema de Tramos)
+    // - Tramo 1 (Pre-lanzamiento): Primeros 50 socios ($2.990)
+    // - Tramo 2 (Fundadores): Hasta 150 socios ($3.990)
+    // - Tramo 3 (Regular): Más de 150 socios ($5.990)
+    const PRE_LAUNCH_LIMIT = 50;
+    const FOUNDERS_LIMIT = 150; // Ajusta este número si quieres que dure más
+
+    const countRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id&status=eq.active&limit=${FOUNDERS_LIMIT + 1}`, { headers: supabaseHeaders });
     const actives = await countRes.json();
-    const isLaunchOffer = (actives && actives.length < 100);
+    const activeCount = actives ? actives.length : 0;
 
-    // Links estáticos de suscripción de MercadoPago cargados desde variables de entorno
-    const MP_LAUNCH_URL = env.MP_LINK_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227'; // URL por defecto si falta
+    const MP_PRE_LAUNCH_URL = env.MP_LINK_PRE_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227';
+    const MP_LAUNCH_URL = env.MP_LINK_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227';
     const MP_REGULAR_URL = env.MP_LINK_REGULAR || 'https://www.mercadopago.cl/ayuda/19227';
 
-    const checkoutUrl = isLaunchOffer ? MP_LAUNCH_URL : MP_REGULAR_URL;
+    let checkoutUrl = MP_REGULAR_URL;
+    let offerType = 'regular';
+
+    if (activeCount < PRE_LAUNCH_LIMIT) {
+      checkoutUrl = MP_PRE_LAUNCH_URL;
+      offerType = 'pre-launch';
+    } else if (activeCount < FOUNDERS_LIMIT) {
+      checkoutUrl = MP_LAUNCH_URL;
+      offerType = 'founders';
+    }
 
     // 3. Insertar Miembro como 'pending'
     const memberPayload = {
@@ -62,6 +73,8 @@ export async function onRequestPost({ request, env }) {
       email: data.email,
       phone: data.phone,
       city_id: city_id,
+      region: data.region,
+      comuna: data.comuna,
       status: 'pending', // Ahora nacen inactivos hasta que paguen
       marketing_opt_in: data.marketing_opt_in || false,
       accepted_terms_at: new Date().toISOString(),
@@ -102,7 +115,7 @@ export async function onRequestPost({ request, env }) {
       success: true, 
       member_id: createdMember[0].id,
       payment_url: checkoutUrl,
-      is_launch_offer: isLaunchOffer
+      offer_type: offerType
     }), { 
       status: 200,
       headers: { 'Content-Type': 'application/json' }
