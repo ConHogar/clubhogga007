@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const partnerLogo = document.createElement('img');
           partnerLogo.src = data.partner.logo_url;
           partnerLogo.alt = data.partner.business_name || 'Logo Comercio';
-          partnerLogo.style.height = '32px';
+          partnerLogo.style.height = '48px'; // Logo más grande para que se note
+          partnerLogo.style.maxWidth = '120px';
           partnerLogo.style.objectFit = 'contain';
           logosContainer.appendChild(partnerLogo);
         }

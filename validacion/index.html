@@ -8,36 +8,86 @@
   <title>Validación de Comercios | Club Hogga</title>
   <link rel="stylesheet" href="/css/styles.css">
   <style>
-    body { background-color: var(--primary-subtle); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: var(--space-4); }
-    .val-container { background: white; width: 100%; max-width: 450px; border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: var(--shadow-hover); }
-    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: var(--radius-pill); font-weight: bold; font-size: 0.875rem; margin-bottom: var(--space-4); }
-    .status-active { background: #dcfce7; color: #166534; }
-    .status-inactive { background: #fee2e2; color: #991b1b; }
-    .status-notfound { background: #fef3c7; color: #92400e; }
+    body { 
+      background: linear-gradient(135deg, var(--bg-main) 0%, var(--primary-subtle) 100%);
+      display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: var(--space-4); 
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Forma abstracta de fondo para darle un "wow" factor suave */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -15%; left: -10%; width: 60vw; height: 60vw;
+      background: radial-gradient(circle, var(--primary-light) 0%, rgba(204,251,241,0) 70%);
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .val-container { 
+      position: relative; z-index: 1;
+      background: rgba(255, 255, 255, 0.85); 
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 100%; max-width: 480px; 
+      border-radius: 24px; 
+      padding: var(--space-8); 
+      box-shadow: 0 20px 40px -10px rgba(13, 148, 136, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; 
+    }
+
+    .partner-header {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-6);
+      margin-bottom: var(--space-6);
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border-light);
+    }
+
+    .status-badge { display: inline-block; padding: 0.35rem 1rem; border-radius: var(--radius-pill); font-weight: bold; font-size: 0.9rem; margin-bottom: var(--space-4); }
+    .status-active { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .status-inactive { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .status-notfound { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
     #result-box { display: none; margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--border-light); text-align: center; }
+
+    .rut-input {
+      width: 100%; padding: 1rem 1.25rem; font-size: 1.1rem; border-radius: var(--radius-md); 
+      border: 2px solid var(--border-light); background: white; margin-bottom: var(--space-4);
+      transition: var(--transition);
+      color: var(--text-main); font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02) inset;
+    }
+    .rut-input:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light);
+    }
+    .btn-submit {
+      border-radius: var(--radius-md); font-size: 1.1rem; padding: 1rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800;
+    }
   </style>
 </head>
 <body>
 
   <div class="val-container">
-    <div style="text-align: center; margin-bottom: var(--space-6);">
-      <div id="logos-container" style="display: flex; justify-content: center; align-items: center; gap: 16px;">
-        <div class="logo" style="margin: 0; padding: 0;"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</div>
+    <div class="partner-header">
+      <div id="logos-container" style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 12px;">
+        <div class="logo" style="margin: 0; padding: 0;"><img src="/images/logo.webp" alt="Club Hogga" style="height:36px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</div>
         <!-- El logo del comercio se inyectará aquí a través de JS -->
       </div>
-      <p id="partner-panel-title" class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Panel Privado para Comercios</p>
+      <p id="partner-panel-title" class="text-muted" style="font-size: 0.95rem; font-weight: 600; margin: 0;">Panel Privado para Comercios</p>
     </div>
 
     <!-- Si no hay token en la url -->
-    <div id="no-token-alert" style="display: none; color: red; text-align: center; margin-bottom: var(--space-4);">
-      Acceso denegado: Token de comercio no proporcionado en la URL (?k=...).
+    <div id="no-token-alert" style="display: none; background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: var(--space-4); font-weight: 500;">
+      Acceso denegado: Token de comercio no proporcionado.
     </div>
 
     <!-- Formulario validación -->
     <form id="validate-form">
-      <label class="font-medium" style="display: block; margin-bottom: var(--space-2);">RUT del Socio</label>
-      <input type="text" id="rut-input" class="btn btn-full" style="border: 1px solid var(--border-strong); text-align: left; background: white; margin-bottom: var(--space-4);" placeholder="Ej: 12345678-9" required>
-      <button type="submit" class="btn btn-primary btn-full" id="validate-btn">Buscar y Validar</button>
+      <label class="font-bold text-muted" style="display: block; margin-bottom: var(--space-2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">RUT del Socio</label>
+      <input type="text" id="rut-input" class="rut-input" placeholder="Ej: 12345678-9" required autofocus>
+      <button type="submit" class="btn btn-primary btn-full btn-submit" id="validate-btn">Buscar y Validar</button>
     </form>
 
     <div id="error-msg" style="color: red; text-align: center; margin-top: var(--space-4); display: none;"></div>
