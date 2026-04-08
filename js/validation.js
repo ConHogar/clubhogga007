@@ -9,6 +9,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Cargar info del comercio (logo y nombre)
+  fetch(`/api/get-partner-info?k=${token}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'success' && data.partner) {
+        const logosContainer = document.getElementById('logos-container');
+        const titleSpan = document.getElementById('partner-panel-title');
+        
+        if (data.partner.logo_url) {
+          // Agregar separador
+          const divider = document.createElement('div');
+          divider.style.width = '1px';
+          divider.style.height = '32px';
+          divider.style.backgroundColor = 'var(--border-strong)';
+          logosContainer.appendChild(divider);
+
+          // Agregar logo del partner
+          const partnerLogo = document.createElement('img');
+          partnerLogo.src = data.partner.logo_url;
+          partnerLogo.alt = data.partner.business_name || 'Logo Comercio';
+          partnerLogo.style.height = '32px';
+          partnerLogo.style.objectFit = 'contain';
+          logosContainer.appendChild(partnerLogo);
+        }
+
+        if (data.partner.business_name) {
+             titleSpan.innerText = `Panel de Validación: ${data.partner.business_name}`;
+        }
+      }
+    })
+    .catch(err => console.error("No se pudo cargar la info del comercio", err));
+
   const validateForm = document.getElementById('validate-form');
   const validateBtn = document.getElementById('validate-btn');
   const errorMsg = document.getElementById('error-msg');

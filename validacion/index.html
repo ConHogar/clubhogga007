@@ -21,8 +21,11 @@
 
   <div class="val-container">
     <div style="text-align: center; margin-bottom: var(--space-6);">
-      <div class="logo" style="justify-content: center;"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</div>
-      <p class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Panel Privado para Comercios</p>
+      <div id="logos-container" style="display: flex; justify-content: center; align-items: center; gap: 16px;">
+        <div class="logo" style="margin: 0; padding: 0;"><img src="/images/logo.webp" alt="Club Hogga" style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span class="logo-club">Club</span>hogga</div>
+        <!-- El logo del comercio se inyectará aquí a través de JS -->
+      </div>
+      <p id="partner-panel-title" class="text-muted" style="font-size: 0.875rem; margin-top: 0.5rem;">Panel Privado para Comercios</p>
     </div>
 
     <!-- Si no hay token en la url -->
