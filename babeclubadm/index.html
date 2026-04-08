@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BabeClub - Admin Portal</title>
+  
+  <!-- Prevent indexing -->
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Auth View -->
+  <div id="auth-view">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+        Club Hogga Admin
+      </div>
+      <h2>Acceso Restringido</h2>
+      <p>Ingresa la clave de administración para acceder al panel general.</p>
+      
+      <form id="login-form">
+        <div class="input-group">
+          <label for="admin-secret">Master Key</label>
+          <input type="password" id="admin-secret" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn" id="login-btn">Acceder al Portal</button>
+        <div id="auth-error" class="error-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main SPA Layout -->
+  <div id="dashboard-shell">
+    <div class="layout-wrapper">
+      
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <button class="mobile-nav-toggle" id="mobile-toggle">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        
+        <div class="sidebar-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path>
+          </svg>
+          Hogga
+        </div>
+        
+        <nav class="sidebar-nav">
+          <a class="nav-item active" data-target="view-dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Dashboard
+          </a>
+          <a class="nav-item" data-target="view-businesses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Empresas
+          </a>
+          <a class="nav-item" data-target="view-members">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Socios
+          </a>
+        </nav>
+        
+        <div class="logout-container">
+          <a class="nav-item logout-nav-item" id="logout-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Cerrar Sesión
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        
+        <div class="loader-overlay" id="dash-loader">
+          <div class="loader-spinner"></div> Sincronizando...
+        </div>
+
+        <!-- 1. Dashboard View -->
+        <div id="view-dashboard" class="view-container active">
+          <header class="dash-header">
+            <div>
+              <h1>Visión General</h1>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Rendimiento del Club en tiempo real</p>
+            </div>
+            <button class="logout-btn" id="refresh-btn">
+              <svg width="18" height="18" style="vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              Recargar Data
+            </button>
+          </header>
+          
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-title">Socios Activos (Suscritos)</div>
+              <div class="stat-value" id="stat-active">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Nuevos / Pendientes</div>
+              <div class="stat-value" id="stat-pending">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Empresas Aliadas</div>
+              <div class="stat-value" id="stat-partners">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Businesses View -->
+        <div id="view-businesses" class="view-container">
+          <header class="dash-header">
+            <div>
+              <h1>Empresas Aliadas</h1>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de partners y beneficios del Club</p>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="openPartnerModal()">+ Añadir Empresa</button>
+          </header>
+          
+          <div class="data-section">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Empresa</th>
+                    <th>Estado</th>
+                    <th>Destacado</th>
+                    <th>Link Validación</th>
+                    <th>Fecha Ingreso</th>
+                  </tr>
+                </thead>
+                <tbody id="partners-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Members View -->
+        <div id="view-members" class="view-container">
+          <header class="dash-header">
+            <div>
+              <h1>Base de Socios</h1>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Cien últimos registros de sistema</p>
+            </div>
+          </header>
+          
+          <div class="data-section">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>RUT</th>
+                    <th>Email</th>
+                    <th>Región / Comuna</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="members-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Add Partner Modal -->
+  <div class="modal-overlay" id="partner-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Añadir Nueva Empresa</h2>
+        <button class="modal-close" onclick="closePartnerModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <form id="partner-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nombre de la Empresa *</label>
+            <input type="text" id="p-name" class="form-control" required placeholder="Ej: Burger King">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label>Ciudad *</label>
+              <select id="p-city" class="form-control" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Categoría *</label>
+              <select id="p-category" class="form-control" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Token de Validación URL *</label>
+            <div class="flex-btn">
+              <input type="text" id="p-token" class="form-control" required placeholder="codigo_secreto_unico">
+              <button type="button" class="randomize-btn" onclick="generateToken()" title="Generar Automático">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Dirección (Opcional)</label>
+            <input type="text" id="p-address" class="form-control" placeholder="Ej: San Martin 44">
+          </div>
+          <div class="form-group">
+            <label>Logo URL (Opcional pero recomendado)</label>
+            <input type="url" id="p-logo" class="form-control" placeholder="Ej: /images/partners/burgerking.png o https://...">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label>Instagram (Opcional)</label>
+              <input type="text" id="p-instagram" class="form-control" placeholder="Ej: @burgerking">
+            </div>
+            <div class="form-group">
+              <label>Página Web (Opcional)</label>
+              <input type="url" id="p-website" class="form-control" placeholder="Ej: https://burgerking.cl">
+            </div>
+          </div>
+          <div id="partner-error" class="error-message"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closePartnerModal()">Cancelar</button>
+          <button type="submit" class="btn" id="save-partner-btn">Guardar Empresa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api/admin-stats';
+    const API_PARTNERS = '/api/admin-partners';
+    let currentToken = localStorage.getItem('babeclub_admin_token') || null;
+    let globalCities = [];
+    let globalCategories = [];
+
+    // DOM Elements
+    const authView = document.getElementById('auth-view');
+    const dashShell = document.getElementById('dashboard-shell');
+    const loginForm = document.getElementById('login-form');
+    const authError = document.getElementById('auth-error');
+    const dashLoader = document.getElementById('dash-loader');
+    
+    // Auth Flow
+    if (currentToken) {
+      authView.style.display = 'none';
+      dashShell.style.display = 'block';
+      fetchDashData();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const secret = document.getElementById('admin-secret').value;
+      const btn = document.getElementById('login-btn');
+      
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Verificando...';
+        authError.textContent = '';
+
+        const res = await fetch(API_URL, {
+          headers: { 'Authorization': `Bearer ${secret}` }
+        });
+
+        if (res.ok) {
+          currentToken = secret;
+          localStorage.setItem('babeclub_admin_token', currentToken);
+          authView.style.display = 'none';
+          dashShell.style.display = 'block';
+          const data = await res.json();
+          renderData(data);
+        } else {
+          try {
+            const errData = await res.clone().json();
+            authError.textContent = 'Error: ' + (errData.error || res.statusText);
+          } catch(e) {
+            authError.textContent = 'Clave incorrecta o error de autorización.';
+          }
+        }
+      } catch (err) {
+        authError.textContent = 'Error de conexión. Intenta de nuevo.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Acceder al Portal';
+      }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('babeclub_admin_token');
+      currentToken = null;
+      document.getElementById('admin-secret').value = '';
+      dashShell.style.display = 'none';
+      authView.style.display = 'flex';
+    });
+
+    document.getElementById('refresh-btn').addEventListener('click', fetchDashData);
+
+    // Sidebar & SPA Routing
+    const navItems = document.querySelectorAll('.nav-item[data-target]');
+    const views = document.querySelectorAll('.view-container');
+    
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Update active class on nav
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        
+        // Show correct view
+        const targetId = item.getAttribute('data-target');
+        views.forEach(v => {
+          v.classList.remove('active');
+          if(v.id === targetId) v.classList.add('active');
+        });
+
+        // Mobile menu behavior
+        document.getElementById('sidebar').classList.remove('expanded');
+      });
+    });
+
+    document.getElementById('mobile-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('expanded');
+    });
+
+    // Data Fetching & Rendering
+    async function fetchDashData() {
+      dashLoader.style.display = 'flex';
+      try {
+        const res = await fetch(API_URL, {
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          document.getElementById('logout-btn').click();
+          return;
+        }
+
+        if (!res.ok) {
+          const errData = await res.json();
+          alert('Error from server: ' + (errData.error || res.statusText));
+          return;
+        }
+
+        const data = await res.json();
+        
+        // Save references for forms
+        if (data.cities) globalCities = data.cities;
+        if (data.categories) globalCategories = data.categories;
+
+        renderData(data);
+      } catch (err) {
+        console.error(err);
+        alert('Error al sincronizar datos.');
+      } finally {
+        dashLoader.style.display = 'none';
+      }
+    }
+
+    function renderData(data) {
+      if (!data || !data.success) return;
+
+      // Overview Stats
+      document.getElementById('stat-active').textContent = data.stats.activeSubscribers;
+      document.getElementById('stat-pending').textContent = data.stats.pendingMembers;
+      document.getElementById('stat-partners').textContent = data.partners ? data.partners.length : '0';
+
+      // Members Table
+      const membersTbody = document.getElementById('members-body');
+      membersTbody.innerHTML = '';
+      if (!data.members || data.members.length === 0) {
+        membersTbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No hay socios registrados.</td></tr>`;
+      } else {
+        data.members.forEach(member => {
+          const tr = document.createElement('tr');
+          const date = new Date(member.created_at).toLocaleDateString('es-CL');
+          const badgeClass = member.status === 'active' ? 'badge-active' : 'badge-pending';
+          const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
+
+          tr.innerHTML = `
+            <td>${date}</td>
+            <td><strong>${member.full_name}</strong></td>
+            <td>${member.rut}</td>
+            <td>${member.email || '-'}</td>
+            <td>${geo}</td>
+            <td><span class="badge ${badgeClass}">${member.status}</span></td>
+          `;
+          membersTbody.appendChild(tr);
+        });
+      }
+
+      // Partners Table
+      const partnersTbody = document.getElementById('partners-body');
+      partnersTbody.innerHTML = '';
+      if (!data.partners || data.partners.length === 0) {
+        partnersTbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No hay empresas aliadas.</td></tr>`;
+      } else {
+        data.partners.forEach(partner => {
+          const tr = document.createElement('tr');
+          const date = new Date(partner.created_at).toLocaleDateString('es-CL');
+          const statusBadge = partner.active ? '<span class="badge badge-active">Activo</span>' : '<span class="badge badge-inactive">Inactivo</span>';
+          const featureBadge = partner.featured ? '⭐ Sí' : '-';
+          
+          const valUrl = window.location.origin + '/validacion/?k=' + partner.validation_token;
+
+          tr.innerHTML = `
+            <td><strong>${partner.business_name}</strong></td>
+            <td>${statusBadge}</td>
+            <td>${featureBadge}</td>
+            <td><a href="${valUrl}" target="_blank" style="color: var(--primary-color); text-decoration: none;">Ver QR / Portal</a></td>
+            <td>${date}</td>
+          `;
+          partnersTbody.appendChild(tr);
+        });
+      }
+    }
+
+    // Modal & Form Logic
+    const partnerModal = document.getElementById('partner-modal');
+    
+    function openPartnerModal() {
+      // Clear form
+      document.getElementById('partner-form').reset();
+      document.getElementById('partner-error').textContent = '';
+      
+      // Populate selects
+      const citySelect = document.getElementById('p-city');
+      const catSelect = document.getElementById('p-category');
+      
+      citySelect.innerHTML = '<option value="">Selecciona...</option>' + globalCities.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      catSelect.innerHTML = '<option value="">Selecciona...</option>' + globalCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+      partnerModal.classList.add('active');
+    }
+
+    function closePartnerModal() {
+      partnerModal.classList.remove('active');
+    }
+
+    function generateToken() {
+      const cryptoArr = new Uint8Array(8);
+      window.crypto.getRandomValues(cryptoArr);
+      const token = Array.from(cryptoArr, byte => byte.toString(16).padStart(2, '0')).join('');
+      document.getElementById('p-token').value = token;
+    }
+
+    document.getElementById('partner-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('save-partner-btn');
+      const err = document.getElementById('partner-error');
+      
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Guardando...';
+        err.textContent = '';
+
+        const payload = {
+          business_name: document.getElementById('p-name').value,
+          city_id: document.getElementById('p-city').value,
+          category_id: document.getElementById('p-category').value,
+          validation_token: document.getElementById('p-token').value,
+          address: document.getElementById('p-address').value || null,
+          logo_url: document.getElementById('p-logo').value || null,
+          instagram: document.getElementById('p-instagram').value || null,
+          website: document.getElementById('p-website').value || null
+        };
+
+        const res = await fetch(API_PARTNERS, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          closePartnerModal();
+          fetchDashData(); // Refresh the table
+        } else {
+          err.textContent = data.error || 'Error desconocido';
+        }
+      } catch (error) {
+        err.textContent = 'Error de conexión / red.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar Empresa';
+      }
+    });
+
+  </script>
+</body>
+</html>
