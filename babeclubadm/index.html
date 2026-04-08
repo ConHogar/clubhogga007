@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BabeClub - Admin Portal</title>
-  
+
   <!-- Prevent indexing -->
   <meta name="robots" content="noindex, nofollow, noarchive">
-  
+
   <!-- Styling -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <!-- Auth View -->
   <div id="auth-view">
     <div class="auth-card">
       <div class="auth-logo">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
           <path d="M2 17l10 5 10-5"></path>
           <path d="M2 12l10 5 10-5"></path>
@@ -25,8 +28,8 @@
         Club Hogga Admin
       </div>
       <h2>Acceso Restringido</h2>
-      <p>Ingresa la clave de administración para acceder al panel general.</p>
-      
+      <p></p>
+
       <form id="login-form">
         <div class="input-group">
           <label for="admin-secret">Master Key</label>
@@ -41,38 +44,62 @@
   <!-- Main SPA Layout -->
   <div id="dashboard-shell">
     <div class="layout-wrapper">
-      
+
       <!-- Sidebar -->
       <aside class="sidebar" id="sidebar">
         <button class="mobile-nav-toggle" id="mobile-toggle">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
-        
+
         <div class="sidebar-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
           </svg>
           Hogga
         </div>
-        
+
         <nav class="sidebar-nav">
           <a class="nav-item active" data-target="view-dashboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
             Dashboard
           </a>
           <a class="nav-item" data-target="view-businesses">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
             Empresas
           </a>
           <a class="nav-item" data-target="view-members">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
             Socios
           </a>
         </nav>
-        
+
         <div class="logout-container">
           <a class="nav-item logout-nav-item" id="logout-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
             Cerrar Sesión
           </a>
         </div>
@@ -80,7 +107,7 @@
 
       <!-- Main Content Area -->
       <main class="main-content">
-        
+
         <div class="loader-overlay" id="dash-loader">
           <div class="loader-spinner"></div> Sincronizando...
         </div>
@@ -90,16 +117,20 @@
           <header class="dash-header">
             <div>
               <h1>Visión General</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Rendimiento del Club en tiempo real</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Rendimiento del Club en
+                tiempo real</p>
             </div>
             <button class="logout-btn" id="refresh-btn">
-              <svg width="18" height="18" style="vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              <svg width="18" height="18" style="vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
               </svg>
               Recargar Data
             </button>
           </header>
-          
+
           <div class="stats-grid">
             <div class="stat-card">
               <div class="stat-title">Socios Activos (Suscritos)</div>
@@ -121,11 +152,12 @@
           <header class="dash-header">
             <div>
               <h1>Empresas Aliadas</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de partners y beneficios del Club</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de partners y
+                beneficios del Club</p>
             </div>
             <button class="btn btn-sm btn-secondary" onclick="openPartnerModal()">+ Añadir Empresa</button>
           </header>
-          
+
           <div class="data-section">
             <div class="table-container">
               <table>
@@ -151,10 +183,11 @@
           <header class="dash-header">
             <div>
               <h1>Base de Socios</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Cien últimos registros de sistema</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Cien últimos registros de
+                sistema</p>
             </div>
           </header>
-          
+
           <div class="data-section">
             <div class="table-container">
               <table>
@@ -185,7 +218,11 @@
     <div class="modal-card">
       <div class="modal-header">
         <h2>Añadir Nueva Empresa</h2>
-        <button class="modal-close" onclick="closePartnerModal()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <button class="modal-close" onclick="closePartnerModal()"><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg></button>
       </div>
       <form id="partner-form">
         <div class="modal-body">
@@ -212,7 +249,13 @@
             <div class="flex-btn">
               <input type="text" id="p-token" class="form-control" required placeholder="codigo_secreto_unico">
               <button type="button" class="randomize-btn" onclick="generateToken()" title="Generar Automático">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                  </path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
               </button>
             </div>
           </div>
@@ -222,7 +265,8 @@
           </div>
           <div class="form-group">
             <label>Logo URL (Opcional pero recomendado)</label>
-            <input type="url" id="p-logo" class="form-control" placeholder="Ej: /images/partners/burgerking.png o https://...">
+            <input type="url" id="p-logo" class="form-control"
+              placeholder="Ej: /images/partners/burgerking.png o https://...">
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
@@ -257,7 +301,7 @@
     const loginForm = document.getElementById('login-form');
     const authError = document.getElementById('auth-error');
     const dashLoader = document.getElementById('dash-loader');
-    
+
     // Auth Flow
     if (currentToken) {
       authView.style.display = 'none';
@@ -269,7 +313,7 @@
       e.preventDefault();
       const secret = document.getElementById('admin-secret').value;
       const btn = document.getElementById('login-btn');
-      
+
       try {
         btn.disabled = true;
         btn.textContent = 'Verificando...';
@@ -290,7 +334,7 @@
           try {
             const errData = await res.clone().json();
             authError.textContent = 'Error: ' + (errData.error || res.statusText);
-          } catch(e) {
+          } catch (e) {
             authError.textContent = 'Clave incorrecta o error de autorización.';
           }
         }
@@ -315,18 +359,18 @@
     // Sidebar & SPA Routing
     const navItems = document.querySelectorAll('.nav-item[data-target]');
     const views = document.querySelectorAll('.view-container');
-    
+
     navItems.forEach(item => {
       item.addEventListener('click', () => {
         // Update active class on nav
         navItems.forEach(n => n.classList.remove('active'));
         item.classList.add('active');
-        
+
         // Show correct view
         const targetId = item.getAttribute('data-target');
         views.forEach(v => {
           v.classList.remove('active');
-          if(v.id === targetId) v.classList.add('active');
+          if (v.id === targetId) v.classList.add('active');
         });
 
         // Mobile menu behavior
@@ -358,7 +402,7 @@
         }
 
         const data = await res.json();
-        
+
         // Save references for forms
         if (data.cities) globalCities = data.cities;
         if (data.categories) globalCategories = data.categories;
@@ -415,7 +459,7 @@
           const date = new Date(partner.created_at).toLocaleDateString('es-CL');
           const statusBadge = partner.active ? '<span class="badge badge-active">Activo</span>' : '<span class="badge badge-inactive">Inactivo</span>';
           const featureBadge = partner.featured ? '⭐ Sí' : '-';
-          
+
           const valUrl = window.location.origin + '/validacion/?k=' + partner.validation_token;
 
           tr.innerHTML = `
@@ -432,16 +476,16 @@
 
     // Modal & Form Logic
     const partnerModal = document.getElementById('partner-modal');
-    
+
     function openPartnerModal() {
       // Clear form
       document.getElementById('partner-form').reset();
       document.getElementById('partner-error').textContent = '';
-      
+
       // Populate selects
       const citySelect = document.getElementById('p-city');
       const catSelect = document.getElementById('p-category');
-      
+
       citySelect.innerHTML = '<option value="">Selecciona...</option>' + globalCities.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
       catSelect.innerHTML = '<option value="">Selecciona...</option>' + globalCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
@@ -463,7 +507,7 @@
       e.preventDefault();
       const btn = document.getElementById('save-partner-btn');
       const err = document.getElementById('partner-error');
-      
+
       try {
         btn.disabled = true;
         btn.textContent = 'Guardando...';
@@ -482,7 +526,7 @@
 
         const res = await fetch(API_PARTNERS, {
           method: 'POST',
-          headers: { 
+          headers: {
             'Authorization': `Bearer ${currentToken}`,
             'Content-Type': 'application/json'
           },
@@ -507,4 +551,5 @@
 
   </script>
 </body>
+
 </html>
