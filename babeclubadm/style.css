@@ -466,9 +466,10 @@ td.col-action {
 
 th.col-actions,
 td.col-actions {
-  width: 90px;
+  width: 110px;
   text-align: center;
   white-space: nowrap;
+  overflow: visible;
 }
 
 /* Modals */

@@ -745,6 +745,7 @@
           <div class="drawer-token">Token: <code>${partner.validation_token}</code></div>
         </div>
 
+        ${scrollToEdit ? `
         <div class="drawer-section" style="border-bottom:none;">
           <h3 class="drawer-section-title">Editar Empresa</h3>
           <div style="margin-bottom:0.875rem;">
@@ -816,6 +817,7 @@
           <button class="btn btn-sm" id="ep-save-btn" style="width:100%;" onclick="savePartnerEdit('${partner.id}')">Guardar Cambios</button>
           <div id="ep-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
         </div>
+        ` : ''}
       `;
 
       openDrawer();
