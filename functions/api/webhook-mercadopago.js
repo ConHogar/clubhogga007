@@ -1,17 +1,84 @@
+// Verify MercadoPago webhook signature using HMAC-SHA256
+// Docs: https://www.mercadopago.com.ar/developers/en/docs/your-integrations/notifications/webhooks
+async function verifyMPSignature(request, bodyText, secret) {
+  const xSignature = request.headers.get('x-signature');
+  const xRequestId = request.headers.get('x-request-id');
+
+  if (!xSignature) return false;
+
+  // Header format: "ts=<timestamp>,v1=<hash>"
+  const parts = Object.fromEntries(
+    xSignature.split(',').map(p => {
+      const idx = p.indexOf('=');
+      return [p.slice(0, idx).trim(), p.slice(idx + 1).trim()];
+    })
+  );
+  const { ts, v1 } = parts;
+  if (!ts || !v1) return false;
+
+  // Reject requests older than 5 minutes (replay attack protection)
+  const tsNum = parseInt(ts, 10);
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (Math.abs(nowSec - tsNum) > 300) return false;
+
+  // Extract data.id from body
+  let dataId = '';
+  try {
+    const parsed = JSON.parse(bodyText);
+    dataId = parsed?.data?.id ?? '';
+  } catch {
+    return false;
+  }
+
+  // Build the manifest string MP specifies
+  const manifest = `id:${dataId};request-id:${xRequestId || ''};ts:${ts};`;
+
+  // Compute HMAC-SHA256 using Web Crypto (native in CF Workers)
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(manifest));
+  const computed = Array.from(new Uint8Array(sig))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  return computed === v1;
+}
+
 export async function onRequestPost({ request, env }) {
   try {
-    // MercadoPago envía eventos por POST. Leemos el body o los query params.
-    const url = new URL(request.url);
     const bodyText = await request.text();
-    let body = {};
-    if (bodyText) body = JSON.parse(bodyText);
 
-    // Identificar tipo de evento ('payment' o 'subscription_preapproval')
+    // --- Signature verification ---
+    // If MP_WEBHOOK_SECRET is set, enforce verification.
+    // If not set yet (e.g. local dev), log a warning and continue.
+    if (env.MP_WEBHOOK_SECRET) {
+      const valid = await verifyMPSignature(request, bodyText, env.MP_WEBHOOK_SECRET);
+      if (!valid) {
+        // Return 200 so MP doesn't retry — we just discard the invalid request silently.
+        console.warn('Webhook rejected: invalid signature');
+        return new Response('Invalid signature', { status: 200 });
+      }
+    } else {
+      console.warn('MP_WEBHOOK_SECRET not set — skipping signature verification');
+    }
+
+    // --- Parse body ---
+    const url = new URL(request.url);
+    let body = {};
+    if (bodyText) {
+      try { body = JSON.parse(bodyText); } catch { /* ignore */ }
+    }
+
     const type = url.searchParams.get('type') || url.searchParams.get('topic') || body.type;
     const resourceId = body?.data?.id || body?.id || url.searchParams.get('id');
 
     if (!resourceId || !env.MP_ACCESS_TOKEN) {
-      // Retornar 200 rápido para que MP no reintente locamente si no configuraron el token
       return new Response('Ignored - No resourceId or Token', { status: 200 });
     }
 
@@ -26,7 +93,7 @@ export async function onRequestPost({ request, env }) {
       const paymentData = await mpRes.json();
       payerEmail = paymentData?.payer?.email;
       resourceStatus = paymentData?.status; // 'approved'
-      
+
     } else if (type === 'subscription_preapproval' || type === 'preapproval') {
       const mpRes = await fetch(`https://api.mercadopago.com/preapproval/${resourceId}`, {
         headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
@@ -38,14 +105,14 @@ export async function onRequestPost({ request, env }) {
 
     // 2. Si se aprobó el pago y tenemos el correo del pagador
     if (payerEmail && (resourceStatus === 'approved' || resourceStatus === 'authorized')) {
-      
+
       const supabaseHeaders = {
         'apikey': env.SUPABASE_SERVICE_ROLE_KEY,
         'Authorization': `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json'
       };
 
-      // 3. Obtener el usuario actual en la base de datos para ver si ya estaba activo o no
+      // 3. Obtener el usuario actual en la base de datos
       const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&email=eq.${payerEmail}`, {
         method: 'GET',
         headers: supabaseHeaders
@@ -85,14 +152,14 @@ export async function onRequestPost({ request, env }) {
             <div style="padding: 30px 24px;">
               <h2 style="color: #0a2e46; font-size: 22px; margin-top: 0; margin-bottom: 16px;">¡Bienvenido/a al Club! 🎉</h2>
               <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">Hola, tu suscripción ha sido confirmada exitosamente y ya eres oficialmente parte de la red de beneficios.</p>
-              
+
               <div style="background-color: #f0fdfa; padding: 20px; border-radius: 8px; margin-bottom: 24px; border-left: 4px solid #108f8e;">
                 <h3 style="color: #0a2e46; font-size: 16px; margin-top: 0; margin-bottom: 8px;">¿Cómo cobro mis beneficios?</h3>
                 <p style="font-size: 15px; line-height: 1.5; margin: 0; color: #0f766e;">
                   Es súper simple: visita cualquier comercio asociado, menciona que eres socio y <strong>dicta tu RUT</strong> al momento de pedir la cuenta. El local validará tu membresía en segundos para aplicar tu descuento.
                 </p>
               </div>
-              
+
               <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
                 <a href="https://clubhogga.cl/beneficios/" style="background-color: #108f8e; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
               </div>
@@ -113,7 +180,7 @@ export async function onRequestPost({ request, env }) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            from: 'Club Hogga <club@hogga.cl>', 
+            from: 'Club Hogga <club@hogga.cl>',
             to: [payerEmail],
             subject: '¡Tu membresía Club Hogga está activa! 🎉',
             html: emailHtml
@@ -126,7 +193,7 @@ export async function onRequestPost({ request, env }) {
 
   } catch (err) {
     console.error('Webhook error:', err);
-    // Para MP, si fallamos debemos devolver 200 OK igual, o hace retry infinito que bota servidores.
+    // Always return 200 to prevent MP infinite retries
     return new Response('Error controlado', { status: 200 });
   }
 }
