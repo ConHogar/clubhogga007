@@ -583,8 +583,8 @@
       }
 
       // Calculate summary stats
-      const successCount = logs.filter(l => l.result === 'valid').length;
-      const failCount = logs.filter(l => l.result !== 'valid').length;
+      const successCount = logs.filter(l => l.result === 'active').length;
+      const failCount = logs.filter(l => l.result !== 'active').length;
       const now = new Date();
       const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const thisWeek = logs.filter(l => new Date(l.created_at) >= weekAgo).length;
@@ -642,10 +642,10 @@
           ? `<strong>${memberObj.full_name}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${log.rut_entered || memberObj.rut}</span>`
           : `<span style="color: var(--text-muted);">${log.rut_entered || '-'}</span>`;
 
-        const isValid = log.result === 'valid';
+        const isValid = log.result === 'active';
         const resultBadge = isValid
           ? '<span class="badge badge-active">✓ Válido</span>'
-          : `<span class="badge badge-inactive">${log.result === 'invalid_rut' ? 'RUT no encontrado' : log.result === 'inactive' ? 'Socio inactivo' : log.result || 'Rechazado'}</span>`;
+          : `<span class="badge badge-inactive">${log.result === 'not_found' ? 'RUT no encontrado' : log.result === 'inactive' ? 'Socio inactivo' : log.result || 'Rechazado'}</span>`;
 
         tr.innerHTML = `
           <td>${dateStr}</td>
@@ -693,7 +693,7 @@
 
       // Count validations for this partner
       const partnerVals = globalValidationLogs.filter(v => v.partner_id === partner.id);
-      const partnerSuccess = partnerVals.filter(v => v.result === 'valid').length;
+      const partnerSuccess = partnerVals.filter(v => v.result === 'active').length;
 
       document.getElementById('drawer-title').textContent = partner.business_name;
 
@@ -794,7 +794,7 @@
       const lastVal = memberVals.length > 0 ? new Date(memberVals[0].created_at).toLocaleDateString('es-CL') : 'Nunca';
 
       // Businesses visited by this member
-      const visitedBizIds = [...new Set(memberVals.filter(v => v.result === 'valid').map(v => v.partner_id))];
+      const visitedBizIds = [...new Set(memberVals.filter(v => v.result === 'active').map(v => v.partner_id))];
       const visitedBizNames = visitedBizIds.map(id => {
         const p = globalPartners.find(pp => pp.id === id);
         return p ? p.business_name : 'Desconocido';
