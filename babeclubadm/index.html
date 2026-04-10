@@ -773,6 +773,78 @@
           </a>
           <div class="drawer-token">Token: <code>${partner.validation_token}</code></div>
         </div>
+
+        <div class="drawer-section" style="border-bottom:none;">
+          <h3 class="drawer-section-title">Editar Empresa</h3>
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Nombre</label>
+            <input type="text" id="ep-name" class="form-control" value="${partner.business_name.replace(/"/g, '&quot;')}">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
+            <div>
+              <label class="edit-label">Estado</label>
+              <select id="ep-active" class="form-control">
+                <option value="true" ${partner.active ? 'selected' : ''}>Activo</option>
+                <option value="false" ${!partner.active ? 'selected' : ''}>Inactivo</option>
+              </select>
+            </div>
+            <div>
+              <label class="edit-label">Destacado</label>
+              <select id="ep-featured" class="form-control">
+                <option value="false" ${!partner.featured ? 'selected' : ''}>No</option>
+                <option value="true" ${partner.featured ? 'selected' : ''}>Sí</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
+            <div>
+              <label class="edit-label">Ciudad</label>
+              <select id="ep-city" class="form-control">
+                ${globalCities.map(c => `<option value="${c.id}" ${c.id === partner.city_id ? 'selected' : ''}>${c.name}</option>`).join('')}
+              </select>
+            </div>
+            <div>
+              <label class="edit-label">Categoría</label>
+              <select id="ep-category" class="form-control">
+                ${globalCategories.map(c => `<option value="${c.id}" ${c.id === partner.category_id ? 'selected' : ''}>${c.name}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Dirección</label>
+            <input type="text" id="ep-address" class="form-control" value="${(partner.address || '').replace(/"/g, '&quot;')}">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
+            <div>
+              <label class="edit-label">Teléfono</label>
+              <input type="text" id="ep-phone" class="form-control" value="${(partner.phone || '').replace(/"/g, '&quot;')}">
+            </div>
+            <div>
+              <label class="edit-label">Email</label>
+              <input type="text" id="ep-email" class="form-control" value="${(partner.email || '').replace(/"/g, '&quot;')}">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
+            <div>
+              <label class="edit-label">Instagram</label>
+              <input type="text" id="ep-instagram" class="form-control" value="${(partner.instagram || '').replace(/"/g, '&quot;')}">
+            </div>
+            <div>
+              <label class="edit-label">Página Web</label>
+              <input type="text" id="ep-website" class="form-control" value="${(partner.website || '').replace(/"/g, '&quot;')}">
+            </div>
+          </div>
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Logo URL</label>
+            <input type="text" id="ep-logo" class="form-control" value="${(partner.logo_url || '').replace(/"/g, '&quot;')}">
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <label class="edit-label">Descripción</label>
+            <textarea id="ep-description" class="form-control" rows="3" style="resize:vertical;">${partner.description || ''}</textarea>
+          </div>
+          <button class="btn btn-sm" id="ep-save-btn" style="width:100%;" onclick="savePartnerEdit('${partner.id}')">Guardar Cambios</button>
+          <div id="ep-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
+        </div>
       `;
 
       openDrawer();
@@ -1016,6 +1088,108 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    // Save partner edit
+    async function savePartnerEdit(partnerId) {
+      const btn = document.getElementById('ep-save-btn');
+      const msgEl = document.getElementById('ep-msg');
+
+      const payload = {
+        partner_id: partnerId,
+        business_name: document.getElementById('ep-name').value.trim(),
+        city_id: document.getElementById('ep-city').value,
+        category_id: document.getElementById('ep-category').value,
+        active: document.getElementById('ep-active').value === 'true',
+        featured: document.getElementById('ep-featured').value === 'true',
+        address: document.getElementById('ep-address').value.trim() || null,
+        phone: document.getElementById('ep-phone').value.trim() || null,
+        email: document.getElementById('ep-email').value.trim() || null,
+        instagram: document.getElementById('ep-instagram').value.trim() || null,
+        website: document.getElementById('ep-website').value.trim() || null,
+        logo_url: document.getElementById('ep-logo').value.trim() || null,
+        description: document.getElementById('ep-description').value.trim() || null,
+      };
+
+      if (!payload.business_name) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'El nombre es obligatorio.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+      msgEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-update-partner', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Patch local cache
+          const idx = globalPartners.findIndex(p => p.id === partnerId);
+          if (idx !== -1) {
+            Object.assign(globalPartners[idx], {
+              business_name: payload.business_name,
+              city_id: payload.city_id,
+              category_id: payload.category_id,
+              active: payload.active,
+              featured: payload.featured,
+              address: payload.address,
+              phone: payload.phone,
+              email: payload.email,
+              instagram: payload.instagram,
+              website: payload.website,
+              logo_url: payload.logo_url,
+              description: payload.description,
+            });
+          }
+          // Re-render partners table
+          const partnersTbody = document.getElementById('partners-body');
+          partnersTbody.innerHTML = '';
+          globalPartners.forEach(partner => {
+            const tr = document.createElement('tr');
+            const date = new Date(partner.created_at).toLocaleDateString('es-CL');
+            const statusBadge = partner.active ? '<span class="badge badge-active">Activo</span>' : '<span class="badge badge-inactive">Inactivo</span>';
+            const featureBadge = partner.featured ? '⭐ Sí' : '-';
+            const cityName = resolveName(globalCities, partner.city_id);
+            tr.innerHTML = `
+              <td><strong>${partner.business_name}</strong></td>
+              <td>${cityName}</td>
+              <td>${statusBadge}</td>
+              <td>${featureBadge}</td>
+              <td>${date}</td>
+              <td style="text-align: center;">
+                <button class="icon-btn" onclick="openPartnerDrawer('${partner.id}')" title="Ver detalle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path></svg>
+                </button>
+              </td>
+            `;
+            partnersTbody.appendChild(tr);
+          });
+          // Update drawer title if name changed
+          document.getElementById('drawer-title').textContent = payload.business_name;
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Cambios guardados.';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al guardar.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar Cambios';
+      }
     }
 
     // Save manual member edit (status + valid_until)
