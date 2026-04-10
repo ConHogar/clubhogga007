@@ -250,6 +250,10 @@
               <h1>Base de Socios</h1>
               <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de socios del Club</p>
             </div>
+            <button class="btn btn-sm btn-secondary" onclick="exportMembersCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Exportar CSV
+            </button>
           </header>
 
           <div class="search-bar-wrapper">
@@ -796,6 +800,8 @@
         return p ? p.business_name : 'Desconocido';
       });
 
+      const validUntilDate = member.valid_until ? member.valid_until.substring(0, 10) : '';
+
       document.getElementById('drawer-title').textContent = member.full_name;
 
       document.getElementById('drawer-body').innerHTML = `
@@ -867,6 +873,24 @@
             return `<div class="drawer-row"><span class="drawer-label">Vence el</span><span style="color:${_color};font-weight:600;">${_label}</span></div>`;
           })() : ''}
         </div>` : ''}
+
+        <div class="drawer-section" style="border-bottom:none;">
+          <h3 class="drawer-section-title">Editar Socio</h3>
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Estado</label>
+            <select id="edit-status" class="form-control">
+              <option value="active" ${member.status === 'active' ? 'selected' : ''}>Activo</option>
+              <option value="pending" ${member.status === 'pending' ? 'selected' : ''}>Pendiente</option>
+              <option value="inactive" ${member.status === 'inactive' ? 'selected' : ''}>Inactivo</option>
+            </select>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <label class="edit-label">Vence el</label>
+            <input type="date" id="edit-valid-until" class="form-control" value="${validUntilDate}">
+          </div>
+          <button class="btn btn-sm" id="edit-save-btn" style="width:100%;" onclick="saveMemberEdit('${member.id}')">Guardar Cambios</button>
+          <div id="edit-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
+        </div>
       `;
 
       openDrawer();
@@ -992,6 +1016,91 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    // Save manual member edit (status + valid_until)
+    async function saveMemberEdit(memberId) {
+      const statusEl = document.getElementById('edit-status');
+      const validUntilEl = document.getElementById('edit-valid-until');
+      const msgEl = document.getElementById('edit-msg');
+      const btn = document.getElementById('edit-save-btn');
+
+      const status = statusEl.value;
+      const validUntil = validUntilEl.value ? validUntilEl.value + 'T12:00:00.000Z' : null;
+
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+      msgEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-update-member', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ member_id: memberId, status, valid_until: validUntil })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Patch local cache so tables update instantly without a full reload
+          const idx = globalMembers.findIndex(m => m.id === memberId);
+          if (idx !== -1) {
+            globalMembers[idx].status = status;
+            globalMembers[idx].valid_until = validUntil;
+          }
+          renderMembersTable(globalMembers);
+          renderExpiryPanel(globalMembers);
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Cambios guardados.';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al guardar.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar Cambios';
+      }
+    }
+
+    // Export visible members to CSV
+    function exportMembersCSV() {
+      if (!globalMembers || globalMembers.length === 0) {
+        alert('No hay socios para exportar.');
+        return;
+      }
+
+      const headers = ['Fecha Registro', 'Nombre', 'RUT', 'Email', 'Teléfono', 'Región', 'Comuna', 'Estado', 'Vence el'];
+
+      const escape = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+
+      const rows = globalMembers.map(m => [
+        new Date(m.created_at).toLocaleDateString('es-CL'),
+        m.full_name,
+        m.rut,
+        m.email,
+        m.phone,
+        m.region,
+        m.comuna,
+        m.status,
+        m.valid_until ? new Date(m.valid_until).toLocaleDateString('es-CL') : ''
+      ].map(escape).join(','));
+
+      const csv = [headers.join(','), ...rows].join('\r\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'club-hogga-socios-' + new Date().toISOString().split('T')[0] + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     // Member search filter
