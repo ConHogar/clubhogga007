@@ -164,10 +164,11 @@
                 <thead>
                   <tr>
                     <th>Empresa</th>
+                    <th>Ciudad</th>
                     <th>Estado</th>
                     <th>Destacado</th>
-                    <th>Link Validación</th>
                     <th>Fecha Ingreso</th>
+                    <th style="text-align: center;">Detalle</th>
                   </tr>
                 </thead>
                 <tbody id="partners-body">
@@ -212,6 +213,23 @@
       </main>
     </div>
   </div>
+
+  <!-- Partner Detail Drawer -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="detail-drawer" id="partner-drawer">
+    <div class="drawer-header">
+      <h2 id="drawer-title">Detalle Empresa</h2>
+      <button class="drawer-close" id="drawer-close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="drawer-body">
+      <!-- Dynamically populated -->
+    </div>
+  </aside>
 
   <!-- Add Partner Modal -->
   <div class="modal-overlay" id="partner-modal">
@@ -294,6 +312,7 @@
     let currentToken = localStorage.getItem('babeclub_admin_token') || null;
     let globalCities = [];
     let globalCategories = [];
+    let globalPartners = [];
 
     // DOM Elements
     const authView = document.getElementById('auth-view');
@@ -403,9 +422,10 @@
 
         const data = await res.json();
 
-        // Save references for forms
+        // Save references for forms and lookups
         if (data.cities) globalCities = data.cities;
         if (data.categories) globalCategories = data.categories;
+        if (data.partners) globalPartners = data.partners;
 
         renderData(data);
       } catch (err) {
@@ -452,27 +472,143 @@
       const partnersTbody = document.getElementById('partners-body');
       partnersTbody.innerHTML = '';
       if (!data.partners || data.partners.length === 0) {
-        partnersTbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No hay empresas aliadas.</td></tr>`;
+        partnersTbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No hay empresas aliadas.</td></tr>`;
       } else {
         data.partners.forEach(partner => {
           const tr = document.createElement('tr');
           const date = new Date(partner.created_at).toLocaleDateString('es-CL');
           const statusBadge = partner.active ? '<span class="badge badge-active">Activo</span>' : '<span class="badge badge-inactive">Inactivo</span>';
           const featureBadge = partner.featured ? '⭐ Sí' : '-';
-
-          const valUrl = window.location.origin + '/validacion/?k=' + partner.validation_token;
+          const cityName = resolveName(globalCities, partner.city_id);
 
           tr.innerHTML = `
             <td><strong>${partner.business_name}</strong></td>
+            <td>${cityName}</td>
             <td>${statusBadge}</td>
             <td>${featureBadge}</td>
-            <td><a href="${valUrl}" target="_blank" style="color: var(--primary-color); text-decoration: none;">Ver QR / Portal</a></td>
             <td>${date}</td>
+            <td style="text-align: center;">
+              <button class="icon-btn" onclick="openPartnerDrawer('${partner.id}')" title="Ver detalle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                </svg>
+              </button>
+            </td>
           `;
           partnersTbody.appendChild(tr);
         });
       }
     }
+
+    // Helper: resolve city/category ID to name
+    function resolveName(list, id) {
+      if (!list || !id) return '-';
+      const item = list.find(c => c.id === id);
+      return item ? item.name : '-';
+    }
+
+    // Drawer Logic
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const partnerDrawer = document.getElementById('partner-drawer');
+    const drawerClose = document.getElementById('drawer-close');
+
+    function openPartnerDrawer(partnerId) {
+      const partner = globalPartners.find(p => p.id === partnerId);
+      if (!partner) return;
+
+      const cityName = resolveName(globalCities, partner.city_id);
+      const catName = resolveName(globalCategories, partner.category_id);
+      const valUrl = window.location.origin + '/validacion/?k=' + partner.validation_token;
+      const date = new Date(partner.created_at).toLocaleDateString('es-CL');
+      const statusBadge = partner.active
+        ? '<span class="badge badge-active">Activo</span>'
+        : '<span class="badge badge-inactive">Inactivo</span>';
+
+      document.getElementById('drawer-title').textContent = partner.business_name;
+
+      document.getElementById('drawer-body').innerHTML = `
+        ${partner.logo_url ? `<div class="drawer-logo"><img src="${partner.logo_url}" alt="${partner.business_name}"></div>` : ''}
+
+        <div class="drawer-section">
+          <div class="drawer-row">
+            <span class="drawer-label">Estado</span>
+            <span>${statusBadge}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Destacado</span>
+            <span>${partner.featured ? '⭐ Sí' : 'No'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Ciudad</span>
+            <span>${cityName}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Categoría</span>
+            <span>${catName}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Dirección</span>
+            <span>${partner.address || '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Registrado</span>
+            <span>${date}</span>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Contacto & Redes</h3>
+          <div class="drawer-row">
+            <span class="drawer-label">Instagram</span>
+            <span>${partner.instagram ? '<a href="https://instagram.com/' + partner.instagram.replace('@','') + '" target="_blank" class="drawer-link">' + partner.instagram + '</a>' : '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Web</span>
+            <span>${partner.website ? '<a href="' + partner.website + '" target="_blank" class="drawer-link">' + partner.website + '</a>' : '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Teléfono</span>
+            <span>${partner.phone || '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Email</span>
+            <span>${partner.email || '-'}</span>
+          </div>
+        </div>
+
+        ${partner.description ? `<div class="drawer-section"><h3 class="drawer-section-title">Descripción</h3><p class="drawer-description">${partner.description}</p></div>` : ''}
+
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Portal de Validación</h3>
+          <a href="${valUrl}" target="_blank" class="drawer-val-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Abrir Portal de Validación
+          </a>
+          <div class="drawer-token">Token: <code>${partner.validation_token}</code></div>
+        </div>
+      `;
+
+      drawerOverlay.classList.add('active');
+      partnerDrawer.classList.add('active');
+    }
+
+    function closePartnerDrawer() {
+      drawerOverlay.classList.remove('active');
+      partnerDrawer.classList.remove('active');
+    }
+
+    drawerClose.addEventListener('click', closePartnerDrawer);
+    drawerOverlay.addEventListener('click', closePartnerDrawer);
+
+    // Close drawer on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePartnerDrawer();
+    });
 
     // Modal & Form Logic
     const partnerModal = document.getElementById('partner-modal');

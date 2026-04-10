@@ -51,7 +51,7 @@ export async function onRequestGet({ request, env }) {
     const membersList = await membersRes.json();
 
     // 5. Fetch Partners/Businesses
-    const partnersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=id,business_name,city_id,category_id,active,featured,validation_token,created_at&order=created_at.desc`, {
+    const partnersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=*&order=created_at.desc`, {
       method: 'GET',
       headers: supabaseHeaders
     });
