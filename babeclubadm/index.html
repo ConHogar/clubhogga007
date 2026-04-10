@@ -155,6 +155,28 @@
               <div class="stat-value" id="stat-validations">-</div>
             </div>
           </div>
+
+          <!-- Expiry Alert Panel -->
+          <div id="expiry-panel" class="alert-panel" style="display:none;">
+            <div class="alert-panel-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              Alertas de Renovación
+              <span id="expiry-count-badge" class="badge badge-inactive" style="margin-left: auto;"></span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Socio</th>
+                    <th>Email</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="expiry-body"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <!-- 2. Businesses View -->
@@ -226,10 +248,15 @@
           <header class="dash-header">
             <div>
               <h1>Base de Socios</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Cien últimos registros de
-                sistema</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de socios del Club</p>
             </div>
           </header>
+
+          <div class="search-bar-wrapper">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="member-search" class="search-input" placeholder="Buscar por nombre, email o RUT...">
+            <span id="member-count" class="search-count"></span>
+          </div>
 
           <div class="data-section">
             <div class="table-container">
@@ -492,37 +519,9 @@
       document.getElementById('stat-partners').textContent = data.partners ? data.partners.length : '0';
       document.getElementById('stat-validations').textContent = data.stats.totalValidations || '0';
 
-      // Members Table
-      const membersTbody = document.getElementById('members-body');
-      membersTbody.innerHTML = '';
-      if (!data.members || data.members.length === 0) {
-        membersTbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay socios registrados.</td></tr>`;
-      } else {
-        data.members.forEach(member => {
-          const tr = document.createElement('tr');
-          const date = new Date(member.created_at).toLocaleDateString('es-CL');
-          const badgeClass = member.status === 'active' ? 'badge-active' : 'badge-pending';
-          const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
-
-          tr.innerHTML = `
-            <td>${date}</td>
-            <td><strong>${member.full_name}</strong></td>
-            <td>${member.rut}</td>
-            <td>${member.email || '-'}</td>
-            <td>${geo}</td>
-            <td><span class="badge ${badgeClass}">${member.status}</span></td>
-            <td style="text-align: center;">
-              <button class="icon-btn" onclick="openMemberDrawer('${member.id}')" title="Ver detalle">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                </svg>
-              </button>
-            </td>
-          `;
-          membersTbody.appendChild(tr);
-        });
-      }
+      // Members Table + Expiry Panel
+      renderMembersTable(data.members || []);
+      renderExpiryPanel(data.members || []);
 
       // Partners Table
       const partnersTbody = document.getElementById('partners-body');
@@ -851,11 +850,22 @@
           </div>
         </div>` : ''}
 
-        ${member.start_date || member.renewal_date ? `
+        ${(member.start_date || member.renewal_date || member.valid_until) ? `
         <div class="drawer-section">
           <h3 class="drawer-section-title">Suscripción</h3>
           ${member.start_date ? `<div class="drawer-row"><span class="drawer-label">Inicio</span><span>${member.start_date}</span></div>` : ''}
           ${member.renewal_date ? `<div class="drawer-row"><span class="drawer-label">Renovación</span><span>${member.renewal_date}</span></div>` : ''}
+          ${member.valid_until ? (() => {
+            const _exp = new Date(member.valid_until);
+            const _now = new Date();
+            const _days = Math.round((_exp - _now) / 86400000);
+            const _str = _exp.toLocaleDateString('es-CL');
+            let _label, _color;
+            if (_exp < _now) { _label = `${_str} (expirado)`; _color = 'var(--danger-color)'; }
+            else if (_days <= 7) { _label = `${_str} (${_days} día${_days !== 1 ? 's' : ''})`; _color = 'var(--warning-color)'; }
+            else { _label = _str; _color = 'var(--success-color)'; }
+            return `<div class="drawer-row"><span class="drawer-label">Vence el</span><span style="color:${_color};font-weight:600;">${_label}</span></div>`;
+          })() : ''}
         </div>` : ''}
       `;
 
@@ -890,6 +900,112 @@
       const token = Array.from(cryptoArr, byte => byte.toString(16).padStart(2, '0')).join('');
       document.getElementById('p-token').value = token;
     }
+
+    // Render members table — called by renderData and by the search filter
+    function renderMembersTable(members) {
+      const tbody = document.getElementById('members-body');
+      const countEl = document.getElementById('member-count');
+      tbody.innerHTML = '';
+
+      if (countEl) {
+        countEl.textContent = members.length < globalMembers.length
+          ? `${members.length} de ${globalMembers.length} socios`
+          : `${globalMembers.length} socios`;
+      }
+
+      if (!members || members.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">No se encontraron resultados.</td></tr>`;
+        return;
+      }
+
+      members.forEach(member => {
+        const tr = document.createElement('tr');
+        const date = new Date(member.created_at).toLocaleDateString('es-CL');
+        const badgeClass = member.status === 'active' ? 'badge-active' : 'badge-pending';
+        const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
+
+        tr.innerHTML = `
+          <td>${date}</td>
+          <td><strong>${member.full_name}</strong></td>
+          <td>${member.rut}</td>
+          <td>${member.email || '-'}</td>
+          <td>${geo}</td>
+          <td><span class="badge ${badgeClass}">${member.status}</span></td>
+          <td style="text-align:center;">
+            <button class="icon-btn" onclick="openMemberDrawer('${member.id}')" title="Ver detalle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              </svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Render expiry alert panel on the dashboard
+    function renderExpiryPanel(members) {
+      const panel = document.getElementById('expiry-panel');
+      const tbody = document.getElementById('expiry-body');
+      const badge = document.getElementById('expiry-count-badge');
+
+      const now = new Date();
+      const sevenDaysLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+      const atRisk = members.filter(m => {
+        if (!m.valid_until || m.status !== 'active') return false;
+        return new Date(m.valid_until) <= sevenDaysLater;
+      }).sort((a, b) => new Date(a.valid_until) - new Date(b.valid_until));
+
+      if (atRisk.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      panel.style.display = 'block';
+      badge.textContent = atRisk.length;
+      tbody.innerHTML = '';
+
+      atRisk.forEach(member => {
+        const exp = new Date(member.valid_until);
+        const isExpired = exp < now;
+        const daysLeft = Math.round((exp - now) / 86400000);
+        const expStr = exp.toLocaleDateString('es-CL');
+
+        let statusLabel, statusClass;
+        if (isExpired) {
+          const ago = Math.abs(daysLeft);
+          statusLabel = ago === 0 ? 'Venció hoy' : `Venció hace ${ago} día${ago !== 1 ? 's' : ''}`;
+          statusClass = 'badge-expired';
+        } else {
+          statusLabel = daysLeft === 0 ? 'Vence hoy' : `Vence en ${daysLeft} día${daysLeft !== 1 ? 's' : ''}`;
+          statusClass = 'badge-expiring';
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${member.full_name}</strong></td>
+          <td>${member.email || '-'}</td>
+          <td>${expStr}</td>
+          <td><span class="badge ${statusClass}">${statusLabel}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Member search filter
+    document.getElementById('member-search').addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      const filtered = q
+        ? globalMembers.filter(m =>
+            (m.full_name || '').toLowerCase().includes(q) ||
+            (m.email || '').toLowerCase().includes(q) ||
+            (m.rut || '').toLowerCase().includes(q)
+          )
+        : globalMembers;
+      renderMembersTable(filtered);
+    });
 
     document.getElementById('partner-form').addEventListener('submit', async (e) => {
       e.preventDefault();
