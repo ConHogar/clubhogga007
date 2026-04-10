@@ -464,6 +464,13 @@ td.col-action {
   text-align: center;
 }
 
+th.col-actions,
+td.col-actions {
+  width: 90px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 /* Modals */
 .modal-overlay {
   position: fixed;
