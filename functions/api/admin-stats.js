@@ -38,7 +38,7 @@ export async function onRequestGet({ request, env }) {
     const totalMembers = totalData.length || 0;
 
     // 4. Fetch the latest 100 members for the dashboard table
-    const membersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,full_name,email,rut,phone,status,created_at,region,comuna&order=created_at.desc&limit=100`, {
+    const membersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=*&order=created_at.desc&limit=100`, {
       method: 'GET',
       headers: supabaseHeaders
     });
@@ -68,18 +68,27 @@ export async function onRequestGet({ request, env }) {
     let citiesList = citiesRes.ok ? await citiesRes.json() : [];
     let categoriesList = categoriesRes.ok ? await categoriesRes.json() : [];
 
-    // 7. Return aggregated data
+    // 7. Fetch Validation Logs (last 200)
+    const valLogsRes = await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs?select=*&order=created_at.desc&limit=200`, {
+      method: 'GET',
+      headers: supabaseHeaders
+    });
+    let validationLogs = valLogsRes.ok ? await valLogsRes.json() : [];
+
+    // 8. Return aggregated data
     return new Response(JSON.stringify({
       success: true,
       stats: {
         activeSubscribers: activeSubs,
         totalRegistered: totalMembers,
-        pendingMembers: totalMembers - activeSubs
+        pendingMembers: totalMembers - activeSubs,
+        totalValidations: validationLogs.length
       },
       members: membersList,
       partners: partnersList,
       cities: citiesList,
-      categories: categoriesList
+      categories: categoriesList,
+      validationLogs: validationLogs
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

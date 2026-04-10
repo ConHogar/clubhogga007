@@ -82,6 +82,12 @@
             </svg>
             Empresas
           </a>
+          <a class="nav-item" data-target="view-activity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            Actividad
+          </a>
           <a class="nav-item" data-target="view-members">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -144,6 +150,10 @@
               <div class="stat-title">Empresas Aliadas</div>
               <div class="stat-value" id="stat-partners">-</div>
             </div>
+            <div class="stat-card">
+              <div class="stat-title">Validaciones Recientes</div>
+              <div class="stat-value" id="stat-validations">-</div>
+            </div>
           </div>
         </div>
 
@@ -179,7 +189,39 @@
           </div>
         </div>
 
-        <!-- 3. Members View -->
+        <!-- 3. Activity View -->
+        <div id="view-activity" class="view-container">
+          <header class="dash-header">
+            <div>
+              <h1>Actividad de Validaciones</h1>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Historial de verificaciones de membresía en comercios aliados</p>
+            </div>
+          </header>
+
+          <div class="activity-summary" id="activity-summary">
+            <!-- Populated dynamically -->
+          </div>
+
+          <div class="data-section">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha / Hora</th>
+                    <th>Empresa</th>
+                    <th>Socio / RUT</th>
+                    <th>Resultado</th>
+                  </tr>
+                </thead>
+                <tbody id="activity-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Members View -->
         <div id="view-members" class="view-container">
           <header class="dash-header">
             <div>
@@ -200,6 +242,7 @@
                     <th>Email</th>
                     <th>Región / Comuna</th>
                     <th>Estado</th>
+                    <th style="text-align: center;">Detalle</th>
                   </tr>
                 </thead>
                 <tbody id="members-body">
@@ -214,11 +257,11 @@
     </div>
   </div>
 
-  <!-- Partner Detail Drawer -->
+  <!-- Detail Drawer (shared for partners & members) -->
   <div class="drawer-overlay" id="drawer-overlay"></div>
-  <aside class="detail-drawer" id="partner-drawer">
+  <aside class="detail-drawer" id="detail-drawer">
     <div class="drawer-header">
-      <h2 id="drawer-title">Detalle Empresa</h2>
+      <h2 id="drawer-title">Detalle</h2>
       <button class="drawer-close" id="drawer-close">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -313,6 +356,8 @@
     let globalCities = [];
     let globalCategories = [];
     let globalPartners = [];
+    let globalMembers = [];
+    let globalValidationLogs = [];
 
     // DOM Elements
     const authView = document.getElementById('auth-view');
@@ -426,6 +471,8 @@
         if (data.cities) globalCities = data.cities;
         if (data.categories) globalCategories = data.categories;
         if (data.partners) globalPartners = data.partners;
+        if (data.members) globalMembers = data.members;
+        if (data.validationLogs) globalValidationLogs = data.validationLogs;
 
         renderData(data);
       } catch (err) {
@@ -443,12 +490,13 @@
       document.getElementById('stat-active').textContent = data.stats.activeSubscribers;
       document.getElementById('stat-pending').textContent = data.stats.pendingMembers;
       document.getElementById('stat-partners').textContent = data.partners ? data.partners.length : '0';
+      document.getElementById('stat-validations').textContent = data.stats.totalValidations || '0';
 
       // Members Table
       const membersTbody = document.getElementById('members-body');
       membersTbody.innerHTML = '';
       if (!data.members || data.members.length === 0) {
-        membersTbody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No hay socios registrados.</td></tr>`;
+        membersTbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No hay socios registrados.</td></tr>`;
       } else {
         data.members.forEach(member => {
           const tr = document.createElement('tr');
@@ -463,6 +511,14 @@
             <td>${member.email || '-'}</td>
             <td>${geo}</td>
             <td><span class="badge ${badgeClass}">${member.status}</span></td>
+            <td style="text-align: center;">
+              <button class="icon-btn" onclick="openMemberDrawer('${member.id}')" title="Ver detalle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                </svg>
+              </button>
+            </td>
           `;
           membersTbody.appendChild(tr);
         });
@@ -499,6 +555,9 @@
           partnersTbody.appendChild(tr);
         });
       }
+
+      // Validation Logs Table
+      renderValidationLogs(data.validationLogs || []);
     }
 
     // Helper: resolve city/category ID to name
@@ -508,11 +567,115 @@
       return item ? item.name : '-';
     }
 
-    // Drawer Logic
+    // Validation Logs Rendering
+    function renderValidationLogs(logs) {
+      const tbody = document.getElementById('activity-body');
+      const summary = document.getElementById('activity-summary');
+      tbody.innerHTML = '';
+
+      if (!logs || logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No hay validaciones registradas aún.</td></tr>`;
+        summary.innerHTML = '';
+        return;
+      }
+
+      // Calculate summary stats
+      const successCount = logs.filter(l => l.result === 'valid').length;
+      const failCount = logs.filter(l => l.result !== 'valid').length;
+      const now = new Date();
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const thisWeek = logs.filter(l => new Date(l.created_at) >= weekAgo).length;
+
+      // Top businesses by validation count
+      const bizCounts = {};
+      logs.forEach(l => {
+        if (l.partner_id) {
+          bizCounts[l.partner_id] = (bizCounts[l.partner_id] || 0) + 1;
+        }
+      });
+      const topBiz = Object.entries(bizCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([id, count]) => {
+          const p = globalPartners.find(pp => pp.id === id);
+          return { name: p ? p.business_name : 'Desconocido', count };
+        });
+
+      summary.innerHTML = `
+        <div class="activity-stats">
+          <div class="activity-stat">
+            <span class="activity-stat-value">${thisWeek}</span>
+            <span class="activity-stat-label">Esta semana</span>
+          </div>
+          <div class="activity-stat">
+            <span class="activity-stat-value" style="color: var(--success-color);">${successCount}</span>
+            <span class="activity-stat-label">Exitosas</span>
+          </div>
+          <div class="activity-stat">
+            <span class="activity-stat-value" style="color: var(--danger-color);">${failCount}</span>
+            <span class="activity-stat-label">Fallidas</span>
+          </div>
+        </div>
+        ${topBiz.length > 0 ? `
+        <div class="top-businesses">
+          <span class="top-biz-label">Top comercios:</span>
+          ${topBiz.map((b, i) => `<span class="top-biz-chip">${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'} ${b.name} <strong>(${b.count})</strong></span>`).join('')}
+        </div>` : ''}
+      `;
+
+      // Render rows
+      logs.forEach(log => {
+        const tr = document.createElement('tr');
+        const dt = new Date(log.created_at);
+        const dateStr = dt.toLocaleDateString('es-CL') + ' ' + dt.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+
+        // Resolve partner name
+        const partnerObj = globalPartners.find(p => p.id === log.partner_id);
+        const bizName = partnerObj ? partnerObj.business_name : '-';
+
+        // Resolve member name
+        const memberObj = log.member_id ? globalMembers.find(m => m.id === log.member_id) : null;
+        const memberInfo = memberObj
+          ? `<strong>${memberObj.full_name}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${log.rut_entered || memberObj.rut}</span>`
+          : `<span style="color: var(--text-muted);">${log.rut_entered || '-'}</span>`;
+
+        const isValid = log.result === 'valid';
+        const resultBadge = isValid
+          ? '<span class="badge badge-active">✓ Válido</span>'
+          : `<span class="badge badge-inactive">${log.result === 'invalid_rut' ? 'RUT no encontrado' : log.result === 'inactive' ? 'Socio inactivo' : log.result || 'Rechazado'}</span>`;
+
+        tr.innerHTML = `
+          <td>${dateStr}</td>
+          <td><strong>${bizName}</strong></td>
+          <td>${memberInfo}</td>
+          <td>${resultBadge}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Drawer Logic (shared for partners & members)
     const drawerOverlay = document.getElementById('drawer-overlay');
-    const partnerDrawer = document.getElementById('partner-drawer');
+    const detailDrawer = document.getElementById('detail-drawer');
     const drawerClose = document.getElementById('drawer-close');
 
+    function openDrawer() {
+      drawerOverlay.classList.add('active');
+      detailDrawer.classList.add('active');
+    }
+
+    function closeDrawer() {
+      drawerOverlay.classList.remove('active');
+      detailDrawer.classList.remove('active');
+    }
+
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Partner Drawer
     function openPartnerDrawer(partnerId) {
       const partner = globalPartners.find(p => p.id === partnerId);
       if (!partner) return;
@@ -524,6 +687,10 @@
       const statusBadge = partner.active
         ? '<span class="badge badge-active">Activo</span>'
         : '<span class="badge badge-inactive">Inactivo</span>';
+
+      // Count validations for this partner
+      const partnerVals = globalValidationLogs.filter(v => v.partner_id === partner.id);
+      const partnerSuccess = partnerVals.filter(v => v.result === 'valid').length;
 
       document.getElementById('drawer-title').textContent = partner.business_name;
 
@@ -554,6 +721,18 @@
           <div class="drawer-row">
             <span class="drawer-label">Registrado</span>
             <span>${date}</span>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Engagement</h3>
+          <div class="drawer-row">
+            <span class="drawer-label">Total validaciones</span>
+            <span><strong>${partnerVals.length}</strong></span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Exitosas</span>
+            <span style="color: var(--success-color);"><strong>${partnerSuccess}</strong></span>
           </div>
         </div>
 
@@ -593,22 +772,95 @@
         </div>
       `;
 
-      drawerOverlay.classList.add('active');
-      partnerDrawer.classList.add('active');
+      openDrawer();
     }
 
-    function closePartnerDrawer() {
-      drawerOverlay.classList.remove('active');
-      partnerDrawer.classList.remove('active');
+    // Member Drawer
+    function openMemberDrawer(memberId) {
+      const member = globalMembers.find(m => m.id === memberId);
+      if (!member) return;
+
+      const date = new Date(member.created_at).toLocaleDateString('es-CL');
+      const statusBadge = member.status === 'active'
+        ? '<span class="badge badge-active">Activo</span>'
+        : '<span class="badge badge-pending">' + member.status + '</span>';
+      const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
+
+      // Count this member's validations
+      const memberVals = globalValidationLogs.filter(v => v.member_id === member.id);
+      const lastVal = memberVals.length > 0 ? new Date(memberVals[0].created_at).toLocaleDateString('es-CL') : 'Nunca';
+
+      // Businesses visited by this member
+      const visitedBizIds = [...new Set(memberVals.filter(v => v.result === 'valid').map(v => v.partner_id))];
+      const visitedBizNames = visitedBizIds.map(id => {
+        const p = globalPartners.find(pp => pp.id === id);
+        return p ? p.business_name : 'Desconocido';
+      });
+
+      document.getElementById('drawer-title').textContent = member.full_name;
+
+      document.getElementById('drawer-body').innerHTML = `
+        <div class="drawer-section">
+          <div class="drawer-row">
+            <span class="drawer-label">Estado</span>
+            <span>${statusBadge}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">RUT</span>
+            <span><strong>${member.rut}</strong></span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Email</span>
+            <span>${member.email || '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Teléfono</span>
+            <span>${member.phone || '-'}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Región / Comuna</span>
+            <span>${geo}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Fecha registro</span>
+            <span>${date}</span>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Engagement</h3>
+          <div class="drawer-row">
+            <span class="drawer-label">Total validaciones</span>
+            <span><strong>${memberVals.length}</strong></span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Última validación</span>
+            <span>${lastVal}</span>
+          </div>
+          <div class="drawer-row">
+            <span class="drawer-label">Comercios visitados</span>
+            <span><strong>${visitedBizIds.length}</strong></span>
+          </div>
+        </div>
+
+        ${visitedBizNames.length > 0 ? `
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Comercios Usados</h3>
+          <div class="drawer-chips">
+            ${visitedBizNames.map(name => `<span class="drawer-chip">${name}</span>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${member.start_date || member.renewal_date ? `
+        <div class="drawer-section">
+          <h3 class="drawer-section-title">Suscripción</h3>
+          ${member.start_date ? `<div class="drawer-row"><span class="drawer-label">Inicio</span><span>${member.start_date}</span></div>` : ''}
+          ${member.renewal_date ? `<div class="drawer-row"><span class="drawer-label">Renovación</span><span>${member.renewal_date}</span></div>` : ''}
+        </div>` : ''}
+      `;
+
+      openDrawer();
     }
-
-    drawerClose.addEventListener('click', closePartnerDrawer);
-    drawerOverlay.addEventListener('click', closePartnerDrawer);
-
-    // Close drawer on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closePartnerDrawer();
-    });
 
     // Modal & Form Logic
     const partnerModal = document.getElementById('partner-modal');
