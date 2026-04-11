@@ -745,6 +745,10 @@
           <div class="drawer-token">Token: <code>${partner.validation_token}</code></div>
         </div>
 
+        <div id="partner-benefits-section" class="drawer-section">
+          <div style="color:var(--text-muted);font-size:0.8125rem;padding:0.5rem 0;">Cargando beneficios...</div>
+        </div>
+
         ${scrollToEdit ? `
         <div class="drawer-section" style="border-bottom:none;">
           <h3 class="drawer-section-title">Editar Empresa</h3>
@@ -821,6 +825,7 @@
       `;
 
       openDrawer();
+      loadPartnerBenefits(partner.id);
       if (scrollToEdit) {
         setTimeout(() => {
           const el = document.getElementById('ep-name');
@@ -1280,6 +1285,303 @@
         : globalMembers;
       renderMembersTable(filtered);
     });
+
+    // ── Benefits CRUD ──────────────────────────────────────────────────────────
+
+    let currentBenefits = [];
+    let currentBenefitPartnerId = null;
+
+    async function loadPartnerBenefits(partnerId) {
+      currentBenefitPartnerId = partnerId;
+      currentBenefits = [];
+      const section = document.getElementById('partner-benefits-section');
+      if (!section) return;
+      section.innerHTML = '<div style="color:var(--text-muted);font-size:0.8125rem;padding:0.5rem 0;">Cargando beneficios...</div>';
+      try {
+        const res = await fetch(`/api/admin-benefits?partner_id=${partnerId}`, {
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          currentBenefits = data.benefits;
+          renderBenefitsSection();
+        } else {
+          section.innerHTML = '<div style="color:var(--danger-color);font-size:0.8125rem;">Error cargando beneficios.</div>';
+        }
+      } catch (err) {
+        section.innerHTML = '<div style="color:var(--danger-color);font-size:0.8125rem;">Error de conexión.</div>';
+      }
+    }
+
+    function renderBenefitsSection() {
+      const section = document.getElementById('partner-benefits-section');
+      if (!section) return;
+
+      const discountLabel = (b) => {
+        if (!b.discount_type) return '';
+        if (b.discount_type === 'percentage') return `${b.discount_value || '?'}% descuento`;
+        if (b.discount_type === 'fixed') return `$${b.discount_value || '?'} descuento`;
+        if (b.discount_type === '2x1') return '2x1';
+        if (b.discount_type === 'gift') return 'Regalo';
+        return b.discount_type;
+      };
+
+      const benefitCards = currentBenefits.map(b => {
+        const discount = discountLabel(b);
+        const activeBadge = b.active
+          ? '<span class="badge badge-active" style="font-size:0.7rem;padding:0.15rem 0.5rem;">Activo</span>'
+          : '<span class="badge badge-inactive" style="font-size:0.7rem;padding:0.15rem 0.5rem;">Inactivo</span>';
+        const safeTitle = b.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        return `
+          <div class="benefit-card" id="benefit-card-${b.id}">
+            <div class="benefit-card-header">
+              <div>
+                <span class="benefit-title">${b.title}</span>
+                ${discount ? `<span class="benefit-discount">${discount}</span>` : ''}
+              </div>
+              <div class="benefit-card-actions">
+                ${activeBadge}
+                <button class="icon-btn" onclick="editBenefit('${b.id}')" title="Editar beneficio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <button class="icon-btn icon-btn-danger" onclick="deleteBenefit('${b.id}', '${safeTitle}')" title="Eliminar beneficio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>
+                </button>
+              </div>
+            </div>
+            ${b.description ? `<p class="benefit-desc">${b.description}</p>` : ''}
+            ${b.conditions ? `<p class="benefit-conditions">${b.conditions}</p>` : ''}
+          </div>`;
+      }).join('');
+
+      section.innerHTML = `
+        <div class="drawer-section-header-row">
+          <h3 class="drawer-section-title" style="margin:0;">Beneficios (${currentBenefits.length})</h3>
+          <button class="btn btn-sm btn-secondary" style="width:auto;" onclick="showAddBenefitForm()">+ Añadir</button>
+        </div>
+        ${currentBenefits.length === 0
+          ? '<p style="color:var(--text-muted);font-size:0.8125rem;margin-top:0.5rem;">Sin beneficios registrados.</p>'
+          : `<div class="benefits-list" style="margin-top:0.75rem;">${benefitCards}</div>`}
+        <div id="benefit-form-container" style="display:none;margin-top:1rem;"></div>
+        <div id="benefit-msg" style="min-height:1rem;font-size:0.8125rem;margin-top:0.5rem;"></div>
+      `;
+    }
+
+    function getBenefitFormHTML(benefit) {
+      const b = benefit || {};
+      return `
+        <div class="benefit-form">
+          <div style="margin-bottom:0.75rem;">
+            <label class="edit-label">Título *</label>
+            <input type="text" id="bf-title" class="form-control" value="${(b.title || '').replace(/"/g, '&quot;')}" placeholder="Ej: 10% en toda la carta">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div>
+              <label class="edit-label">Tipo de descuento</label>
+              <select id="bf-discount-type" class="form-control">
+                <option value="" ${!b.discount_type ? 'selected' : ''}>Sin especificar</option>
+                <option value="percentage" ${b.discount_type === 'percentage' ? 'selected' : ''}>Porcentaje (%)</option>
+                <option value="fixed" ${b.discount_type === 'fixed' ? 'selected' : ''}>Monto fijo ($)</option>
+                <option value="2x1" ${b.discount_type === '2x1' ? 'selected' : ''}>2x1</option>
+                <option value="gift" ${b.discount_type === 'gift' ? 'selected' : ''}>Regalo</option>
+                <option value="other" ${b.discount_type === 'other' ? 'selected' : ''}>Otro</option>
+              </select>
+            </div>
+            <div>
+              <label class="edit-label">Valor</label>
+              <input type="number" id="bf-discount-value" class="form-control" value="${b.discount_value !== null && b.discount_value !== undefined ? b.discount_value : ''}" placeholder="Ej: 10" min="0" step="any">
+            </div>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <label class="edit-label">Descripción</label>
+            <textarea id="bf-description" class="form-control" rows="2" style="resize:vertical;" placeholder="Detalle del beneficio...">${b.description || ''}</textarea>
+          </div>
+          <div style="margin-bottom:0.75rem;">
+            <label class="edit-label">Condiciones</label>
+            <textarea id="bf-conditions" class="form-control" rows="2" style="resize:vertical;" placeholder="Restricciones, horarios, etc.">${b.conditions || ''}</textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+            <div>
+              <label class="edit-label">Válido desde</label>
+              <input type="date" id="bf-start-date" class="form-control" value="${b.start_date || ''}">
+            </div>
+            <div>
+              <label class="edit-label">Válido hasta</label>
+              <input type="date" id="bf-end-date" class="form-control" value="${b.end_date || ''}">
+            </div>
+          </div>
+          ${benefit ? `
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Estado</label>
+            <select id="bf-active" class="form-control">
+              <option value="true" ${b.active ? 'selected' : ''}>Activo</option>
+              <option value="false" ${!b.active ? 'selected' : ''}>Inactivo</option>
+            </select>
+          </div>` : ''}
+          <div style="display:flex;gap:0.5rem;margin-top:0.25rem;">
+            <button class="btn btn-sm" style="width:auto;" id="bf-save-btn" onclick="${benefit ? `saveBenefitEdit('${benefit.id}')` : 'saveBenefitAdd()'}">
+              ${benefit ? 'Guardar Cambios' : 'Añadir Beneficio'}
+            </button>
+            <button class="btn btn-sm btn-secondary" style="width:auto;" onclick="cancelBenefitForm()">Cancelar</button>
+          </div>
+        </div>`;
+    }
+
+    function showAddBenefitForm() {
+      const container = document.getElementById('benefit-form-container');
+      if (!container) return;
+      container.style.display = 'block';
+      container.innerHTML = `<p style="font-size:0.8125rem;font-weight:600;color:var(--text-main);margin-bottom:0.75rem;">Nuevo Beneficio</p>` + getBenefitFormHTML(null);
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function editBenefit(benefitId) {
+      const benefit = currentBenefits.find(b => b.id === benefitId);
+      if (!benefit) return;
+      const container = document.getElementById('benefit-form-container');
+      if (!container) return;
+      container.style.display = 'block';
+      container.innerHTML = `<p style="font-size:0.8125rem;font-weight:600;color:var(--text-main);margin-bottom:0.75rem;">Editar Beneficio</p>` + getBenefitFormHTML(benefit);
+      container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function cancelBenefitForm() {
+      const container = document.getElementById('benefit-form-container');
+      if (container) { container.style.display = 'none'; container.innerHTML = ''; }
+      const msg = document.getElementById('benefit-msg');
+      if (msg) msg.textContent = '';
+    }
+
+    function readBenefitFormValues() {
+      const discountVal = document.getElementById('bf-discount-value').value;
+      return {
+        title: document.getElementById('bf-title').value.trim(),
+        description: document.getElementById('bf-description').value.trim() || null,
+        discount_type: document.getElementById('bf-discount-type').value || null,
+        discount_value: discountVal !== '' ? parseFloat(discountVal) : null,
+        conditions: document.getElementById('bf-conditions').value.trim() || null,
+        start_date: document.getElementById('bf-start-date').value || null,
+        end_date: document.getElementById('bf-end-date').value || null,
+      };
+    }
+
+    async function saveBenefitAdd() {
+      const btn = document.getElementById('bf-save-btn');
+      const msgEl = document.getElementById('benefit-msg');
+      const values = readBenefitFormValues();
+
+      if (!values.title) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'El título es obligatorio.';
+        return;
+      }
+
+      btn.disabled = true; btn.textContent = 'Guardando...'; msgEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-benefits', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ partner_id: currentBenefitPartnerId, ...values })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          currentBenefits.push(data.benefit);
+          renderBenefitsSection();
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Beneficio añadido.';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al guardar.';
+          btn.disabled = false; btn.textContent = 'Añadir Beneficio';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+        btn.disabled = false; btn.textContent = 'Añadir Beneficio';
+      }
+    }
+
+    async function saveBenefitEdit(benefitId) {
+      const btn = document.getElementById('bf-save-btn');
+      const msgEl = document.getElementById('benefit-msg');
+      const values = readBenefitFormValues();
+      const activeEl = document.getElementById('bf-active');
+
+      if (!values.title) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'El título es obligatorio.';
+        return;
+      }
+
+      btn.disabled = true; btn.textContent = 'Guardando...'; msgEl.textContent = '';
+
+      const payload = {
+        benefit_id: benefitId,
+        ...values,
+        active: activeEl ? activeEl.value === 'true' : true,
+      };
+
+      try {
+        const res = await fetch('/api/admin-benefits', {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          const idx = currentBenefits.findIndex(b => b.id === benefitId);
+          if (idx !== -1) Object.assign(currentBenefits[idx], {
+            title: values.title,
+            description: values.description,
+            discount_type: values.discount_type,
+            discount_value: values.discount_value,
+            conditions: values.conditions,
+            start_date: values.start_date,
+            end_date: values.end_date,
+            active: payload.active,
+          });
+          renderBenefitsSection();
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Cambios guardados.';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al guardar.';
+          btn.disabled = false; btn.textContent = 'Guardar Cambios';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+        btn.disabled = false; btn.textContent = 'Guardar Cambios';
+      }
+    }
+
+    async function deleteBenefit(benefitId, benefitTitle) {
+      if (!confirm(`¿Eliminar el beneficio "${benefitTitle}"?`)) return;
+
+      const msgEl = document.getElementById('benefit-msg');
+      if (msgEl) msgEl.textContent = '';
+
+      try {
+        const res = await fetch(`/api/admin-benefits?benefit_id=${benefitId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          currentBenefits = currentBenefits.filter(b => b.id !== benefitId);
+          renderBenefitsSection();
+          const msg = document.getElementById('benefit-msg');
+          if (msg) { msg.style.color = 'var(--success-color)'; msg.textContent = 'Beneficio eliminado.'; }
+        } else {
+          if (msgEl) { msgEl.style.color = 'var(--danger-color)'; msgEl.textContent = data.error || 'Error al eliminar.'; }
+        }
+      } catch (err) {
+        if (msgEl) { msgEl.style.color = 'var(--danger-color)'; msgEl.textContent = 'Error de conexión.'; }
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
 
     document.getElementById('partner-form').addEventListener('submit', async (e) => {
       e.preventDefault();
