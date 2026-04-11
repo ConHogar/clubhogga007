@@ -250,10 +250,13 @@
               <h1>Base de Socios</h1>
               <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de socios del Club</p>
             </div>
+            <div style="display:flex;gap:0.75rem;align-items:center;">
+            <button class="btn btn-sm btn-secondary" onclick="openAddMemberModal()">+ Añadir Socio</button>
             <button class="btn btn-sm btn-secondary" onclick="exportMembersCSV()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Exportar CSV
             </button>
+            </div>
           </header>
 
           <div class="search-bar-wrapper">
@@ -375,6 +378,61 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closePartnerModal()">Cancelar</button>
           <button type="submit" class="btn" id="save-partner-btn">Guardar Empresa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Member Modal -->
+  <div class="modal-overlay" id="add-member-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Añadir Socio</h2>
+        <button class="modal-close" onclick="closeAddMemberModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="add-member-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nombre Completo *</label>
+            <input type="text" id="am-name" class="form-control" required placeholder="Ej: Juan Pérez">
+          </div>
+          <div class="form-group">
+            <label>RUT *</label>
+            <input type="text" id="am-rut" class="form-control" required placeholder="Ej: 12.345.678-9">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="am-email" class="form-control" placeholder="Ej: juan@mail.com">
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" id="am-phone" class="form-control" placeholder="Ej: +56 9 1234 5678">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label>Estado</label>
+              <select id="am-status" class="form-control">
+                <option value="active">Activo</option>
+                <option value="pending">Pendiente</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Vence el</label>
+              <input type="date" id="am-valid-until" class="form-control">
+            </div>
+          </div>
+          <div id="add-member-error" class="error-message"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeAddMemberModal()">Cancelar</button>
+          <button type="submit" class="btn" id="add-member-btn">Guardar Socio</button>
         </div>
       </form>
     </div>
@@ -1284,6 +1342,61 @@
           )
         : globalMembers;
       renderMembersTable(filtered);
+    });
+
+    // ── Add Member Modal ───────────────────────────────────────────────────────
+
+    const addMemberModal = document.getElementById('add-member-modal');
+
+    function openAddMemberModal() {
+      document.getElementById('add-member-form').reset();
+      document.getElementById('add-member-error').textContent = '';
+      // Default valid_until to one month from today
+      const d = new Date();
+      d.setMonth(d.getMonth() + 1);
+      document.getElementById('am-valid-until').value = d.toISOString().split('T')[0];
+      addMemberModal.classList.add('active');
+    }
+
+    function closeAddMemberModal() {
+      addMemberModal.classList.remove('active');
+    }
+
+    document.getElementById('add-member-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('add-member-btn');
+      const errEl = document.getElementById('add-member-error');
+
+      const validUntilVal = document.getElementById('am-valid-until').value;
+      const payload = {
+        full_name: document.getElementById('am-name').value.trim(),
+        rut: document.getElementById('am-rut').value.trim(),
+        email: document.getElementById('am-email').value.trim() || null,
+        phone: document.getElementById('am-phone').value.trim() || null,
+        status: document.getElementById('am-status').value,
+        valid_until: validUntilVal ? validUntilVal + 'T12:00:00.000Z' : null,
+      };
+
+      btn.disabled = true; btn.textContent = 'Guardando...'; errEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-create-member', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          closeAddMemberModal();
+          fetchDashData();
+        } else {
+          errEl.textContent = data.error || 'Error desconocido.';
+        }
+      } catch (err) {
+        errEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Guardar Socio';
+      }
     });
 
     // ── Benefits CRUD ──────────────────────────────────────────────────────────
