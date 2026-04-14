@@ -77,6 +77,7 @@ export async function onRequestPost({ request, env }) {
 
     const type = url.searchParams.get('type') || url.searchParams.get('topic') || body.type;
     const resourceId = body?.data?.id || body?.id || url.searchParams.get('id');
+    console.log('Webhook received — type:', type, '| resourceId:', resourceId);
 
     if (!resourceId || !env.MP_ACCESS_TOKEN) {
       return new Response('Ignored - No resourceId or Token', { status: 200 });
@@ -91,6 +92,7 @@ export async function onRequestPost({ request, env }) {
         headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
       });
       const paymentData = await mpRes.json();
+      console.log('MP payment data:', JSON.stringify({ status: paymentData?.status, email: paymentData?.payer?.email }));
       payerEmail = paymentData?.payer?.email;
       resourceStatus = paymentData?.status; // 'approved'
 
@@ -99,8 +101,28 @@ export async function onRequestPost({ request, env }) {
         headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
       });
       const subData = await mpRes.json();
+      console.log('MP preapproval data:', JSON.stringify({ status: subData?.status, email: subData?.payer_email }));
       payerEmail = subData?.payer_email;
       resourceStatus = subData?.status; // 'authorized'
+
+    } else if (type === 'subscription_authorized_payment') {
+      // MP fires this when a subscription charge is successfully collected
+      const mpRes = await fetch(`https://api.mercadopago.com/authorized_payments/${resourceId}`, {
+        headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
+      });
+      const authPayment = await mpRes.json();
+      console.log('MP authorized_payment data:', JSON.stringify({ status: authPayment?.status, preapproval_id: authPayment?.preapproval_id }));
+      // Look up the parent preapproval to get payer_email
+      if (authPayment?.preapproval_id) {
+        const subRes = await fetch(`https://api.mercadopago.com/preapproval/${authPayment.preapproval_id}`, {
+          headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
+        });
+        const subData = await subRes.json();
+        payerEmail = subData?.payer_email;
+        resourceStatus = authPayment?.status === 'processed' ? 'approved' : authPayment?.status;
+      }
+    } else {
+      console.warn('Unhandled webhook type:', type, '| body type:', body.type, '| topic param:', url.searchParams.get('topic'));
     }
 
     // 2. Si se aprobó el pago y tenemos el correo del pagador
@@ -113,11 +135,13 @@ export async function onRequestPost({ request, env }) {
       };
 
       // 3. Obtener el usuario actual en la base de datos
-      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&email=eq.${payerEmail}`, {
+      const encodedEmail = encodeURIComponent(payerEmail);
+      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&email=eq.${encodedEmail}`, {
         method: 'GET',
         headers: supabaseHeaders
       });
       const members = await getMembersRes.json();
+      console.log('Supabase member lookup for', payerEmail, ':', JSON.stringify(members));
 
       let wasPending = false;
       if (members && members.length > 0 && members[0].status === 'pending') {
@@ -135,11 +159,12 @@ export async function onRequestPost({ request, env }) {
         valid_until: validUntil.toISOString()
       };
 
-      await fetch(`${env.SUPABASE_URL}/rest/v1/members?email=eq.${payerEmail}`, {
+      const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?email=eq.${encodedEmail}`, {
         method: 'PATCH',
         headers: supabaseHeaders,
         body: JSON.stringify(updatePayload)
       });
+      console.log('Supabase PATCH status:', patchRes.status);
 
       if (wasPending && env.RESEND_API_KEY) {
         const emailHtml = `

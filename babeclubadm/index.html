@@ -1005,6 +1005,15 @@
           <button class="btn btn-sm" id="edit-save-btn" style="width:100%;" onclick="saveMemberEdit('${member.id}')">Guardar Cambios</button>
           <div id="edit-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
         </div>
+
+        ${member.email ? `
+        <div class="drawer-section" style="border-bottom:none;padding-top:0;">
+          <button class="btn btn-sm btn-secondary" id="welcome-email-btn" style="width:100%;" onclick="sendWelcomeEmail('${member.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            Reenviar Email de Bienvenida
+          </button>
+          <div id="welcome-email-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
+        </div>` : ''}
       `;
 
       openDrawer();
@@ -1293,6 +1302,43 @@
       } finally {
         btn.disabled = false;
         btn.textContent = 'Guardar Cambios';
+      }
+    }
+
+    // Send welcome email manually from admin
+    async function sendWelcomeEmail(memberId) {
+      const btn = document.getElementById('welcome-email-btn');
+      const msgEl = document.getElementById('welcome-email-msg');
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      msgEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-send-welcome', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ member_id: memberId })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = `Email enviado a ${data.email_sent_to}`;
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al enviar.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Reenviar Email de Bienvenida`;
       }
     }
 

@@ -8,7 +8,7 @@ const RESEND_API_KEY = resendKeyLine ? resendKeyLine.split('=')[1].trim().replac
 // =========================================================================
 // ⚠️ 2. PON TU CORREO AQUÍ ⚠️
 // Debe ser EXACTAMENTE el correo con el que te creaste la cuenta en Resend.com
-const MI_CORREO_DE_RESEND = "conciergehogar@gmail.com";
+const MI_CORREO_DE_RESEND = "herigan@gmail.com";
 // =========================================================================
 
 if (!RESEND_API_KEY || !RESEND_API_KEY.startsWith('re_')) {
