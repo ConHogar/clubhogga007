@@ -39,7 +39,7 @@ export async function onRequestPost({ request, env }) {
       description: data.description || null,
       validation_token: data.validation_token,
       logo_url: data.logo_url || null,
-      active: true, // Defaulting to true
+      active: data.active !== undefined ? data.active : true,
       featured: false // Defaulting to false, they can be manually updated later
     };
 
