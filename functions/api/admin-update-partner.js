@@ -21,7 +21,7 @@ export async function onRequestPatch({ request, env }) {
     // 3. Whitelist editable fields
     const allowed = ['business_name', 'city_id', 'category_id', 'address', 'phone',
                      'email', 'instagram', 'website', 'logo_url', 'description',
-                     'active', 'featured'];
+                     'google_maps_url', 'active', 'featured'];
 
     const updatePayload = {};
     for (const key of allowed) {

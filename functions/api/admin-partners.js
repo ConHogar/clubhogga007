@@ -37,6 +37,7 @@ export async function onRequestPost({ request, env }) {
       instagram: data.instagram || null,
       website: data.website || null,
       description: data.description || null,
+      google_maps_url: data.google_maps_url || null,
       validation_token: data.validation_token,
       logo_url: data.logo_url || null,
       active: data.active !== undefined ? data.active : true,

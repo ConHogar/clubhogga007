@@ -387,6 +387,10 @@
             <textarea id="p-description" class="form-control" rows="2" placeholder="Breve descripción del comercio..."></textarea>
           </div>
           <div class="form-group">
+            <label>Google Maps URL (Opcional)</label>
+            <input type="url" id="p-google-maps" class="form-control" placeholder="Ej: https://maps.app.goo.gl/...">
+          </div>
+          <div class="form-group">
             <label>Dirección (Opcional)</label>
             <input type="text" id="p-address" class="form-control" placeholder="Ej: San Martin 44">
           </div>
@@ -815,6 +819,10 @@
             <span>${partner.phone || '-'}</span>
           </div>
           <div class="drawer-row">
+            <span class="drawer-label">Google Maps</span>
+            <span>${partner.google_maps_url ? '<a href="' + partner.google_maps_url + '" target="_blank" class="drawer-link">Abrir en Mapa</a>' : '-'}</span>
+          </div>
+          <div class="drawer-row">
             <span class="drawer-label">Email</span>
             <span>${partner.email || '-'}</span>
           </div>
@@ -903,6 +911,10 @@
           <div style="margin-bottom:0.875rem;">
             <label class="edit-label">Logo URL</label>
             <input type="text" id="ep-logo" class="form-control" value="${(partner.logo_url || '').replace(/"/g, '&quot;')}">
+          </div>
+          <div style="margin-bottom:0.875rem;">
+            <label class="edit-label">Google Maps URL</label>
+            <input type="text" id="ep-google-maps" class="form-control" value="${(partner.google_maps_url || '').replace(/"/g, '&quot;')}">
           </div>
           <div style="margin-bottom:1.25rem;">
             <label class="edit-label">Descripción</label>
@@ -1230,6 +1242,7 @@
         instagram: document.getElementById('ep-instagram').value.trim() || null,
         website: document.getElementById('ep-website').value.trim() || null,
         logo_url: document.getElementById('ep-logo').value.trim() || null,
+        google_maps_url: document.getElementById('ep-google-maps').value.trim() || null,
         description: document.getElementById('ep-description').value.trim() || null,
       };
 
@@ -1271,6 +1284,7 @@
               instagram: payload.instagram,
               website: payload.website,
               logo_url: payload.logo_url,
+              google_maps_url: payload.google_maps_url,
               description: payload.description,
             });
           }
@@ -1830,6 +1844,7 @@
           validation_token: document.getElementById('p-token').value,
           active: document.getElementById('p-active').value === 'true',
           description: document.getElementById('p-description').value || null,
+          google_maps_url: document.getElementById('p-google-maps').value || null,
           address: document.getElementById('p-address').value || null,
           logo_url: document.getElementById('p-logo').value || null,
           instagram: document.getElementById('p-instagram').value || null,

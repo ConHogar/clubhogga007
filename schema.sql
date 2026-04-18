@@ -32,6 +32,7 @@ create table partners (
   website text,
   logo_url text,
   description text,
+  google_maps_url text,
   active boolean default true,
   featured boolean default false,
   validation_token text unique not null,
@@ -40,7 +41,7 @@ create table partners (
 
 -- View para exponer comerciales sin el token de validación al front
 create view public_partners as
-select id, business_name, city_id, category_id, address, phone, email, instagram, website, logo_url, description, active, featured, created_at
+select id, business_name, city_id, category_id, address, phone, email, instagram, website, logo_url, google_maps_url, description, active, featured, created_at
 from partners
 where active = true;
 
