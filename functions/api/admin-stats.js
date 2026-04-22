@@ -7,7 +7,10 @@ export async function onRequestGet({ request, env }) {
     }
 
     const token = authHeader.split(' ')[1];
-    const expectedSecret = env.ADMIN_SECRET || 'babeclub_dev_secret'; // Fallback for local testing if env not set
+    const expectedSecret = env.ADMIN_SECRET;
+    if (!expectedSecret) {
+      return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 503 });
+    }
 
     if (token !== expectedSecret) {
       return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 403 });

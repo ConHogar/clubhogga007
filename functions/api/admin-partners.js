@@ -7,9 +7,10 @@ export async function onRequestPost({ request, env }) {
     }
 
     const token = authHeader.split(' ')[1];
-    const expectedSecret = env.ADMIN_SECRET || 'babeclub_dev_secret';
-
-    if (token !== expectedSecret) {
+    if (!env.ADMIN_SECRET) {
+      return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 503 });
+    }
+    if (token !== env.ADMIN_SECRET) {
       return new Response(JSON.stringify({ error: 'Invalid admin token' }), { status: 403 });
     }
 

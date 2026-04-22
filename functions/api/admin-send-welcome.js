@@ -6,7 +6,10 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
     const token = authHeader.split(' ')[1];
-    if (token !== (env.ADMIN_SECRET || 'babeclub_dev_secret')) {
+    if (!env.ADMIN_SECRET) {
+      return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 503 });
+    }
+    if (token !== env.ADMIN_SECRET) {
       return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 403 });
     }
 

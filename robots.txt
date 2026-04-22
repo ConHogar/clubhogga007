@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Bloquear páginas internas y de infraestructura
+Disallow: /babeclubadm/
+Disallow: /validacion/
+Disallow: /exito/
+Disallow: /partials/
+Disallow: /scratch/
+Disallow: /db-updates/
+Disallow: /node_modules/
+Disallow: /js/api/
+
+# Sitemap
+Sitemap: https://club.hogga.cl/sitemap.xml
