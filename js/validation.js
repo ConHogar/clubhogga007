@@ -1,7 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // --- MOCK PARA PRUEBAS LOCALES (Python Server) ---
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    const originalFetch = window.fetch;
+    window.fetch = async (url, options) => {
+      if (typeof url === 'string' && url.includes('/api/get-partner-info')) {
+        return { json: async () => ({
+          status: 'success',
+          partner: { business_name: 'Canclan Parque Perros', logo_url: 'https://cdn-icons-png.flaticon.com/512/2138/2138218.png' } // Mock logo
+        })};
+      }
+      if (typeof url === 'string' && url.includes('/api/validate-member')) {
+        await new Promise(r => setTimeout(r, 600)); // Simulate network delay
+        return { status: 200, json: async () => ({
+          status: 'active', member: { id: 1, full_name: 'Nicolas Alston' }, partner_id: 1,
+          benefits: [{ id: 1, title: '10% dscto en todos los servicios' }]
+        })};
+      }
+      if (typeof url === 'string' && url.includes('/api/register-use')) {
+        await new Promise(r => setTimeout(r, 600));
+        return { ok: true, json: async () => ({ status: 'success' }) };
+      }
+      return originalFetch(url, options);
+    };
+  }
+  // ------------------------------------------------
+
   // 1. Obtener Token de la URL (?k=)
   const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get('k');
+  let token = urlParams.get('k');
+
+  // Si estamos en localhost y no hay token, mockear uno para poder probar la UI
+  if (!token && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    token = 'test_token';
+  }
 
   if(!token) {
     document.getElementById('no-token-alert').style.display = 'block';
@@ -15,8 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       if (data.status === 'success' && data.partner) {
         const titleSpan = document.getElementById('partner-name-subtitle');
+        const logosContainer = document.getElementById('logos-container');
+        
+        if (data.partner.logo_url && logosContainer) {
+          // Agregar separador
+          const divider = document.createElement('div');
+          divider.style.width = '1px';
+          divider.style.height = '32px';
+          divider.style.backgroundColor = 'var(--border-strong)';
+          logosContainer.appendChild(divider);
+
+          // Agregar logo del partner
+          const partnerLogo = document.createElement('img');
+          partnerLogo.src = data.partner.logo_url;
+          partnerLogo.alt = data.partner.business_name || 'Logo Comercio';
+          partnerLogo.style.height = '48px'; // Logo más grande para que se note
+          partnerLogo.style.maxWidth = '120px';
+          partnerLogo.style.objectFit = 'contain';
+          logosContainer.appendChild(partnerLogo);
+        }
         
         if (data.partner.business_name) {
+
              titleSpan.innerText = data.partner.business_name;
         }
       }
