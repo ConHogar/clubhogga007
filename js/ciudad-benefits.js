@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (partner.benefits && partner.benefits.length > 0) {
       benefitTitleStr = partner.benefits.map(b => b.title).join(' • ');
     } else {
-      benefitTitleStr = 'Beneficio se anunciará pronto.';
-      const pendingDesc = 'Estamos finalizando los detalles para ofrecerte el mejor descuento.';
+      benefitTitleStr = '🔥 VIENE LO BUENO';
+      const pendingDesc = 'Estamos cerrando el trato. Va a valer la pena.';
       partnerDescStr = partnerDescStr ? pendingDesc + '<br><br>' + partnerDescStr : pendingDesc;
     }
 
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const hasBenefits = cityPartners.filter(p => p.benefits && p.benefits.length > 0);
       const noBenefits  = cityPartners.filter(p => !p.benefits || p.benefits.length === 0);
-      const sorted      = [...shuffle(hasBenefits), ...shuffle(noBenefits)];
+      const sorted      = [...shuffle(hasBenefits), ...shuffle(noBenefits)].slice(0, 9);
 
       if (loadingEl) loadingEl.style.display = 'none';
       gridEl.style.display = 'grid';

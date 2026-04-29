@@ -748,3 +748,104 @@ img {
     height: 24px;
   }
 }
+
+/* ================================================== */
+/* PARTNER LOGO CAROUSEL                              */
+/* ================================================== */
+.logo-carousel-section {
+  padding: var(--space-8) 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  overflow: hidden;
+}
+
+.logo-carousel-label {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.logo-carousel-track-wrapper {
+  overflow: hidden;
+  position: relative;
+  /* Fade edges left and right */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.logo-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  width: max-content;
+  animation: logo-scroll 40s linear infinite;
+}
+
+.logo-carousel-track:hover {
+  animation-play-state: paused;
+}
+
+.logo-carousel-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 80px;
+  height: 56px;
+}
+
+.logo-carousel-item img {
+  max-width: 80px;
+  max-height: 56px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  /* Grayscale + subtle opacity for understated feel */
+  filter: grayscale(100%) opacity(0.45);
+  transition: filter 0.3s ease;
+}
+
+.logo-carousel-item img:hover {
+  filter: grayscale(0%) opacity(1);
+}
+
+@keyframes logo-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .logo-carousel-section {
+    padding: var(--space-6) 0;
+  }
+  .logo-carousel-item {
+    width: 64px;
+    height: 44px;
+  }
+  .logo-carousel-item img {
+    max-width: 64px;
+    max-height: 44px;
+  }
+  .logo-carousel-track {
+    gap: var(--space-6);
+    animation-duration: 30s;
+  }
+}
+

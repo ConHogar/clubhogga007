@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (partner.benefits && partner.benefits.length > 0) {
       benefitTitleStr = partner.benefits.map(b => b.title).join(' • ');
     } else {
-      benefitTitleStr = 'Beneficio se anunciará pronto.';
-      const pendingDesc = 'Estamos finalizando los detalles para ofrecerte el mejor descuento.';
+      benefitTitleStr = '🔥 VIENE LO BUENO';
+      const pendingDesc = 'Estamos cerrando el trato. Va a valer la pena.';
       partnerDescStr = partnerDescStr ? pendingDesc + '<br><br>' + partnerDescStr : pendingDesc;
     }
 

@@ -14,33 +14,31 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(r => r.json())
     .then(data => {
       if (data.status === 'success' && data.partner) {
-        const logosContainer = document.getElementById('logos-container');
-        const titleSpan = document.getElementById('partner-panel-title');
+        const titleSpan = document.getElementById('partner-name-subtitle');
         
-        if (data.partner.logo_url) {
-          // Agregar separador
-          const divider = document.createElement('div');
-          divider.style.width = '1px';
-          divider.style.height = '32px';
-          divider.style.backgroundColor = 'var(--border-strong)';
-          logosContainer.appendChild(divider);
-
-          // Agregar logo del partner
-          const partnerLogo = document.createElement('img');
-          partnerLogo.src = data.partner.logo_url;
-          partnerLogo.alt = data.partner.business_name || 'Logo Comercio';
-          partnerLogo.style.height = '48px'; // Logo más grande para que se note
-          partnerLogo.style.maxWidth = '120px';
-          partnerLogo.style.objectFit = 'contain';
-          logosContainer.appendChild(partnerLogo);
-        }
-
         if (data.partner.business_name) {
-             titleSpan.innerText = `Panel de Validación: ${data.partner.business_name}`;
+             titleSpan.innerText = data.partner.business_name;
         }
       }
     })
     .catch(err => console.error("No se pudo cargar la info del comercio", err));
+
+  const rutInput = document.getElementById('rut-input');
+  
+  // Auto-formato básico para RUT
+  rutInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/[^0-9kK]/g, '').toUpperCase();
+    if (value.length > 1) {
+      value = value.slice(0, -1) + '-' + value.slice(-1);
+    }
+    e.target.value = value;
+    
+    // Si escriben, volver a mostrar el botón de validar
+    const validateBtn = document.getElementById('validate-btn');
+    if (validateBtn) validateBtn.style.display = 'block';
+    const resultBox = document.getElementById('result-box');
+    if (resultBox) resultBox.style.display = 'none';
+  });
 
   const validateForm = document.getElementById('validate-form');
   const validateBtn = document.getElementById('validate-btn');
@@ -97,8 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         memberName.innerText = `RUT: ${rut}`;
       } else if (data.status === 'active') {
         statusBadge.className = 'status-badge status-active';
-        statusBadge.innerText = 'Socio Activo';
+        statusBadge.innerHTML = '<span style="margin-right:4px;">✅</span> Socio Activo';
         memberName.innerText = data.member.full_name;
+        
+        // Ocultar botón de validar para enfocar la atención en el registro
+        validateBtn.style.display = 'none';
         
         currentMemberId = data.member.id;
         currentPartnerId = data.partner_id;
