@@ -97,6 +97,13 @@
             </svg>
             Socios
           </a>
+          <a class="nav-item" data-target="view-email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            Correos
+          </a>
         </nav>
 
         <div class="logout-container">
@@ -303,6 +310,102 @@
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+
+        <!-- 5. Email Broadcast View -->
+        <div id="view-email" class="view-container">
+          <header class="dash-header">
+            <div>
+              <h1>Enviar Correo</h1>
+              <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem;">Redacta y envía emails a tus socios</p>
+            </div>
+          </header>
+
+          <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+
+            <!-- Compose Panel -->
+            <div style="flex:0 0 420px;max-width:420px;min-width:280px;">
+
+              <!-- Audience -->
+              <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
+                <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                    <input type="radio" name="email-audience" value="active" checked onchange="onAudienceChange()">
+                    Todos los activos
+                  </label>
+                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                    <input type="radio" name="email-audience" value="active_pending" onchange="onAudienceChange()">
+                    Activos + Pendientes
+                  </label>
+                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                    <input type="radio" name="email-audience" value="region" onchange="onAudienceChange()">
+                    Por región
+                  </label>
+                  <div id="region-picker" style="display:none;padding-left:1.5rem;">
+                    <select id="email-region-select" class="form-control" onchange="updateAudienceCount()"></select>
+                  </div>
+                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                    <input type="radio" name="email-audience" value="custom" onchange="onAudienceChange()">
+                    Seleccionar socios
+                  </label>
+                  <div id="custom-member-picker" style="display:none;padding-left:1.5rem;">
+                    <input type="text" class="form-control" placeholder="Buscar..." id="custom-member-search" oninput="filterCustomMembers()" style="margin-bottom:0.5rem;">
+                    <div id="custom-member-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
+                  </div>
+                </div>
+                <div id="audience-count-display" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
+              </div>
+
+              <!-- Content -->
+              <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
+                <div class="form-group">
+                  <label class="edit-label">Asunto *</label>
+                  <input type="text" id="email-subject" class="form-control" placeholder="Ej: Nuevos beneficios en el Club" oninput="updateEmailPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="edit-label">Título del correo *</label>
+                  <input type="text" id="email-heading" class="form-control" placeholder="Ej: ¡Tenemos novedades para ti!" oninput="updateEmailPreview()">
+                </div>
+                <div class="form-group">
+                  <label class="edit-label">Mensaje *</label>
+                  <textarea id="email-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {nombre} para personalizar." style="resize:vertical;" oninput="updateEmailPreview()"></textarea>
+                  <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{nombre}</code> se reemplaza con el primer nombre de cada socio.</p>
+                </div>
+                <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
+                  <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                    <div>
+                      <label class="edit-label">Texto</label>
+                      <input type="text" id="email-cta-text" class="form-control" placeholder="Ej: Ver Beneficios" oninput="updateEmailPreview()">
+                    </div>
+                    <div>
+                      <label class="edit-label">URL</label>
+                      <input type="text" id="email-cta-url" class="form-control" placeholder="https://..." oninput="updateEmailPreview()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn" style="width:100%;">Enviar prueba a mí</button>
+                <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a <span id="send-btn-count">0</span> socios</button>
+                <div id="email-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
+              </div>
+
+            </div>
+
+            <!-- Preview Panel -->
+            <div style="flex:1;min-width:280px;">
+              <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
+              <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
+                <div id="email-preview" style="max-width:480px;margin:0 auto;"></div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -562,6 +665,13 @@
           if (v.id === targetId) v.classList.add('active');
         });
 
+        // Initialize email view when navigated to
+        if (targetId === 'view-email') {
+          populateRegionDropdown();
+          updateAudienceCount();
+          updateEmailPreview();
+        }
+
         // Mobile menu behavior
         document.getElementById('sidebar').classList.remove('expanded');
       });
@@ -626,6 +736,9 @@
 
       // Validation Logs Table
       renderValidationLogs(data.validationLogs || []);
+
+      // Email view audience count (updates if view is open)
+      updateAudienceCount();
     }
 
     // Helper: resolve city/category ID to name
@@ -1875,6 +1988,209 @@
         btn.textContent = 'Guardar Empresa';
       }
     });
+
+    // ── Email Broadcast Module ─────────────────────────────────────────────────
+
+    function onAudienceChange() {
+      const val = document.querySelector('input[name="email-audience"]:checked')?.value;
+      document.getElementById('region-picker').style.display = val === 'region' ? 'block' : 'none';
+      document.getElementById('custom-member-picker').style.display = val === 'custom' ? 'block' : 'none';
+      if (val === 'region') populateRegionDropdown();
+      if (val === 'custom') renderCustomMemberList('');
+      updateAudienceCount();
+    }
+
+    function populateRegionDropdown() {
+      const sel = document.getElementById('email-region-select');
+      if (!sel) return;
+      const regions = [...new Set(globalMembers.filter(m => m.region).map(m => m.region))].sort();
+      sel.innerHTML = regions.length
+        ? regions.map(r => `<option value="${r}">${r}</option>`).join('')
+        : '<option value="">Sin regiones disponibles</option>';
+    }
+
+    function getSelectedAudience() {
+      const val = document.querySelector('input[name="email-audience"]:checked')?.value || 'active';
+      if (val === 'custom') {
+        const checked = [...document.querySelectorAll('#custom-member-list input[type=checkbox]:checked')];
+        return { segment: 'custom', member_ids: checked.map(c => c.value) };
+      }
+      if (val === 'region') {
+        return { segment: 'active', region_filter: document.getElementById('email-region-select')?.value || null };
+      }
+      return { segment: val };
+    }
+
+    function computeRecipientCount() {
+      const { segment, member_ids, region_filter } = getSelectedAudience();
+      if (member_ids) return member_ids.length;
+      let members = globalMembers;
+      if (segment === 'active') members = members.filter(m => m.status === 'active');
+      if (segment === 'active_pending') members = members.filter(m => m.status === 'active' || m.status === 'pending');
+      if (region_filter) members = members.filter(m => m.region === region_filter);
+      return members.filter(m => m.email).length;
+    }
+
+    function updateAudienceCount() {
+      const count = computeRecipientCount();
+      const display = document.getElementById('audience-count-display');
+      const countSpan = document.getElementById('send-btn-count');
+      const sendBtn = document.getElementById('email-send-btn');
+      if (display) display.textContent = count === 0
+        ? 'Sin destinatarios con email en este segmento.'
+        : `${count} socio${count !== 1 ? 's' : ''} recibirán este correo`;
+      if (countSpan) countSpan.textContent = count;
+      if (sendBtn) sendBtn.disabled = count === 0;
+    }
+
+    function renderCustomMemberList(query) {
+      const container = document.getElementById('custom-member-list');
+      if (!container) return;
+      const q = query.toLowerCase();
+      const withEmail = globalMembers.filter(m => m.email && (
+        !q || (m.full_name || '').toLowerCase().includes(q) ||
+              (m.email || '').toLowerCase().includes(q) ||
+              (m.rut || '').toLowerCase().includes(q)
+      ));
+      if (withEmail.length === 0) {
+        container.innerHTML = '<p style="padding:0.75rem;color:var(--text-muted);font-size:0.875rem;margin:0;">Sin resultados.</p>';
+        return;
+      }
+      container.innerHTML = withEmail.slice(0, 60).map(m => `
+        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
+          <input type="checkbox" value="${m.id}" onchange="updateAudienceCount()">
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.full_name}</span>
+          <span style="color:var(--text-muted);font-size:0.75rem;flex-shrink:0;">${m.email}</span>
+        </label>`).join('');
+    }
+
+    function filterCustomMembers() {
+      renderCustomMemberList(document.getElementById('custom-member-search')?.value || '');
+    }
+
+    function buildPreviewHtml(heading, bodyText, ctaText, ctaUrl) {
+      const safeHeading = heading || '<em style="color:#94a3b8">Título del correo...</em>';
+      const safeBody = bodyText
+        ? bodyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/\{nombre\}/gi, '<strong>[Nombre]</strong>').replace(/\n/g, '<br>')
+        : '<em style="color:#94a3b8">El mensaje aparecerá aquí...</em>';
+      return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:500px;margin:0 auto;color:#1e293b;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)">
+  <div style="background:#f8fafc;padding:24px 20px;text-align:center;border-bottom:1px solid #e2e8f0">
+    <img src="https://club-hogga.pages.dev/images/logo.webp" alt="Club Hogga" style="height:40px">
+  </div>
+  <div style="padding:24px">
+    <h2 style="color:#0a2e46;font-size:20px;margin-top:0;margin-bottom:14px">${safeHeading}</h2>
+    <div style="font-size:15px;line-height:1.6;margin-bottom:20px">${safeBody}</div>
+    ${ctaText && ctaUrl ? `<div style="text-align:center;margin:24px 0 12px"><a style="background:#108f8e;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:15px">${ctaText}</a></div>` : ''}
+  </div>
+  <div style="background:#f8fafc;padding:16px;text-align:center;border-top:1px solid #e2e8f0">
+    <p style="font-size:13px;color:#64748b;margin:0">Si tienes alguna duda, escríbenos a club@hogga.cl.</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:10px">© 2026 Club Hogga. Todos los derechos reservados.</p>
+  </div>
+</div>`;
+    }
+
+    function updateEmailPreview() {
+      const preview = document.getElementById('email-preview');
+      if (!preview) return;
+      preview.innerHTML = buildPreviewHtml(
+        document.getElementById('email-heading')?.value,
+        document.getElementById('email-body')?.value,
+        document.getElementById('email-cta-text')?.value,
+        document.getElementById('email-cta-url')?.value
+      );
+    }
+
+    async function sendTestEmail() {
+      const subject = document.getElementById('email-subject')?.value.trim();
+      const heading = document.getElementById('email-heading')?.value.trim();
+      const body = document.getElementById('email-body')?.value.trim();
+      const msgEl = document.getElementById('email-send-msg');
+      if (!subject || !heading || !body) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Completa asunto, título y mensaje primero.';
+        return;
+      }
+      const btn = document.getElementById('email-test-btn');
+      btn.disabled = true; btn.textContent = 'Enviando...'; msgEl.textContent = '';
+      try {
+        const res = await fetch('/api/admin-broadcast', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            test_email: 'npalston@gmail.com',
+            subject: '[TEST] ' + subject,
+            heading,
+            body_text: body,
+            cta_text: document.getElementById('email-cta-text')?.value.trim() || null,
+            cta_url: document.getElementById('email-cta-url')?.value.trim() || null,
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Prueba enviada a npalston@gmail.com';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al enviar prueba.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Enviar prueba a mí';
+      }
+    }
+
+    async function confirmAndSend() {
+      const subject = document.getElementById('email-subject')?.value.trim();
+      const heading = document.getElementById('email-heading')?.value.trim();
+      const body = document.getElementById('email-body')?.value.trim();
+      const msgEl = document.getElementById('email-send-msg');
+      if (!subject || !heading || !body) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Completa asunto, título y mensaje primero.';
+        return;
+      }
+      const count = computeRecipientCount();
+      if (count === 0) return;
+      if (!confirm(`¿Confirmas el envío a ${count} socio${count !== 1 ? 's' : ''}?\n\nAsunto: "${subject}"`)) return;
+
+      const btn = document.getElementById('email-send-btn');
+      btn.disabled = true; btn.textContent = 'Enviando...'; msgEl.textContent = '';
+
+      const { segment, member_ids, region_filter } = getSelectedAudience();
+      try {
+        const res = await fetch('/api/admin-broadcast', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject,
+            heading,
+            body_text: body,
+            cta_text: document.getElementById('email-cta-text')?.value.trim() || null,
+            cta_url: document.getElementById('email-cta-url')?.value.trim() || null,
+            segment: segment || 'active',
+            region_filter: region_filter || null,
+            member_ids: member_ids && member_ids.length > 0 ? member_ids : null,
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = `Enviado a ${data.sent_count} socio${data.sent_count !== 1 ? 's' : ''}.`;
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al enviar.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        updateAudienceCount();
+      }
+    }
 
   </script>
 </body>

@@ -777,15 +777,15 @@ img {
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 8%,
-    black 92%,
+    rgba(0,0,0,1) 8%,
+    rgba(0,0,0,1) 92%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 8%,
-    black 92%,
+    rgba(0,0,0,1) 8%,
+    rgba(0,0,0,1) 92%,
     transparent 100%
   );
 }
@@ -847,5 +847,12 @@ img {
     gap: var(--space-6);
     animation-duration: 30s;
   }
+  
+  .stats-section {
+    padding: var(--space-6) 0;
+  }
 }
 
+.stats-section {
+  padding: var(--space-8) 0;
+}

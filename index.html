@@ -142,33 +142,37 @@
     </section>
 
     <!-- How it works -->
-    <section class="section bg-white">
+    <section class="section" style="background: var(--bg-surface);">
       <div class="container">
         <h2 class="text-center mb-12">¿Cómo funciona?</h2>
         <div class="grid-3">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Hazte Socio</h3>
-            <p class="text-muted mt-2">Regístrate en línea completando tus datos en solo
-              1 minuto.</p>
+          <div class="card" style="text-align: center; padding: var(--space-6); background: white; border: 1px solid var(--border-light);">
+            <div style="background: rgba(13, 148, 136, 0.1); color: var(--primary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+            </div>
+            <h3 style="margin-bottom: var(--space-2);">1. Hazte Socio</h3>
+            <p class="text-muted" style="font-size: 0.95rem;">Regístrate en línea completando tus datos en solo 1 minuto.</p>
           </div>
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Encuentra Beneficios</h3>
-            <p class="text-muted mt-2">Explora los beneficios disponibles en tu ciudad desde tu teléfono.</p>
+          <div class="card" style="text-align: center; padding: var(--space-6); background: white; border: 1px solid var(--border-light);">
+            <div style="background: rgba(13, 148, 136, 0.1); color: var(--primary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <h3 style="margin-bottom: var(--space-2);">2. Encuentra Beneficios</h3>
+            <p class="text-muted" style="font-size: 0.95rem;">Explora los descuentos y promociones en tu ciudad desde el celular.</p>
           </div>
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Muestra tu RUT y accede al beneficio</h3>
-            <p class="text-muted mt-2">Indica tu RUT en el comercio asociado. Ellos
-              validan tu suscripción en segundos.</p>
+          <div class="card" style="text-align: center; padding: var(--space-6); background: white; border: 1px solid var(--border-light);">
+            <div style="background: rgba(13, 148, 136, 0.1); color: var(--primary); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+            </div>
+            <h3 style="margin-bottom: var(--space-2);">3. Muestra tu RUT</h3>
+            <p class="text-muted" style="font-size: 0.95rem;">Dicta tu RUT al pagar en el comercio asociado y el descuento es inmediato.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Social Proof: Stats Bar -->
-    <section style="background: var(--primary); color: white; padding: var(--space-8) 0;">
+    <section class="stats-section" style="background: var(--primary); color: white;">
       <div class="container">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); text-align: center;">
           <div>
