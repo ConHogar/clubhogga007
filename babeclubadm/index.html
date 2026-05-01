@@ -1923,6 +1923,48 @@
       }
     }
 
+    async function syncMemberMP(memberId, email) {
+      const btn = document.getElementById('sync-mp-btn');
+      const msg = document.getElementById('welcome-email-msg'); // reuse the msg container
+      const originalHtml = btn.innerHTML;
+
+      btn.disabled = true;
+      btn.textContent = 'Sincronizando...';
+      msg.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin-sync-member', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + currentToken
+          },
+          body: JSON.stringify({ member_id: memberId, email })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          if (data.success) {
+            msg.style.color = 'var(--success-color)';
+            msg.textContent = '¡Sincronización exitosa! Nueva fecha: ' + new Date(data.new_valid_until).toLocaleDateString('es-CL');
+            setTimeout(() => { fetchDashData(); }, 1500); // refresh all data
+          } else {
+            msg.style.color = 'var(--warning-color)';
+            msg.textContent = data.message;
+          }
+        } else {
+          msg.style.color = 'var(--danger-color)';
+          msg.textContent = data.error || 'Error sincronizando.';
+        }
+      } catch (err) {
+        msg.style.color = 'var(--danger-color)';
+        msg.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+      }
+    }
+
     // Export visible members to CSV
     function exportMembersCSV() {
       if (!globalMembers || globalMembers.length === 0) {
