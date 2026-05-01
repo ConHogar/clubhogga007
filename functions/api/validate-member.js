@@ -14,7 +14,7 @@ export async function onRequestPost({ request, env }) {
     };
 
     // 1. Identificar al comercio (Partner) mediante el token
-    const partnerRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=id,business_name&validation_token=eq.${data.validation_token}&active=eq.true`, { headers });
+    const partnerRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=id,business_name,is_test&validation_token=eq.${data.validation_token}&active=eq.true`, { headers });
     const partners = await partnerRes.json();
     
     if (!partners || partners.length === 0) {
@@ -24,8 +24,10 @@ export async function onRequestPost({ request, env }) {
     const partner = partners[0];
 
     // 2. Buscar al socio por RUT Normalizado
-    const memberRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,full_name,status&rut_normalized=eq.${rut_norm}`, { headers });
+    const memberRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,full_name,status,is_test&rut_normalized=eq.${rut_norm}`, { headers });
     const members = await memberRes.json();
+    
+    const isTestMode = Boolean(partner.is_test || (members && members.length > 0 && members[0].is_test));
     
     let resultLog = 'not_found';
     let responsePayload = {};
@@ -43,7 +45,13 @@ export async function onRequestPost({ request, env }) {
           message: 'Socio activo',
           member: {
             id: member.id,
-            full_name: member.full_name
+            full_name: member.full_name,
+            is_test: member.is_test
+          },
+          partner: {
+            id: partner.id,
+            business_name: partner.business_name,
+            is_test: partner.is_test
           },
           partner_id: partner.id
         };
@@ -55,25 +63,33 @@ export async function onRequestPost({ request, env }) {
         
       } else {
         resultLog = 'inactive';
-        responsePayload = { status: 'inactive', message: 'Socio inactivo' };
+        responsePayload = { 
+          status: 'inactive', 
+          message: 'Socio inactivo',
+          member: {
+            is_test: member.is_test
+          }
+        };
       }
     }
 
-    // 3. Registrar en validation_logs (asincrónico)
-    const logPayload = {
-      partner_id: partner.id,
-      member_id: members && members.length > 0 ? members[0].id : null,
-      rut_entered: data.rut,
-      result: resultLog,
-      ip_address: request.headers.get('cf-connecting-ip') || '',
-      user_agent: request.headers.get('user-agent') || ''
-    };
+    // 3. Registrar en validation_logs (asincrónico) SOLO si no es test mode
+    if (!isTestMode) {
+      const logPayload = {
+        partner_id: partner.id,
+        member_id: members && members.length > 0 ? members[0].id : null,
+        rut_entered: data.rut,
+        result: resultLog,
+        ip_address: request.headers.get('cf-connecting-ip') || '',
+        user_agent: request.headers.get('user-agent') || ''
+      };
 
-    await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(logPayload)
-    });
+      await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(logPayload)
+      });
+    }
 
     return new Response(JSON.stringify(responsePayload), { 
       status: statusCode,

@@ -13,14 +13,14 @@ export async function onRequestPost({ request, env }) {
     };
 
     // 1. Validar el token del comercio
-    const partnerRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=id&validation_token=eq.${data.validation_token}&active=eq.true`, { headers });
+    const partnerRes = await fetch(`${env.SUPABASE_URL}/rest/v1/partners?select=id,is_test&validation_token=eq.${data.validation_token}&active=eq.true`, { headers });
     const partners = await partnerRes.json();
     if (!partners || partners.length === 0 || partners[0].id !== data.partner_id) {
       return new Response(JSON.stringify({ error: 'Token inválido o comercio no corresponde.' }), { status: 401 });
     }
 
     // 2. Verificar que el socio exista y esté activo
-    const memberRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&id=eq.${data.member_id}`, { headers });
+    const memberRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status,is_test&id=eq.${data.member_id}`, { headers });
     const members = await memberRes.json();
     if (!members || members.length === 0 || members[0].status !== 'active') {
       return new Response(JSON.stringify({ error: 'Socio inválido o inactivo.' }), { status: 400 });
@@ -31,6 +31,12 @@ export async function onRequestPost({ request, env }) {
     const benefits = await benefitRes.json();
     if (!benefits || benefits.length === 0) {
       return new Response(JSON.stringify({ error: 'Beneficio inválido para este comercio.' }), { status: 400 });
+    }
+
+    // EXTRA SAFETY: Evitar inserciones de prueba en base de datos
+    const isTestMode = Boolean(partners[0].is_test || members[0].is_test);
+    if (isTestMode) {
+      return new Response(JSON.stringify({ success: true, test_mode: true, message: 'Beneficio registrado correctamente (MODO PRUEBA).' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
     // 4. Chequear duplicados (Regla Anti-Duplicados: misma combinación en los últimos 5 mins)

@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentMemberId = null;
   let currentPartnerId = null;
+  let isTestMode = false;
 
   validateForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -133,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMsg.style.display = 'block';
         return;
       }
+
+      isTestMode = Boolean(data.member?.is_test || data.partner?.is_test);
 
       resultBox.style.display = 'block';
 
@@ -187,6 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Registrar Uso
   registerBtn.addEventListener('click', async () => {
     if(!currentMemberId || !currentPartnerId || !benefitSelect.value) return;
+
+    if (isTestMode) {
+      useSuccessMsg.innerText = '✅ Modo prueba: así se ve un uso registrado, pero no se guardó en la base de datos.';
+      useSuccessMsg.style.display = 'block';
+      registerBtn.style.display = 'none';
+      return;
+    }
 
     registerBtn.disabled = true;
     registerBtn.innerText = 'Registrando...';
