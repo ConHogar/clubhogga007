@@ -104,6 +104,12 @@
             </svg>
             Correos
           </a>
+          <a class="nav-item" data-target="view-salud">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            Salud Aliados
+          </a>
         </nav>
 
         <div class="logout-container">
@@ -161,6 +167,26 @@
               <div class="stat-title">Validaciones Recientes</div>
               <div class="stat-value" id="stat-validations">-</div>
             </div>
+            <div class="stat-card" style="cursor:pointer;" onclick="document.getElementById('mrr-panel').scrollIntoView({behavior:'smooth'})">
+              <div class="stat-title">MRR Estimado</div>
+              <div class="stat-value" id="stat-mrr">-</div>
+              <div id="stat-mrr-sub" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;"></div>
+            </div>
+            <div class="stat-card" style="cursor:pointer;" onclick="document.querySelector('.nav-item[data-target=\'view-salud\']').click()">
+              <div class="stat-title">Aliados en Riesgo</div>
+              <div class="stat-value" id="stat-at-risk">-</div>
+              <div id="stat-at-risk-sub" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">sin actividad 30d+</div>
+            </div>
+          </div>
+
+          <!-- MRR Breakdown Panel -->
+          <div id="mrr-panel" style="display:none;margin-bottom:1.25rem;">
+            <div class="alert-panel-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              Desglose MRR por tramo
+              <span style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);font-weight:400;">Estimado — basado en orden de inscripción</span>
+            </div>
+            <div id="mrr-breakdown" style="display:flex;gap:1rem;flex-wrap:wrap;padding:1rem;background:white;border:1px solid var(--border-color);border-top:none;border-radius:0 0 8px 8px;"></div>
           </div>
 
           <!-- Expiry Alert Panel -->
@@ -321,6 +347,7 @@
                     <th>RUT</th>
                     <th>Email</th>
                     <th>Región / Comuna</th>
+                    <th>Vencimiento</th>
                     <th>Estado</th>
                     <th class="col-action">Detalle</th>
                   </tr>
@@ -449,8 +476,7 @@
                 <div style="display:flex;flex-direction:column;gap:0.625rem;">
                   <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn"
                     style="width:100%;">Enviar prueba a mí</button>
-                  <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a
-                    <span id="send-btn-count">0</span> %20socios</button>
+                  <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a&nbsp;<span id="send-btn-count">0</span>&nbsp;socios</button>
                   <div id="email-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
                 </div>
               </div>
@@ -563,7 +589,7 @@
                   <button class="btn btn-secondary btn-sm" onclick="sendTestPartnerEmail()" id="a-test-btn"
                     style="width:100%;">Enviar prueba a mí</button>
                   <button class="btn btn-sm" onclick="confirmAndSendToPartners()" id="a-send-btn"
-                    style="width:100%;">Enviar a <span id="a-send-count">0</span> aliados</button>
+                    style="width:100%;">Enviar a&nbsp;<span id="a-send-count">0</span>&nbsp;aliados</button>
                   <div id="a-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
                 </div>
               </div>
@@ -581,6 +607,63 @@
             </div>
           </div>
 
+        </div>
+
+        <!-- 6. Salud Aliados View -->
+        <div id="view-salud" class="view-container">
+          <header class="dash-header">
+            <div>
+              <h1>Salud de Aliados</h1>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Actividad y estado de las empresas asociadas</p>
+            </div>
+          </header>
+
+          <!-- KPI cards -->
+          <div class="stats-grid" style="margin-bottom:1.25rem;">
+            <div class="stat-card">
+              <div class="stat-title">Aliados Activos</div>
+              <div class="stat-value" id="salud-total">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Con Email registrado</div>
+              <div class="stat-value" id="salud-with-email">-</div>
+            </div>
+            <div class="stat-card" style="border-color:var(--success-color,#10b981);">
+              <div class="stat-title">Saludables (últ. 30d)</div>
+              <div class="stat-value" id="salud-healthy" style="color:var(--success-color,#10b981);">-</div>
+            </div>
+            <div class="stat-card" style="border-color:var(--danger-color);">
+              <div class="stat-title">En riesgo (30d+ sin uso)</div>
+              <div class="stat-value" id="salud-at-risk" style="color:var(--danger-color);">-</div>
+            </div>
+          </div>
+
+          <!-- Partner health table -->
+          <div id="salud-panel" class="alert-panel" style="display:none;">
+            <div class="alert-panel-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Aliados sin actividad reciente
+              <span id="salud-badge" class="badge badge-inactive" style="margin-left:auto;"></span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Empresa</th>
+                    <th>Ciudad</th>
+                    <th>Última validación</th>
+                    <th>Días inactivo</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="salud-health-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="salud-all-ok" style="display:none;padding:2rem;text-align:center;color:var(--text-muted);background:white;border:1px solid var(--border-color);border-radius:8px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#10b981;margin-bottom:0.75rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <p style="font-size:1rem;font-weight:600;margin:0;">¡Todos los aliados activos tienen actividad reciente!</p>
+          </div>
         </div>
 
       </main>
@@ -897,6 +980,12 @@
       document.getElementById('stat-partners').textContent = data.partners ? data.partners.length : '0';
       document.getElementById('stat-validations').textContent = data.stats.totalValidations || '0';
 
+      // MRR
+      renderMRR(data.members || []);
+
+      // Partner Health Panel
+      renderPartnerHealthPanel(data.partners || [], data.validationLogs || []);
+
       // Members Table + Expiry Panel
       renderMembersTable(data.members || []);
       renderExpiryPanel(data.members || []);
@@ -909,6 +998,145 @@
 
       // Email view audience count (updates if view is open)
       updateAudienceCount();
+    }
+
+    // MRR — tiered pricing mirrors create-member.js logic
+    function computeMRR(members) {
+      const active = members.filter(m => m.status === 'active');
+      const count = active.length;
+      const PRE_LIMIT = 50, FOUND_LIMIT = 150;
+      const P_PRE = 2990, P_FOUND = 3990, P_REG = 5990;
+      const tiers = [];
+      let mrr = 0;
+      const preCount = Math.min(count, PRE_LIMIT);
+      if (preCount > 0) { mrr += preCount * P_PRE; tiers.push({ name: 'Pre-lanzamiento', count: preCount, price: P_PRE }); }
+      const foundCount = Math.min(Math.max(count - PRE_LIMIT, 0), FOUND_LIMIT - PRE_LIMIT);
+      if (foundCount > 0) { mrr += foundCount * P_FOUND; tiers.push({ name: 'Fundadores', count: foundCount, price: P_FOUND }); }
+      const regCount = Math.max(count - FOUND_LIMIT, 0);
+      if (regCount > 0) { mrr += regCount * P_REG; tiers.push({ name: 'Regular', count: regCount, price: P_REG }); }
+      return { mrr, tiers, count };
+    }
+
+    function renderMRR(members) {
+      const { mrr, tiers, count } = computeMRR(members);
+      const mrrEl = document.getElementById('stat-mrr');
+      const subEl = document.getElementById('stat-mrr-sub');
+      const panel = document.getElementById('mrr-panel');
+      const breakdown = document.getElementById('mrr-breakdown');
+
+      mrrEl.textContent = '$' + mrr.toLocaleString('es-CL');
+      const avg = count > 0 ? Math.round(mrr / count) : 0;
+      subEl.textContent = count > 0 ? `~$${avg.toLocaleString('es-CL')} prom./socio` : '';
+
+      if (tiers.length === 0) { panel.style.display = 'none'; return; }
+
+      panel.style.display = 'block';
+      breakdown.innerHTML = tiers.map(t => `
+        <div style="flex:1;min-width:140px;border:1px solid var(--border-color);border-radius:8px;padding:0.875rem;">
+          <div style="font-size:0.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;">${t.name}</div>
+          <div style="font-size:1.75rem;font-weight:700;color:var(--text-primary);margin:0.25rem 0 0.125rem;">${t.count}</div>
+          <div style="font-size:0.8125rem;color:var(--text-muted);">socios × $${t.price.toLocaleString('es-CL')}/mes</div>
+          <div style="font-size:1rem;font-weight:600;color:var(--primary-color);margin-top:0.5rem;border-top:1px solid var(--border-color);padding-top:0.5rem;">$${(t.count * t.price).toLocaleString('es-CL')}/mes</div>
+        </div>`).join('');
+    }
+
+    // Partner Health — updates dashboard KPI card + Salud view
+    function renderPartnerHealthPanel(partners, logs) {
+      const now = new Date();
+      const cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const activePartners = partners.filter(p => p.active);
+
+      const atRisk = [];
+      let healthyCount = 0;
+      activePartners.forEach(p => {
+        const pLogs = logs.filter(v => v.partner_id === p.id);
+        let lastDate = null;
+        if (pLogs.length > 0) {
+          lastDate = new Date(Math.max(...pLogs.map(v => new Date(v.created_at).getTime())));
+          if (lastDate >= cutoff) { healthyCount++; return; }
+        }
+        const daysInactive = lastDate ? Math.floor((now - lastDate) / 86400000) : null;
+        atRisk.push({ partner: p, lastDate, daysInactive });
+      });
+
+      atRisk.sort((a, b) => {
+        if (a.daysInactive === null && b.daysInactive === null) return 0;
+        if (a.daysInactive === null) return -1;
+        if (b.daysInactive === null) return 1;
+        return b.daysInactive - a.daysInactive;
+      });
+
+      // Dashboard KPI card
+      const statEl = document.getElementById('stat-at-risk');
+      if (statEl) {
+        statEl.textContent = atRisk.length;
+        statEl.style.color = atRisk.length > 0 ? 'var(--danger-color)' : 'var(--text-primary)';
+      }
+
+      // Salud view KPI cards
+      const totalEl = document.getElementById('salud-total');
+      const emailEl = document.getElementById('salud-with-email');
+      const healthyEl = document.getElementById('salud-healthy');
+      const riskEl = document.getElementById('salud-at-risk');
+      if (totalEl) totalEl.textContent = activePartners.length;
+      if (emailEl) emailEl.textContent = activePartners.filter(p => p.email).length;
+      if (healthyEl) healthyEl.textContent = healthyCount;
+      if (riskEl) riskEl.textContent = atRisk.length;
+
+      // Salud view table
+      const panel = document.getElementById('salud-panel');
+      const allOk = document.getElementById('salud-all-ok');
+      const badge = document.getElementById('salud-badge');
+      const body = document.getElementById('salud-health-body');
+
+      if (atRisk.length === 0) {
+        if (panel) panel.style.display = 'none';
+        if (allOk) allOk.style.display = 'block';
+        return;
+      }
+
+      if (panel) panel.style.display = 'block';
+      if (allOk) allOk.style.display = 'none';
+      if (badge) badge.textContent = atRisk.length;
+      if (body) body.innerHTML = '';
+
+      atRisk.forEach(({ partner, lastDate, daysInactive }) => {
+        const tr = document.createElement('tr');
+        const city = resolveName(globalCities, partner.city_id);
+        const lastStr = lastDate ? lastDate.toLocaleDateString('es-CL') : '<span style="color:var(--danger-color);">Nunca</span>';
+        const daysColor = daysInactive === null || daysInactive > 60 ? 'var(--danger-color)' : 'var(--warning-color)';
+        const daysStr = daysInactive !== null ? `${daysInactive} días` : '—';
+        const actionBtn = partner.email
+          ? `<button class="btn btn-sm btn-secondary" onclick="openLowActivityEmail('${partner.id}')" style="font-size:0.75rem;padding:0.25rem 0.625rem;white-space:nowrap;">Enviar email</button>`
+          : `<span style="font-size:0.75rem;color:var(--text-muted);">Sin email</span>`;
+        tr.innerHTML = `
+          <td><strong>${partner.business_name}</strong></td>
+          <td>${city}</td>
+          <td>${lastStr}</td>
+          <td style="color:${daysColor};font-weight:600;">${daysStr}</td>
+          <td>${actionBtn}</td>`;
+        if (body) body.appendChild(tr);
+      });
+    }
+
+    function openLowActivityEmail(partnerId) {
+      // Navigate to Correos view
+      document.querySelector('.nav-item[data-target="view-email"]').click();
+      setTimeout(() => {
+        // Switch to aliados tab
+        switchEmailTab('aliados');
+        // Apply low_activity template
+        const sel = document.getElementById('aliados-template-select');
+        if (sel) { sel.value = 'low_activity'; applyPartnerTemplate('low_activity'); }
+        // Select custom audience radio
+        const radio = document.querySelector('input[name="partner-audience"][value="custom"]');
+        if (radio) { radio.checked = true; onPartnerAudienceChange(); }
+        // Pre-check the specific partner once the list renders
+        setTimeout(() => {
+          const cb = document.querySelector(`#a-custom-list input[value="${partnerId}"]`);
+          if (cb) { cb.checked = true; updatePartnerAudienceCount(); }
+        }, 150);
+      }, 100);
     }
 
     // Helper: resolve city/category ID to name
@@ -1335,6 +1563,10 @@
 
         ${member.email ? `
         <div class="drawer-section" style="border-bottom:none;padding-top:0;">
+          <button class="btn btn-sm btn-secondary" id="sync-mp-btn" style="width:100%;margin-bottom:0.75rem;background:#009ee3;color:white;border-color:#009ee3;" onclick="syncMemberMP('${member.id}', '${member.email}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Sincronizar con MercadoPago
+          </button>
           <button class="btn btn-sm btn-secondary" id="welcome-email-btn" style="width:100%;" onclick="sendWelcomeEmail('${member.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             Reenviar Email de Bienvenida
@@ -1436,6 +1668,19 @@
         const date = new Date(member.created_at).toLocaleDateString('es-CL');
         const badgeClass = member.status === 'active' ? 'badge-active' : 'badge-pending';
         const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
+        
+        // Expiration Logic
+        let expHtml = '-';
+        if (member.valid_until) {
+          const exp = new Date(member.valid_until);
+          const now = new Date();
+          const expStr = exp.toLocaleDateString('es-CL');
+          if (exp < now) {
+            expHtml = `<span style="color:var(--danger-color);font-weight:600;">${expStr}</span>`;
+          } else {
+            expHtml = expStr;
+          }
+        }
 
         tr.innerHTML = `
           <td>${date}</td>
@@ -1443,6 +1688,7 @@
           <td>${member.rut}</td>
           <td>${member.email || '-'}</td>
           <td>${geo}</td>
+          <td>${expHtml}</td>
           <td><span class="badge ${badgeClass}">${member.status}</span></td>
           <td style="text-align:center;">
             <button class="icon-btn" onclick="openMemberDrawer('${member.id}')" title="Ver detalle">
@@ -2634,12 +2880,9 @@ Algunas razones comunes por las que los socios no llegan:
         return;
       }
       container.innerHTML = withEmail.map(p => `
-        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;">
+        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
           <input type="checkbox" value="${p.id}" onchange="updatePartnerAudienceCount()" style="flex-shrink:0;">
-          <span style="flex:1;min-width:0;">
-            <span style="display:block;font-size:0.875rem;font-weight:500;">${p.business_name}</span>
-            <span style="display:block;font-size:0.75rem;color:var(--text-muted);">${p.email}</span>
-          </span>
+          <span style="flex:1;">${p.business_name}</span>
         </label>`).join('');
     }
 
