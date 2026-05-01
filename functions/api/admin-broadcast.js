@@ -56,12 +56,13 @@ export async function onRequestPost({ request, env }) {
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/\n/g, '<br>');
       const personalizedBody = safeBody.replace(/\{nombre\}/gi, firstName || 'Socio');
+      const personalizedHeading = heading.replace(/\{nombre\}/gi, firstName || 'Socio');
       return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:500px;margin:0 auto;color:#1e293b;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)">
   <div style="background:#f8fafc;padding:30px 20px;text-align:center;border-bottom:1px solid #e2e8f0">
     <img src="https://club.hogga.cl/images/club.png" alt="Club Hogga" style="height:80px">
   </div>
   <div style="padding:30px 24px">
-    <h2 style="color:#0a2e46;font-size:22px;margin-top:0;margin-bottom:16px">${heading}</h2>
+    <h2 style="color:#0a2e46;font-size:22px;margin-top:0;margin-bottom:16px">${personalizedHeading}</h2>
     <div style="font-size:16px;line-height:1.6;margin-bottom:24px">${personalizedBody}</div>
     ${cta_text && cta_url ? `<div style="text-align:center;margin:32px 0 16px"><a href="${cta_url}" style="background:#108f8e;color:#fff;padding:14px 28px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:16px">${cta_text}</a></div>` : ''}
   </div>
