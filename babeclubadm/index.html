@@ -317,96 +317,198 @@
         <div id="view-email" class="view-container">
           <header class="dash-header">
             <div>
-              <h1>Enviar Correo</h1>
-              <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem;">Redacta y envía emails a tus socios</p>
+              <h1>Correos</h1>
+              <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem;">Envía emails a socios y aliados</p>
             </div>
           </header>
 
-          <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
-
-            <!-- Compose Panel -->
-            <div style="flex:0 0 420px;max-width:420px;min-width:280px;">
-
-              <!-- Audience -->
-              <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
-                <div style="display:flex;flex-direction:column;gap:0.625rem;">
-                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
-                    <input type="radio" name="email-audience" value="active" checked onchange="onAudienceChange()">
-                    Todos los activos
-                  </label>
-                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
-                    <input type="radio" name="email-audience" value="active_pending" onchange="onAudienceChange()">
-                    Activos + Pendientes
-                  </label>
-                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
-                    <input type="radio" name="email-audience" value="region" onchange="onAudienceChange()">
-                    Por región
-                  </label>
-                  <div id="region-picker" style="display:none;padding-left:1.5rem;">
-                    <select id="email-region-select" class="form-control" onchange="updateAudienceCount()"></select>
-                  </div>
-                  <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
-                    <input type="radio" name="email-audience" value="custom" onchange="onAudienceChange()">
-                    Seleccionar socios
-                  </label>
-                  <div id="custom-member-picker" style="display:none;padding-left:1.5rem;">
-                    <input type="text" class="form-control" placeholder="Buscar..." id="custom-member-search" oninput="filterCustomMembers()" style="margin-bottom:0.5rem;">
-                    <div id="custom-member-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
-                  </div>
-                </div>
-                <div id="audience-count-display" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
-              </div>
-
-              <!-- Content -->
-              <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
-                <div class="form-group">
-                  <label class="edit-label">Asunto *</label>
-                  <input type="text" id="email-subject" class="form-control" placeholder="Ej: Nuevos beneficios en el Club" oninput="updateEmailPreview()">
-                </div>
-                <div class="form-group">
-                  <label class="edit-label">Título del correo *</label>
-                  <input type="text" id="email-heading" class="form-control" placeholder="Ej: ¡Tenemos novedades para ti!" oninput="updateEmailPreview()">
-                </div>
-                <div class="form-group">
-                  <label class="edit-label">Mensaje *</label>
-                  <textarea id="email-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {nombre} para personalizar." style="resize:vertical;" oninput="updateEmailPreview()"></textarea>
-                  <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{nombre}</code> se reemplaza con el primer nombre de cada socio.</p>
-                </div>
-                <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
-                  <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
-                    <div>
-                      <label class="edit-label">Texto</label>
-                      <input type="text" id="email-cta-text" class="form-control" placeholder="Ej: Ver Beneficios" oninput="updateEmailPreview()">
-                    </div>
-                    <div>
-                      <label class="edit-label">URL</label>
-                      <input type="text" id="email-cta-url" class="form-control" placeholder="https://..." oninput="updateEmailPreview()">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Actions -->
-              <div style="display:flex;flex-direction:column;gap:0.625rem;">
-                <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn" style="width:100%;">Enviar prueba a mí</button>
-                <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a <span id="send-btn-count">0</span> socios</button>
-                <div id="email-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
-              </div>
-
-            </div>
-
-            <!-- Preview Panel -->
-            <div style="flex:1;min-width:280px;">
-              <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
-              <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
-                <div id="email-preview" style="max-width:480px;margin:0 auto;"></div>
-              </div>
-            </div>
-
+          <!-- Sub-tabs -->
+          <div style="display:flex;border-bottom:2px solid var(--border-color);margin-bottom:1.5rem;">
+            <button id="etab-btn-socios" onclick="switchEmailTab('socios')" style="background:none;border:none;border-bottom:2px solid var(--primary-color);margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:600;color:var(--primary-color);cursor:pointer;">Socios</button>
+            <button id="etab-btn-aliados" onclick="switchEmailTab('aliados')" style="background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:500;color:var(--text-muted);cursor:pointer;">Aliados</button>
           </div>
+
+          <!-- ── SOCIOS TAB ── -->
+          <div id="etab-socios">
+            <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+              <div style="flex:0 0 420px;max-width:420px;min-width:280px;">
+
+                <!-- Template picker -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Plantilla</h3>
+                  <select id="socios-template-select" class="form-control" onchange="applyMemberTemplate(this.value)">
+                    <option value="">— Empezar desde cero —</option>
+                    <option value="activation">Primer descuento (Activación)</option>
+                    <option value="new_partner">Nuevo aliado</option>
+                    <option value="reengagement">¿Sigues ahí? (Reactivación)</option>
+                    <option value="renewal">Membresía vence pronto</option>
+                    <option value="flash">Solo este fin de semana</option>
+                    <option value="blank">Novedad del Club (en blanco)</option>
+                  </select>
+                </div>
+
+                <!-- Audience -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
+                  <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="email-audience" value="active" checked onchange="onAudienceChange()">
+                      Todos los activos
+                    </label>
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="email-audience" value="active_pending" onchange="onAudienceChange()">
+                      Activos + Pendientes
+                    </label>
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="email-audience" value="region" onchange="onAudienceChange()">
+                      Por región
+                    </label>
+                    <div id="region-picker" style="display:none;padding-left:1.5rem;">
+                      <select id="email-region-select" class="form-control" onchange="updateAudienceCount()"></select>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="email-audience" value="custom" onchange="onAudienceChange()">
+                      Seleccionar socios
+                    </label>
+                    <div id="custom-member-picker" style="display:none;padding-left:1.5rem;">
+                      <input type="text" class="form-control" placeholder="Buscar..." id="custom-member-search" oninput="filterCustomMembers()" style="margin-bottom:0.5rem;">
+                      <div id="custom-member-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
+                    </div>
+                  </div>
+                  <div id="audience-count-display" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
+                  <div class="form-group">
+                    <label class="edit-label">Asunto *</label>
+                    <input type="text" id="email-subject" class="form-control" placeholder="Ej: Nuevos beneficios en el Club" oninput="updateEmailPreview()">
+                  </div>
+                  <div class="form-group">
+                    <label class="edit-label">Título del correo *</label>
+                    <input type="text" id="email-heading" class="form-control" placeholder="Ej: ¡Tenemos novedades para ti!" oninput="updateEmailPreview()">
+                  </div>
+                  <div class="form-group">
+                    <label class="edit-label">Mensaje *</label>
+                    <textarea id="email-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {nombre} para personalizar." style="resize:vertical;" oninput="updateEmailPreview()"></textarea>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{nombre}</code> se reemplaza con el primer nombre de cada socio.</p>
+                  </div>
+                  <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
+                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                      <div><label class="edit-label">Texto</label><input type="text" id="email-cta-text" class="form-control" placeholder="Ej: Ver Beneficios" oninput="updateEmailPreview()"></div>
+                      <div><label class="edit-label">URL</label><input type="text" id="email-cta-url" class="form-control" placeholder="https://..." oninput="updateEmailPreview()"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                  <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn" style="width:100%;">Enviar prueba a mí</button>
+                  <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a <span id="send-btn-count">0</span> socios</button>
+                  <div id="email-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
+                </div>
+              </div>
+
+              <!-- Preview -->
+              <div style="flex:1;min-width:280px;">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
+                <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
+                  <div id="email-preview" style="max-width:480px;margin:0 auto;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── ALIADOS TAB ── -->
+          <div id="etab-aliados" style="display:none;">
+            <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+              <div style="flex:0 0 420px;max-width:420px;min-width:280px;">
+
+                <!-- Template picker -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Plantilla</h3>
+                  <select id="aliados-template-select" class="form-control" onchange="applyPartnerTemplate(this.value)">
+                    <option value="">— Empezar desde cero —</option>
+                    <option value="welcome_partner">Bienvenida al aliado</option>
+                    <option value="activity_report">Reporte de actividad</option>
+                    <option value="new_members">Socios nuevos en tu ciudad</option>
+                    <option value="low_activity">Sin actividad reciente</option>
+                    <option value="blank_partner">Novedad del Club (en blanco)</option>
+                  </select>
+                </div>
+
+                <!-- Audience -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
+                  <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="partner-audience" value="active" checked onchange="onPartnerAudienceChange()">
+                      Todos los aliados activos
+                    </label>
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="partner-audience" value="city" onchange="onPartnerAudienceChange()">
+                      Por ciudad
+                    </label>
+                    <div id="a-city-picker" style="display:none;padding-left:1.5rem;">
+                      <select id="a-city-select" class="form-control" onchange="updatePartnerAudienceCount()"></select>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
+                      <input type="radio" name="partner-audience" value="custom" onchange="onPartnerAudienceChange()">
+                      Seleccionar aliados
+                    </label>
+                    <div id="a-custom-picker" style="display:none;padding-left:1.5rem;">
+                      <input type="text" class="form-control" placeholder="Buscar aliado..." id="a-custom-search" oninput="filterPartnerList()" style="margin-bottom:0.5rem;">
+                      <div id="a-custom-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
+                    </div>
+                  </div>
+                  <div id="a-audience-count" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
+                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
+                  <div class="form-group">
+                    <label class="edit-label">Asunto *</label>
+                    <input type="text" id="a-subject" class="form-control" placeholder="Ej: Reporte de actividad del mes" oninput="updatePartnerPreview()">
+                  </div>
+                  <div class="form-group">
+                    <label class="edit-label">Título del correo *</label>
+                    <input type="text" id="a-heading" class="form-control" placeholder="Ej: Tu resumen del mes, {empresa}" oninput="updatePartnerPreview()">
+                  </div>
+                  <div class="form-group">
+                    <label class="edit-label">Mensaje *</label>
+                    <textarea id="a-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {empresa} para personalizar." style="resize:vertical;" oninput="updatePartnerPreview()"></textarea>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{empresa}</code> se reemplaza con el nombre de cada aliado.</p>
+                  </div>
+                  <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
+                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+                      <div><label class="edit-label">Texto</label><input type="text" id="a-cta-text" class="form-control" placeholder="Ej: Abrir portal" oninput="updatePartnerPreview()"></div>
+                      <div><label class="edit-label">URL</label><input type="text" id="a-cta-url" class="form-control" placeholder="https://..." oninput="updatePartnerPreview()"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display:flex;flex-direction:column;gap:0.625rem;">
+                  <button class="btn btn-secondary btn-sm" onclick="sendTestPartnerEmail()" id="a-test-btn" style="width:100%;">Enviar prueba a mí</button>
+                  <button class="btn btn-sm" onclick="confirmAndSendToPartners()" id="a-send-btn" style="width:100%;">Enviar a <span id="a-send-count">0</span> aliados</button>
+                  <div id="a-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
+                </div>
+              </div>
+
+              <!-- Preview -->
+              <div style="flex:1;min-width:280px;">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
+                <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
+                  <div id="a-preview" style="max-width:480px;margin:0 auto;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </main>
@@ -665,12 +767,7 @@
           if (v.id === targetId) v.classList.add('active');
         });
 
-        // Initialize email view when navigated to
-        if (targetId === 'view-email') {
-          populateRegionDropdown();
-          updateAudienceCount();
-          updateEmailPreview();
-        }
+        if (targetId === 'view-email') initEmailView();
 
         // Mobile menu behavior
         document.getElementById('sidebar').classList.remove('expanded');
@@ -1991,6 +2088,215 @@
 
     // ── Email Broadcast Module ─────────────────────────────────────────────────
 
+    // ── Template data ──────────────────────────────────────────────────────────
+
+    const MEMBER_TEMPLATES = {
+      activation: {
+        subject: '¿Ya usaste tu membresía? Tu primer descuento te espera',
+        heading: 'Tu primera experiencia Club Hogga',
+        body: `Hola {nombre},
+
+Ya eres socio, pero notamos que aún no has usado ningún beneficio. Eso significa que estás dejando descuentos sin aprovechar — y eso queremos remediarlo.
+
+Usar tu membresía es más simple de lo que parece:
+
+1. Visita cualquier comercio aliado
+2. Dile al cajero o mesero que eres socio Club Hogga
+3. Da tu RUT — en segundos validan y aplican tu descuento
+
+¿Por dónde empezar? Entra al link de abajo y elige el comercio más cercano a ti.
+
+¡El primer descuento siempre es el más rico!`,
+        cta_text: 'Ver comercios aliados',
+        cta_url: 'https://clubhogga.cl/beneficios/'
+      },
+      new_partner: {
+        subject: 'Nuevo beneficio disponible: [Nombre del comercio]',
+        heading: '¡Tenemos un nuevo aliado!',
+        body: `Hola {nombre},
+
+[Nombre del comercio] acaba de unirse a la red Club Hogga y ya puedes aprovechar su descuento exclusivo como socio.
+
+[Descripción breve del comercio]
+
+Tu beneficio: [descuento exacto]
+Encuéntranlos en: [dirección]
+
+Como siempre, solo dicta tu RUT al pagar. Sin apps, sin tarjetas.`,
+        cta_text: 'Ver todos los beneficios',
+        cta_url: 'https://clubhogga.cl/beneficios/'
+      },
+      reengagement: {
+        subject: 'Llevas un tiempo sin aprovechar el Club...',
+        heading: 'Te echamos de menos, {nombre}',
+        body: `Hola {nombre},
+
+Llevas un tiempo sin usar tu membresía. Y eso nos preocupa un poco, porque significa que estás pagando y no recibiendo nada a cambio.
+
+¿Pasó algo? ¿Algo no funcionó bien en una visita? Si es así, cuéntanos respondiendo este correo — lo resolvemos.
+
+Si solo ha sido falta de tiempo, te entendemos. Pero mientras tanto el Club ha crecido: hay nuevos comercios aliados y más beneficios esperándote.
+
+Recuerda: sin apps, sin tarjetas. Solo tu RUT.`,
+        cta_text: 'Ver qué hay de nuevo',
+        cta_url: 'https://clubhogga.cl/beneficios/'
+      },
+      renewal: {
+        subject: 'Tu membresía Club Hogga vence pronto',
+        heading: 'No pierdas acceso a tus descuentos',
+        body: `Hola {nombre},
+
+Tu membresía Club Hogga está por vencer en los próximos días.
+
+Una vez que expire, perderás acceso a todos los descuentos en nuestra red de comercios aliados — y eso queremos evitar.
+
+Si tu pago está configurado automáticamente, no necesitas hacer nada. Si no, es buen momento para revisar.
+
+¿Tienes alguna consulta sobre tu membresía? Responde este correo o escríbenos a club@hogga.cl y te ayudamos.`,
+        cta_text: '',
+        cta_url: ''
+      },
+      flash: {
+        subject: 'Solo hasta el [día]: oferta especial en [Empresa]',
+        heading: 'Beneficio especial — por tiempo limitado',
+        body: `Hola {nombre},
+
+[Empresa aliada] tiene un beneficio especial exclusivo para socios Club Hogga, solo válido hasta el [fecha].
+
+[Descripción exacta del beneficio: qué es, cuánto se descuenta, qué incluye]
+
+Cómo acceder: visítalos en [dirección] y dicta tu RUT al momento de pagar.
+
+Después de esa fecha vuelve al beneficio regular — así que no lo dejes pasar.`,
+        cta_text: '',
+        cta_url: ''
+      },
+      blank: { subject: '', heading: '', body: '', cta_text: '', cta_url: '' }
+    };
+
+    const PARTNER_TEMPLATES = {
+      welcome_partner: {
+        subject: 'Bienvenidos a Club Hogga — guía rápida para {empresa}',
+        heading: '¡Bienvenidos a la red, {empresa}!',
+        body: `Hola equipo de {empresa},
+
+Ya son oficialmente parte de la red Club Hogga. Esto es lo que necesitan saber:
+
+¿Cómo validan la membresía de un socio?
+Cuando un cliente mencione que es socio del Club, pídanle su RUT e ingrésalo en su portal de validación. En segundos sabrán si está activo y aplican el descuento.
+
+Beneficio registrado para sus socios: [COMPLETAR]
+
+¿El equipo tiene dudas sobre el proceso o necesita una capacitación rápida? Respondan este correo y coordinamos.
+
+¡Esperamos que sea una gran alianza para los dos!`,
+        cta_text: 'Abrir portal de validación',
+        cta_url: ''
+      },
+      activity_report: {
+        subject: 'Reporte de actividad Club Hogga — {empresa}',
+        heading: 'Tu resumen del mes, {empresa}',
+        body: `Hola equipo de {empresa},
+
+Aquí va el resumen de socios Club Hogga que visitaron su local este período:
+
+→ Validaciones totales: [X]
+→ Validaciones exitosas: [X]
+→ Comparado al mes anterior: [mejor / similar / menor]
+
+[X] personas llegaron a {empresa} gracias al Club Hogga.
+
+¿Tienen alguna observación o sugerencia para mejorar la experiencia? Nos interesa saberlo — esta alianza funciona mejor cuando conversamos.`,
+        cta_text: '',
+        cta_url: ''
+      },
+      new_members: {
+        subject: 'Nuevos socios Club Hogga en tu ciudad',
+        heading: 'Más socios en tu zona, {empresa}',
+        body: `Hola equipo de {empresa},
+
+Buenas noticias: [X] nuevos socios se unieron a Club Hogga en tu ciudad este mes.
+
+Eso significa más personas buscando activamente comercios aliados donde usar sus beneficios — y {empresa} está en esa lista.
+
+Si quieren aprovechar el momento para promover su beneficio (en redes, en el local, o con sus clientes habituales), este es un buen momento para hacerlo.
+
+Cualquier duda, estamos a disposición.`,
+        cta_text: '',
+        cta_url: ''
+      },
+      low_activity: {
+        subject: 'Queremos que la alianza funcione bien para {empresa}',
+        heading: '¿Cómo les va con Club Hogga, {empresa}?',
+        body: `Hola equipo de {empresa},
+
+Notamos que ha habido poca actividad de socios Club Hogga en su local últimamente, y queremos asegurarnos de que la alianza esté siendo útil para ustedes.
+
+Algunas razones comunes por las que los socios no llegan:
+
+→ No saben que el local es aliado del Club
+→ El equipo no está familiarizado con el proceso de validación
+→ El beneficio podría necesitar una actualización
+
+¿Hay algo que podamos hacer desde nuestra parte? Respondan este correo y lo analizamos juntos — queremos que esto funcione bien para los dos.`,
+        cta_text: '',
+        cta_url: ''
+      },
+      blank_partner: { subject: '', heading: '', body: '', cta_text: '', cta_url: '' }
+    };
+
+    // ── Tab switching ──────────────────────────────────────────────────────────
+
+    function switchEmailTab(tab) {
+      const isSocios = tab === 'socios';
+      document.getElementById('etab-socios').style.display = isSocios ? 'block' : 'none';
+      document.getElementById('etab-aliados').style.display = isSocios ? 'none' : 'block';
+      const activeStyle = { color: 'var(--primary-color)', borderBottomColor: 'var(--primary-color)', fontWeight: '600' };
+      const inactiveStyle = { color: 'var(--text-muted)', borderBottomColor: 'transparent', fontWeight: '500' };
+      const applyStyle = (el, styles) => Object.assign(el.style, styles);
+      applyStyle(document.getElementById('etab-btn-socios'), isSocios ? activeStyle : inactiveStyle);
+      applyStyle(document.getElementById('etab-btn-aliados'), isSocios ? inactiveStyle : activeStyle);
+      if (!isSocios) {
+        populateCityDropdown();
+        updatePartnerAudienceCount();
+        updatePartnerPreview();
+      }
+    }
+
+    function initEmailView() {
+      populateRegionDropdown();
+      updateAudienceCount();
+      updateEmailPreview();
+    }
+
+    // ── Apply templates ────────────────────────────────────────────────────────
+
+    function applyMemberTemplate(key) {
+      if (!key) return;
+      const t = MEMBER_TEMPLATES[key];
+      if (!t) return;
+      document.getElementById('email-subject').value = t.subject;
+      document.getElementById('email-heading').value = t.heading;
+      document.getElementById('email-body').value = t.body;
+      document.getElementById('email-cta-text').value = t.cta_text || '';
+      document.getElementById('email-cta-url').value = t.cta_url || '';
+      updateEmailPreview();
+    }
+
+    function applyPartnerTemplate(key) {
+      if (!key) return;
+      const t = PARTNER_TEMPLATES[key];
+      if (!t) return;
+      document.getElementById('a-subject').value = t.subject;
+      document.getElementById('a-heading').value = t.heading;
+      document.getElementById('a-body').value = t.body;
+      document.getElementById('a-cta-text').value = t.cta_text || '';
+      document.getElementById('a-cta-url').value = t.cta_url || '';
+      updatePartnerPreview();
+    }
+
+    // ── Socios audience ────────────────────────────────────────────────────────
+
     function onAudienceChange() {
       const val = document.querySelector('input[name="email-audience"]:checked')?.value;
       document.getElementById('region-picker').style.display = val === 'region' ? 'block' : 'none';
@@ -2189,6 +2495,204 @@
       } finally {
         btn.disabled = false;
         updateAudienceCount();
+      }
+    }
+
+    // ── Partner (Aliados) audience ─────────────────────────────────────────────
+
+    function onPartnerAudienceChange() {
+      const val = document.querySelector('input[name="partner-audience"]:checked')?.value;
+      document.getElementById('a-city-picker').style.display = val === 'city' ? 'block' : 'none';
+      document.getElementById('a-custom-picker').style.display = val === 'custom' ? 'block' : 'none';
+      if (val === 'city') populateCityDropdown();
+      if (val === 'custom') renderPartnerList('');
+      updatePartnerAudienceCount();
+    }
+
+    function populateCityDropdown() {
+      const sel = document.getElementById('a-city-select');
+      if (!sel) return;
+      sel.innerHTML = globalCities.length
+        ? globalCities.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+        : '<option value="">Sin ciudades disponibles</option>';
+    }
+
+    function getSelectedPartnerAudience() {
+      const val = document.querySelector('input[name="partner-audience"]:checked')?.value || 'active';
+      if (val === 'custom') {
+        const checked = [...document.querySelectorAll('#a-custom-list input[type=checkbox]:checked')];
+        return { segment: 'custom', partner_ids: checked.map(c => c.value) };
+      }
+      if (val === 'city') {
+        return { segment: 'city', city_id: document.getElementById('a-city-select')?.value || null };
+      }
+      return { segment: 'active' };
+    }
+
+    function computePartnerRecipientCount() {
+      const { segment, partner_ids, city_id } = getSelectedPartnerAudience();
+      if (partner_ids) return partner_ids.length;
+      let partners = globalPartners.filter(p => p.active && p.email);
+      if (city_id) partners = partners.filter(p => p.city_id === city_id);
+      return partners.length;
+    }
+
+    function updatePartnerAudienceCount() {
+      const count = computePartnerRecipientCount();
+      const display = document.getElementById('a-audience-count');
+      const countSpan = document.getElementById('a-send-count');
+      const sendBtn = document.getElementById('a-send-btn');
+      if (display) display.textContent = count === 0
+        ? 'Sin aliados con email en este segmento.'
+        : `${count} aliado${count !== 1 ? 's' : ''} recibirán este correo`;
+      if (countSpan) countSpan.textContent = count;
+      if (sendBtn) sendBtn.disabled = count === 0;
+    }
+
+    function renderPartnerList(query) {
+      const container = document.getElementById('a-custom-list');
+      if (!container) return;
+      const q = query.toLowerCase();
+      const withEmail = globalPartners.filter(p => p.email && (
+        !q || (p.business_name || '').toLowerCase().includes(q)
+      ));
+      if (withEmail.length === 0) {
+        container.innerHTML = '<p style="padding:0.75rem;color:var(--text-muted);font-size:0.875rem;margin:0;">Sin resultados.</p>';
+        return;
+      }
+      container.innerHTML = withEmail.map(p => `
+        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
+          <input type="checkbox" value="${p.id}" onchange="updatePartnerAudienceCount()">
+          <span style="flex:1;">${p.business_name}</span>
+          <span style="color:var(--text-muted);font-size:0.75rem;">${resolveName(globalCities, p.city_id)}</span>
+        </label>`).join('');
+    }
+
+    function filterPartnerList() {
+      renderPartnerList(document.getElementById('a-custom-search')?.value || '');
+    }
+
+    function buildPartnerPreviewHtml(heading, bodyText, ctaText, ctaUrl) {
+      const safeHeading = heading || '<em style="color:#94a3b8">Título del correo...</em>';
+      const safeBody = bodyText
+        ? bodyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/\{empresa\}/gi, '<strong>[Empresa]</strong>').replace(/\n/g, '<br>')
+        : '<em style="color:#94a3b8">El mensaje aparecerá aquí...</em>';
+      return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:500px;margin:0 auto;color:#1e293b;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)">
+  <div style="background:#f8fafc;padding:24px 20px;text-align:center;border-bottom:1px solid #e2e8f0">
+    <img src="https://club-hogga.pages.dev/images/logo.webp" alt="Club Hogga" style="height:40px">
+  </div>
+  <div style="padding:24px">
+    <h2 style="color:#0a2e46;font-size:20px;margin-top:0;margin-bottom:14px">${safeHeading}</h2>
+    <div style="font-size:15px;line-height:1.6;margin-bottom:20px">${safeBody}</div>
+    ${ctaText && ctaUrl ? `<div style="text-align:center;margin:24px 0 12px"><a style="background:#108f8e;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:15px">${ctaText}</a></div>` : ''}
+  </div>
+  <div style="background:#f8fafc;padding:16px;text-align:center;border-top:1px solid #e2e8f0">
+    <p style="font-size:13px;color:#64748b;margin:0">Si tienes alguna consulta, escríbenos a club@hogga.cl.</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:10px">© 2026 Club Hogga. Todos los derechos reservados.</p>
+  </div>
+</div>`;
+    }
+
+    function updatePartnerPreview() {
+      const preview = document.getElementById('a-preview');
+      if (!preview) return;
+      preview.innerHTML = buildPartnerPreviewHtml(
+        document.getElementById('a-heading')?.value,
+        document.getElementById('a-body')?.value,
+        document.getElementById('a-cta-text')?.value,
+        document.getElementById('a-cta-url')?.value
+      );
+    }
+
+    async function sendTestPartnerEmail() {
+      const subject = document.getElementById('a-subject')?.value.trim();
+      const heading = document.getElementById('a-heading')?.value.trim();
+      const body = document.getElementById('a-body')?.value.trim();
+      const msgEl = document.getElementById('a-send-msg');
+      if (!subject || !heading || !body) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Completa asunto, título y mensaje primero.';
+        return;
+      }
+      const btn = document.getElementById('a-test-btn');
+      btn.disabled = true; btn.textContent = 'Enviando...'; msgEl.textContent = '';
+      try {
+        const res = await fetch('/api/admin-broadcast-partners', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            test_email: 'npalston@gmail.com',
+            subject: '[TEST] ' + subject,
+            heading,
+            body_text: body,
+            cta_text: document.getElementById('a-cta-text')?.value.trim() || null,
+            cta_url: document.getElementById('a-cta-url')?.value.trim() || null,
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = 'Prueba enviada a npalston@gmail.com';
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al enviar prueba.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Enviar prueba a mí';
+      }
+    }
+
+    async function confirmAndSendToPartners() {
+      const subject = document.getElementById('a-subject')?.value.trim();
+      const heading = document.getElementById('a-heading')?.value.trim();
+      const body = document.getElementById('a-body')?.value.trim();
+      const msgEl = document.getElementById('a-send-msg');
+      if (!subject || !heading || !body) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Completa asunto, título y mensaje primero.';
+        return;
+      }
+      const count = computePartnerRecipientCount();
+      if (count === 0) return;
+      if (!confirm(`¿Confirmas el envío a ${count} aliado${count !== 1 ? 's' : ''}?\n\nAsunto: "${subject}"`)) return;
+
+      const btn = document.getElementById('a-send-btn');
+      btn.disabled = true; btn.textContent = 'Enviando...'; msgEl.textContent = '';
+
+      const { segment, partner_ids, city_id } = getSelectedPartnerAudience();
+      try {
+        const res = await fetch('/api/admin-broadcast-partners', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject,
+            heading,
+            body_text: body,
+            cta_text: document.getElementById('a-cta-text')?.value.trim() || null,
+            cta_url: document.getElementById('a-cta-url')?.value.trim() || null,
+            segment,
+            city_id: city_id || null,
+            partner_ids: partner_ids && partner_ids.length > 0 ? partner_ids : null,
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          msgEl.style.color = 'var(--success-color)';
+          msgEl.textContent = `Enviado a ${data.sent_count} aliado${data.sent_count !== 1 ? 's' : ''}.`;
+        } else {
+          msgEl.style.color = 'var(--danger-color)';
+          msgEl.textContent = data.error || 'Error al enviar.';
+        }
+      } catch (err) {
+        msgEl.style.color = 'var(--danger-color)';
+        msgEl.textContent = 'Error de conexión.';
+      } finally {
+        btn.disabled = false;
+        updatePartnerAudienceCount();
       }
     }
 
