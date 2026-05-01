@@ -166,7 +166,12 @@
           <!-- Expiry Alert Panel -->
           <div id="expiry-panel" class="alert-panel" style="display:none;">
             <div class="alert-panel-header">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
               Alertas de Renovación
               <span id="expiry-count-badge" class="badge badge-inactive" style="margin-left: auto;"></span>
             </div>
@@ -197,13 +202,17 @@
             <button class="btn btn-sm btn-secondary" onclick="openPartnerModal()">+ Añadir Empresa</button>
           </header>
 
-          <div class="filter-bar" style="margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
-            <div class="search-box" style="flex: 1; max-width: 400px; display: flex; align-items: center; background: white; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 0.75rem;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" style="margin-right: 0.5rem;">
+          <div class="filter-bar"
+            style="margin-bottom: 1.25rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+            <div class="search-box"
+              style="flex: 1; max-width: 400px; display: flex; align-items: center; background: white; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 0.75rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"
+                style="margin-right: 0.5rem;">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <input type="text" id="partner-search" placeholder="Buscar por nombre o ciudad..." style="border: none; outline: none; width: 100%; font-size: 0.875rem;">
+              <input type="text" id="partner-search" placeholder="Buscar por nombre o ciudad..."
+                style="border: none; outline: none; width: 100%; font-size: 0.875rem;">
             </div>
             <div style="display: flex; gap: 0.75rem; align-items: center;">
               <span style="font-size: 0.8125rem; color: var(--text-muted);" id="partner-count"></span>
@@ -242,7 +251,8 @@
           <header class="dash-header">
             <div>
               <h1>Actividad de Validaciones</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Historial de verificaciones de membresía en comercios aliados</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Historial de verificaciones
+                de membresía en comercios aliados</p>
             </div>
           </header>
 
@@ -274,19 +284,29 @@
           <header class="dash-header">
             <div>
               <h1>Base de Socios</h1>
-              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de socios del Club</p>
+              <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Directorio de socios del
+                Club</p>
             </div>
             <div style="display:flex;gap:0.75rem;align-items:center;">
-            <button class="btn btn-sm btn-secondary" onclick="openAddMemberModal()">+ Añadir Socio</button>
-            <button class="btn btn-sm btn-secondary" onclick="exportMembersCSV()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Exportar CSV
-            </button>
+              <button class="btn btn-sm btn-secondary" onclick="openAddMemberModal()">+ Añadir Socio</button>
+              <button class="btn btn-sm btn-secondary" onclick="exportMembersCSV()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;vertical-align:middle;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Exportar CSV
+              </button>
             </div>
           </header>
 
           <div class="search-bar-wrapper">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             <input type="text" id="member-search" class="search-input" placeholder="Buscar por nombre, email o RUT...">
             <span id="member-count" class="search-count"></span>
           </div>
@@ -318,14 +338,17 @@
           <header class="dash-header">
             <div>
               <h1>Correos</h1>
-              <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem;">Envía emails a socios y aliados</p>
+              <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem;">Envía emails a socios y aliados
+              </p>
             </div>
           </header>
 
           <!-- Sub-tabs -->
           <div style="display:flex;border-bottom:2px solid var(--border-color);margin-bottom:1.5rem;">
-            <button id="etab-btn-socios" onclick="switchEmailTab('socios')" style="background:none;border:none;border-bottom:2px solid var(--primary-color);margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:600;color:var(--primary-color);cursor:pointer;">Socios</button>
-            <button id="etab-btn-aliados" onclick="switchEmailTab('aliados')" style="background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:500;color:var(--text-muted);cursor:pointer;">Aliados</button>
+            <button id="etab-btn-socios" onclick="switchEmailTab('socios')"
+              style="background:none;border:none;border-bottom:2px solid var(--primary-color);margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:600;color:var(--primary-color);cursor:pointer;">Socios</button>
+            <button id="etab-btn-aliados" onclick="switchEmailTab('aliados')"
+              style="background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:500;color:var(--text-muted);cursor:pointer;">Aliados</button>
           </div>
 
           <!-- ── SOCIOS TAB ── -->
@@ -335,7 +358,9 @@
 
                 <!-- Template picker -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Plantilla</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Plantilla</h3>
                   <select id="socios-template-select" class="form-control" onchange="applyMemberTemplate(this.value)">
                     <option value="">— Empezar desde cero —</option>
                     <option value="activation">Primer descuento (Activación)</option>
@@ -349,7 +374,9 @@
 
                 <!-- Audience -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Destinatarios</h3>
                   <div style="display:flex;flex-direction:column;gap:0.625rem;">
                     <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
                       <input type="radio" name="email-audience" value="active" checked onchange="onAudienceChange()">
@@ -371,50 +398,70 @@
                       Seleccionar socios
                     </label>
                     <div id="custom-member-picker" style="display:none;padding-left:1.5rem;">
-                      <input type="text" class="form-control" placeholder="Buscar..." id="custom-member-search" oninput="filterCustomMembers()" style="margin-bottom:0.5rem;">
-                      <div id="custom-member-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
+                      <input type="text" class="form-control" placeholder="Buscar..." id="custom-member-search"
+                        oninput="filterCustomMembers()" style="margin-bottom:0.5rem;">
+                      <div id="custom-member-list"
+                        style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;">
+                      </div>
                     </div>
                   </div>
-                  <div id="audience-count-display" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
+                  <div id="audience-count-display"
+                    style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);">
+                  </div>
                 </div>
 
                 <!-- Content -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Contenido</h3>
                   <div class="form-group">
                     <label class="edit-label">Asunto *</label>
-                    <input type="text" id="email-subject" class="form-control" placeholder="Ej: Nuevos beneficios en el Club" oninput="updateEmailPreview()">
+                    <input type="text" id="email-subject" class="form-control"
+                      placeholder="Ej: Nuevos beneficios en el Club" oninput="updateEmailPreview()">
                   </div>
                   <div class="form-group">
                     <label class="edit-label">Título del correo *</label>
-                    <input type="text" id="email-heading" class="form-control" placeholder="Ej: ¡Tenemos novedades para ti!" oninput="updateEmailPreview()">
+                    <input type="text" id="email-heading" class="form-control"
+                      placeholder="Ej: ¡Tenemos novedades para ti!" oninput="updateEmailPreview()">
                   </div>
                   <div class="form-group">
                     <label class="edit-label">Mensaje *</label>
-                    <textarea id="email-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {nombre} para personalizar." style="resize:vertical;" oninput="updateEmailPreview()"></textarea>
-                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{nombre}</code> se reemplaza con el primer nombre de cada socio.</p>
+                    <textarea id="email-body" class="form-control" rows="6"
+                      placeholder="Escribe tu mensaje... Usa {nombre} para personalizar." style="resize:vertical;"
+                      oninput="updateEmailPreview()"></textarea>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{nombre}</code> se
+                      reemplaza con el primer nombre de cada socio.</p>
                   </div>
                   <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
-                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
+                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">
+                      Botón CTA (opcional)</p>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
-                      <div><label class="edit-label">Texto</label><input type="text" id="email-cta-text" class="form-control" placeholder="Ej: Ver Beneficios" oninput="updateEmailPreview()"></div>
-                      <div><label class="edit-label">URL</label><input type="text" id="email-cta-url" class="form-control" placeholder="https://..." oninput="updateEmailPreview()"></div>
+                      <div><label class="edit-label">Texto</label><input type="text" id="email-cta-text"
+                          class="form-control" placeholder="Ej: Ver Beneficios" oninput="updateEmailPreview()"></div>
+                      <div><label class="edit-label">URL</label><input type="text" id="email-cta-url"
+                          class="form-control" placeholder="https://..." oninput="updateEmailPreview()"></div>
                     </div>
                   </div>
                 </div>
 
                 <!-- Actions -->
                 <div style="display:flex;flex-direction:column;gap:0.625rem;">
-                  <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn" style="width:100%;">Enviar prueba a mí</button>
-                  <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a <span id="send-btn-count">0</span> socios</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendTestEmail()" id="email-test-btn"
+                    style="width:100%;">Enviar prueba a mí</button>
+                  <button class="btn btn-sm" onclick="confirmAndSend()" id="email-send-btn" style="width:100%;">Enviar a
+                    %20 <span id="send-btn-count">0</span> %20socios</button>
                   <div id="email-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
                 </div>
               </div>
 
               <!-- Preview -->
               <div style="flex:1;min-width:280px;">
-                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
-                <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
+                <div
+                  style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">
+                  Vista previa</div>
+                <div
+                  style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
                   <div id="email-preview" style="max-width:480px;margin:0 auto;"></div>
                 </div>
               </div>
@@ -428,7 +475,9 @@
 
                 <!-- Template picker -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Plantilla</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Plantilla</h3>
                   <select id="aliados-template-select" class="form-control" onchange="applyPartnerTemplate(this.value)">
                     <option value="">— Empezar desde cero —</option>
                     <option value="welcome_partner">Bienvenida al aliado</option>
@@ -441,10 +490,13 @@
 
                 <!-- Audience -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Destinatarios</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Destinatarios</h3>
                   <div style="display:flex;flex-direction:column;gap:0.625rem;">
                     <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
-                      <input type="radio" name="partner-audience" value="active" checked onchange="onPartnerAudienceChange()">
+                      <input type="radio" name="partner-audience" value="active" checked
+                        onchange="onPartnerAudienceChange()">
                       Todos los aliados activos
                     </label>
                     <label style="display:flex;align-items:center;gap:0.625rem;cursor:pointer;font-size:0.9375rem;">
@@ -459,50 +511,70 @@
                       Seleccionar aliados
                     </label>
                     <div id="a-custom-picker" style="display:none;padding-left:1.5rem;">
-                      <input type="text" class="form-control" placeholder="Buscar aliado..." id="a-custom-search" oninput="filterPartnerList()" style="margin-bottom:0.5rem;">
-                      <div id="a-custom-list" style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;"></div>
+                      <input type="text" class="form-control" placeholder="Buscar aliado..." id="a-custom-search"
+                        oninput="filterPartnerList()" style="margin-bottom:0.5rem;">
+                      <div id="a-custom-list"
+                        style="max-height:180px;overflow-y:auto;border:1px solid var(--border-color);border-radius:6px;background:white;">
+                      </div>
                     </div>
                   </div>
-                  <div id="a-audience-count" style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);"></div>
+                  <div id="a-audience-count"
+                    style="margin-top:0.875rem;padding:0.5rem 0.75rem;background:var(--bg-color);border-radius:6px;font-size:0.875rem;color:var(--text-muted);">
+                  </div>
                 </div>
 
                 <!-- Content -->
                 <div class="data-section" style="padding:1.25rem;margin-bottom:1rem;">
-                  <h3 style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">Contenido</h3>
+                  <h3
+                    style="font-size:0.8125rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 0.875rem;">
+                    Contenido</h3>
                   <div class="form-group">
                     <label class="edit-label">Asunto *</label>
-                    <input type="text" id="a-subject" class="form-control" placeholder="Ej: Reporte de actividad del mes" oninput="updatePartnerPreview()">
+                    <input type="text" id="a-subject" class="form-control"
+                      placeholder="Ej: Reporte de actividad del mes" oninput="updatePartnerPreview()">
                   </div>
                   <div class="form-group">
                     <label class="edit-label">Título del correo *</label>
-                    <input type="text" id="a-heading" class="form-control" placeholder="Ej: Tu resumen del mes, {empresa}" oninput="updatePartnerPreview()">
+                    <input type="text" id="a-heading" class="form-control"
+                      placeholder="Ej: Tu resumen del mes, {empresa}" oninput="updatePartnerPreview()">
                   </div>
                   <div class="form-group">
                     <label class="edit-label">Mensaje *</label>
-                    <textarea id="a-body" class="form-control" rows="6" placeholder="Escribe tu mensaje... Usa {empresa} para personalizar." style="resize:vertical;" oninput="updatePartnerPreview()"></textarea>
-                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{empresa}</code> se reemplaza con el nombre de cada aliado.</p>
+                    <textarea id="a-body" class="form-control" rows="6"
+                      placeholder="Escribe tu mensaje... Usa {empresa} para personalizar." style="resize:vertical;"
+                      oninput="updatePartnerPreview()"></textarea>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.375rem;"><code>{empresa}</code> se
+                      reemplaza con el nombre de cada aliado.</p>
                   </div>
                   <div style="border-top:1px solid var(--border-color);padding-top:0.875rem;">
-                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">Botón CTA (opcional)</p>
+                    <p style="font-size:0.8125rem;font-weight:500;margin:0 0 0.625rem;color:var(--text-secondary);">
+                      Botón CTA (opcional)</p>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
-                      <div><label class="edit-label">Texto</label><input type="text" id="a-cta-text" class="form-control" placeholder="Ej: Abrir portal" oninput="updatePartnerPreview()"></div>
-                      <div><label class="edit-label">URL</label><input type="text" id="a-cta-url" class="form-control" placeholder="https://..." oninput="updatePartnerPreview()"></div>
+                      <div><label class="edit-label">Texto</label><input type="text" id="a-cta-text"
+                          class="form-control" placeholder="Ej: Abrir portal" oninput="updatePartnerPreview()"></div>
+                      <div><label class="edit-label">URL</label><input type="text" id="a-cta-url" class="form-control"
+                          placeholder="https://..." oninput="updatePartnerPreview()"></div>
                     </div>
                   </div>
                 </div>
 
                 <!-- Actions -->
                 <div style="display:flex;flex-direction:column;gap:0.625rem;">
-                  <button class="btn btn-secondary btn-sm" onclick="sendTestPartnerEmail()" id="a-test-btn" style="width:100%;">Enviar prueba a mí</button>
-                  <button class="btn btn-sm" onclick="confirmAndSendToPartners()" id="a-send-btn" style="width:100%;">Enviar a <span id="a-send-count">0</span> aliados</button>
+                  <button class="btn btn-secondary btn-sm" onclick="sendTestPartnerEmail()" id="a-test-btn"
+                    style="width:100%;">Enviar prueba a mí</button>
+                  <button class="btn btn-sm" onclick="confirmAndSendToPartners()" id="a-send-btn"
+                    style="width:100%;">Enviar a <span id="a-send-count">0</span> aliados</button>
                   <div id="a-send-msg" style="font-size:0.8125rem;min-height:1.25rem;text-align:center;"></div>
                 </div>
               </div>
 
               <!-- Preview -->
               <div style="flex:1;min-width:280px;">
-                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">Vista previa</div>
-                <div style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
+                <div
+                  style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:0.75rem;">
+                  Vista previa</div>
+                <div
+                  style="border:1px solid var(--border-color);border-radius:8px;overflow:hidden;background:#f1f5f9;padding:1.5rem;">
                   <div id="a-preview" style="max-width:480px;margin:0 auto;"></div>
                 </div>
               </div>
@@ -589,7 +661,8 @@
           </div>
           <div class="form-group">
             <label>Descripción de la Empresa</label>
-            <textarea id="p-description" class="form-control" rows="2" placeholder="Breve descripción del comercio..."></textarea>
+            <textarea id="p-description" class="form-control" rows="2"
+              placeholder="Breve descripción del comercio..."></textarea>
           </div>
           <div class="form-group">
             <label>Google Maps URL (Opcional)</label>
@@ -1018,7 +1091,7 @@
           <h3 class="drawer-section-title">Contacto & Redes</h3>
           <div class="drawer-row">
             <span class="drawer-label">Instagram</span>
-            <span>${partner.instagram ? '<a href="https://instagram.com/' + partner.instagram.replace('@','') + '" target="_blank" class="drawer-link">' + partner.instagram + '</a>' : '-'}</span>
+            <span>${partner.instagram ? '<a href="https://instagram.com/' + partner.instagram.replace('@', '') + '" target="_blank" class="drawer-link">' + partner.instagram + '</a>' : '-'}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Web</span>
@@ -1307,11 +1380,11 @@
       const tbody = document.getElementById('partners-body');
       const countEl = document.getElementById('partner-count');
       tbody.innerHTML = '';
-      
+
       if (countEl) {
         countEl.textContent = `${partners ? partners.length : 0} empresas`;
       }
-      
+
       if (!partners || partners.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No hay empresas aliadas.</td></tr>`;
         return;
@@ -1644,10 +1717,10 @@
       const q = this.value.trim().toLowerCase();
       const filtered = q
         ? globalMembers.filter(m =>
-            (m.full_name || '').toLowerCase().includes(q) ||
-            (m.email || '').toLowerCase().includes(q) ||
-            (m.rut || '').toLowerCase().includes(q)
-          )
+          (m.full_name || '').toLowerCase().includes(q) ||
+          (m.email || '').toLowerCase().includes(q) ||
+          (m.rut || '').toLowerCase().includes(q)
+        )
         : globalMembers;
       renderMembersTable(filtered);
     });
@@ -2355,8 +2428,8 @@ Algunas razones comunes por las que los socios no llegan:
       const q = query.toLowerCase();
       const withEmail = globalMembers.filter(m => m.email && (
         !q || (m.full_name || '').toLowerCase().includes(q) ||
-              (m.email || '').toLowerCase().includes(q) ||
-              (m.rut || '').toLowerCase().includes(q)
+        (m.email || '').toLowerCase().includes(q) ||
+        (m.rut || '').toLowerCase().includes(q)
       ));
       if (withEmail.length === 0) {
         container.innerHTML = '<p style="padding:0.75rem;color:var(--text-muted);font-size:0.875rem;margin:0;">Sin resultados.</p>';
@@ -2377,8 +2450,8 @@ Algunas razones comunes por las que los socios no llegan:
     function buildPreviewHtml(heading, bodyText, ctaText, ctaUrl) {
       const safeHeading = heading || '<em style="color:#94a3b8">Título del correo...</em>';
       const safeBody = bodyText
-        ? bodyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-            .replace(/\{nombre\}/gi, '<strong>[Nombre]</strong>').replace(/\n/g, '<br>')
+        ? bodyText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\{nombre\}/gi, '<strong>[Nombre]</strong>').replace(/\n/g, '<br>')
         : '<em style="color:#94a3b8">El mensaje aparecerá aquí...</em>';
       return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:500px;margin:0 auto;color:#1e293b;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)">
   <div style="background:#f8fafc;padding:24px 20px;text-align:center;border-bottom:1px solid #e2e8f0">
@@ -2561,10 +2634,12 @@ Algunas razones comunes por las que los socios no llegan:
         return;
       }
       container.innerHTML = withEmail.map(p => `
-        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
-          <input type="checkbox" value="${p.id}" onchange="updatePartnerAudienceCount()">
-          <span style="flex:1;">${p.business_name}</span>
-          <span style="color:var(--text-muted);font-size:0.75rem;">${resolveName(globalCities, p.city_id)}</span>
+        <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;">
+          <input type="checkbox" value="${p.id}" onchange="updatePartnerAudienceCount()" style="flex-shrink:0;">
+          <span style="flex:1;min-width:0;">
+            <span style="display:block;font-size:0.875rem;font-weight:500;">${p.business_name}</span>
+            <span style="display:block;font-size:0.75rem;color:var(--text-muted);">${p.email}</span>
+          </span>
         </label>`).join('');
     }
 
@@ -2575,8 +2650,8 @@ Algunas razones comunes por las que los socios no llegan:
     function buildPartnerPreviewHtml(heading, bodyText, ctaText, ctaUrl) {
       const safeHeading = heading || '<em style="color:#94a3b8">Título del correo...</em>';
       const safeBody = bodyText
-        ? bodyText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-            .replace(/\{empresa\}/gi, '<strong>[Empresa]</strong>').replace(/\n/g, '<br>')
+        ? bodyText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\{empresa\}/gi, '<strong>[Empresa]</strong>').replace(/\n/g, '<br>')
         : '<em style="color:#94a3b8">El mensaje aparecerá aquí...</em>';
       return `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:500px;margin:0 auto;color:#1e293b;background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)">
   <div style="background:#f8fafc;padding:24px 20px;text-align:center;border-bottom:1px solid #e2e8f0">
