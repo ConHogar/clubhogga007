@@ -51,7 +51,7 @@ export async function onRequestPost({ request, env }) {
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #1e293b; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <!-- Header -->
         <div style="background-color: #f8fafc; padding: 30px 20px; text-align: center; border-bottom: 1px solid #e2e8f0;">
-          <img src="https://club-hogga.pages.dev/images/logo.png" alt="Club Hogga Logo" style="height: 48px; margin-bottom: 0;">
+          <img src="https://club.hogga.cl/images/logo.png" alt="Club Hogga Logo" style="height: 48px; margin-bottom: 0;">
         </div>
         <!-- Body -->
         <div style="padding: 30px 24px;">
@@ -66,7 +66,7 @@ export async function onRequestPost({ request, env }) {
           </div>
 
           <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
-            <a href="https://clubhogga.cl/beneficios/" style="background-color: #108f8e; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
+            <a href="https://club.hogga.cl/beneficios/" style="background-color: #108f8e; color: #ffffff; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; font-size: 16px;">Explorar Beneficios</a>
           </div>
         </div>
         <!-- Footer -->
