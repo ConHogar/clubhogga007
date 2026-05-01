@@ -1,8 +1,17 @@
 function verifyAuth(request, env) {
   const authHeader = request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) return false;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return json({ error: 'Unauthorized' }, 401);
+  }
   const token = authHeader.split(' ')[1];
-  return token === (env.ADMIN_SECRET || 'babeclub_dev_secret');
+  const expectedSecret = env.ADMIN_SECRET;
+  if (!expectedSecret) {
+    return json({ error: 'Server misconfiguration' }, 503);
+  }
+  if (token !== expectedSecret) {
+    return json({ error: 'Invalid token' }, 403);
+  }
+  return null;
 }
 
 function supaFetch(env, path, method = 'GET', body = null) {
@@ -28,7 +37,8 @@ function json(data, status = 200) {
 
 // GET /api/admin-benefits?partner_id=xxx
 export async function onRequestGet({ request, env }) {
-  if (!verifyAuth(request, env)) return json({ error: 'Unauthorized' }, 401);
+  const authError = verifyAuth(request, env);
+  if (authError) return authError;
 
   const url = new URL(request.url);
   const partnerId = url.searchParams.get('partner_id');
@@ -46,7 +56,8 @@ export async function onRequestGet({ request, env }) {
 
 // POST /api/admin-benefits — create
 export async function onRequestPost({ request, env }) {
-  if (!verifyAuth(request, env)) return json({ error: 'Unauthorized' }, 401);
+  const authError = verifyAuth(request, env);
+  if (authError) return authError;
 
   const body = await request.json();
   const { partner_id, title, description, discount_type, discount_value, conditions, start_date, end_date } = body;
@@ -77,7 +88,8 @@ export async function onRequestPost({ request, env }) {
 
 // PATCH /api/admin-benefits — update
 export async function onRequestPatch({ request, env }) {
-  if (!verifyAuth(request, env)) return json({ error: 'Unauthorized' }, 401);
+  const authError = verifyAuth(request, env);
+  if (authError) return authError;
 
   const body = await request.json();
   const { benefit_id, ...fields } = body;
@@ -103,7 +115,8 @@ export async function onRequestPatch({ request, env }) {
 
 // DELETE /api/admin-benefits?benefit_id=xxx
 export async function onRequestDelete({ request, env }) {
-  if (!verifyAuth(request, env)) return json({ error: 'Unauthorized' }, 401);
+  const authError = verifyAuth(request, env);
+  if (authError) return authError;
 
   const url = new URL(request.url);
   const benefitId = url.searchParams.get('benefit_id');
