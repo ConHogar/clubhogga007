@@ -15,7 +15,7 @@ export async function onRequestPatch({ request, env }) {
 
     // 2. Parse body
     const body = await request.json();
-    const { member_id, status, valid_until } = body;
+    const { member_id, status, valid_until, mp_email } = body;
 
     if (!member_id) {
       return new Response(JSON.stringify({ error: 'member_id requerido' }), { status: 400 });
@@ -32,6 +32,9 @@ export async function onRequestPatch({ request, env }) {
     }
     if (valid_until !== undefined) {
       updatePayload.valid_until = valid_until; // ISO string or null
+    }
+    if (mp_email !== undefined) {
+      updatePayload.mp_email = mp_email ? mp_email.trim() : null;
     }
 
     if (Object.keys(updatePayload).length === 0) {

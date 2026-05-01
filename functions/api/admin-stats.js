@@ -71,12 +71,32 @@ export async function onRequestGet({ request, env }) {
     let citiesList = citiesRes.ok ? await citiesRes.json() : [];
     let categoriesList = categoriesRes.ok ? await categoriesRes.json() : [];
 
-    // 7. Fetch Validation Logs (last 200)
-    const valLogsRes = await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs?select=*&order=created_at.desc&limit=200`, {
+    // 7. Fetch Validation Logs (last 500)
+    const valLogsRes = await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs?select=*&order=created_at.desc&limit=500`, {
       method: 'GET',
       headers: supabaseHeaders
     });
     let validationLogs = valLogsRes.ok ? await valLogsRes.json() : [];
+
+    // 7A. Fetch Benefit Uses (last 500) with joined data
+    const usesListRes = await fetch(`${env.SUPABASE_URL}/rest/v1/benefit_uses?select=id,created_at,partner_id,members(full_name,rut),benefits(title)&order=created_at.desc&limit=500`, {
+      method: 'GET',
+      headers: supabaseHeaders
+    });
+    let benefitUses = usesListRes.ok ? await usesListRes.json() : [];
+
+    // 7A. Fetch Totals for searches and uses
+    const totalValLogsRes = await fetch(`${env.SUPABASE_URL}/rest/v1/validation_logs?select=id`, {
+      method: 'GET',
+      headers: supabaseHeaders
+    });
+    const totalValLogs = totalValLogsRes.ok ? await totalValLogsRes.json() : [];
+
+    const totalUsesRes = await fetch(`${env.SUPABASE_URL}/rest/v1/benefit_uses?select=id`, {
+      method: 'GET',
+      headers: supabaseHeaders
+    });
+    const totalUses = totalUsesRes.ok ? await totalUsesRes.json() : [];
 
     // 8. Return aggregated data
     return new Response(JSON.stringify({
@@ -85,13 +105,15 @@ export async function onRequestGet({ request, env }) {
         activeSubscribers: activeSubs,
         totalRegistered: totalMembers,
         pendingMembers: totalMembers - activeSubs,
-        totalValidations: validationLogs.length
+        totalSearches: totalValLogs.length,
+        totalUses: totalUses.length
       },
       members: membersList,
       partners: partnersList,
       cities: citiesList,
       categories: categoriesList,
-      validationLogs: validationLogs
+      validationLogs: validationLogs,
+      benefitUses: benefitUses
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }

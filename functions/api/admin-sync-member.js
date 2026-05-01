@@ -10,9 +10,11 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 403 });
     }
 
-    const { member_id, email } = await request.json();
+    const { member_id, email, mp_email } = await request.json();
 
-    if (!email) {
+    const searchEmail = mp_email || email;
+
+    if (!searchEmail) {
       return new Response(JSON.stringify({ error: 'Email requerido para sincronizar' }), { status: 400 });
     }
 
@@ -21,7 +23,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     // 2. Fetch MP subscriptions by email
-    const mpRes = await fetch(`https://api.mercadopago.com/preapproval/search?payer_email=${encodeURIComponent(email)}`, {
+    const mpRes = await fetch(`https://api.mercadopago.com/preapproval/search?payer_email=${encodeURIComponent(searchEmail)}`, {
       headers: { 'Authorization': `Bearer ${env.MP_ACCESS_TOKEN}` }
     });
 

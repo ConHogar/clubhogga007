@@ -134,37 +134,37 @@ export async function onRequestPost({ request, env }) {
         'Content-Type': 'application/json'
       };
 
-      // 3. Obtener el usuario actual en la base de datos
+      // 3. Obtener el usuario actual en la base de datos (por email o mp_email)
       const encodedEmail = encodeURIComponent(payerEmail);
-      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&email=eq.${encodedEmail}`, {
+      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&or=(email.eq.${encodedEmail},mp_email.eq.${encodedEmail})`, {
         method: 'GET',
         headers: supabaseHeaders
       });
       const members = await getMembersRes.json();
       console.log('Supabase member lookup for', payerEmail, ':', JSON.stringify(members));
 
-      let wasPending = false;
-      if (members && members.length > 0 && members[0].status === 'pending') {
-        wasPending = true;
-      }
+      if (members && members.length > 0) {
+        let wasPending = members[0].status === 'pending';
+        const memberId = members[0].id;
 
-      // 4. Actualizar estado y fecha de vencimiento (+31 días)
-      const validUntil = new Date();
-      validUntil.setDate(validUntil.getDate() + 31);
+        // 4. Actualizar estado y fecha de vencimiento (+31 días)
+        const validUntil = new Date();
+        validUntil.setDate(validUntil.getDate() + 31);
 
-      const updatePayload = {
-        status: 'active',
-        payment_status: resourceStatus,
-        subscription_id: resourceId,
-        valid_until: validUntil.toISOString()
-      };
+        const updatePayload = {
+          status: 'active',
+          payment_status: resourceStatus,
+          subscription_id: resourceId,
+          valid_until: validUntil.toISOString(),
+          mp_email: payerEmail // save the MP email so we learn it automatically
+        };
 
-      const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?email=eq.${encodedEmail}`, {
-        method: 'PATCH',
-        headers: supabaseHeaders,
-        body: JSON.stringify(updatePayload)
-      });
-      console.log('Supabase PATCH status:', patchRes.status);
+        const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?id=eq.${memberId}`, {
+          method: 'PATCH',
+          headers: supabaseHeaders,
+          body: JSON.stringify(updatePayload)
+        });
+        console.log('Supabase PATCH status:', patchRes.status);
 
       if (wasPending && env.RESEND_API_KEY) {
         const emailHtml = `
@@ -211,6 +211,7 @@ export async function onRequestPost({ request, env }) {
             html: emailHtml
           })
         });
+      }
       }
     }
 

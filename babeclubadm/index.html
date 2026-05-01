@@ -164,8 +164,16 @@
               <div class="stat-value" id="stat-partners">-</div>
             </div>
             <div class="stat-card">
-              <div class="stat-title">Validaciones Recientes</div>
-              <div class="stat-value" id="stat-validations">-</div>
+              <div class="stat-title">Búsquedas de RUT</div>
+              <div class="stat-value" id="stat-searches">-</div>
+            </div>
+            <div class="stat-card" style="border-color: var(--primary-color);">
+              <div class="stat-title">Usos Confirmados</div>
+              <div class="stat-value" id="stat-uses" style="color: var(--primary-color);">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Tasa de Conversión</div>
+              <div class="stat-value" id="stat-conversion">-</div>
             </div>
             <div class="stat-card" style="cursor:pointer;" onclick="document.getElementById('mrr-panel').scrollIntoView({behavior:'smooth'})">
               <div class="stat-title">MRR Estimado</div>
@@ -282,25 +290,57 @@
             </div>
           </header>
 
-          <div class="activity-summary" id="activity-summary">
-            <!-- Populated dynamically -->
+          <!-- Sub-tabs -->
+          <div style="display:flex;border-bottom:2px solid var(--border-color);margin-bottom:1.5rem;">
+            <button id="atab-btn-searches" onclick="switchActivityTab('searches')"
+              style="background:none;border:none;border-bottom:2px solid var(--primary-color);margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:600;color:var(--primary-color);cursor:pointer;">Búsquedas de RUT</button>
+            <button id="atab-btn-uses" onclick="switchActivityTab('uses')"
+              style="background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:0.5rem 1.25rem;font-size:0.9375rem;font-weight:500;color:var(--text-muted);cursor:pointer;">Usos Confirmados</button>
           </div>
 
-          <div class="data-section">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Fecha / Hora</th>
-                    <th>Empresa</th>
-                    <th>Socio / RUT</th>
-                    <th>Resultado</th>
-                  </tr>
-                </thead>
-                <tbody id="activity-body">
-                  <!-- Dynamically populated -->
-                </tbody>
-              </table>
+          <!-- Búsquedas Tab -->
+          <div id="atab-searches">
+            <div class="activity-summary" id="activity-summary">
+              <!-- Populated dynamically -->
+            </div>
+
+            <div class="data-section">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha / Hora</th>
+                      <th>Empresa</th>
+                      <th>Socio / RUT</th>
+                      <th>Resultado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activity-body">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Usos Confirmados Tab -->
+          <div id="atab-uses" style="display:none;">
+            <div class="data-section">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Fecha / Hora</th>
+                      <th>Empresa</th>
+                      <th>Socio</th>
+                      <th>Beneficio Aplicado</th>
+                    </tr>
+                  </thead>
+                  <tbody id="uses-body">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -390,6 +430,7 @@
                     Plantilla</h3>
                   <select id="socios-template-select" class="form-control" onchange="applyMemberTemplate(this.value)">
                     <option value="">— Empezar desde cero —</option>
+                    <option value="pending_recovery">⚡ Recuperar registro incompleto</option>
                     <option value="activation">Primer descuento (Activación)</option>
                     <option value="new_partner">Nuevo aliado</option>
                     <option value="reengagement">¿Sigues ahí? (Reactivación)</option>
@@ -978,7 +1019,14 @@
       document.getElementById('stat-active').textContent = data.stats.activeSubscribers;
       document.getElementById('stat-pending').textContent = data.stats.pendingMembers;
       document.getElementById('stat-partners').textContent = data.partners ? data.partners.length : '0';
-      document.getElementById('stat-validations').textContent = data.stats.totalValidations || '0';
+      
+      const totalSearches = data.stats.totalSearches || 0;
+      const totalUses = data.stats.totalUses || 0;
+      const conversionRate = totalSearches > 0 ? Math.round((totalUses / totalSearches) * 100) : 0;
+      
+      document.getElementById('stat-searches').textContent = totalSearches;
+      document.getElementById('stat-uses').textContent = totalUses;
+      document.getElementById('stat-conversion').textContent = conversionRate + '%';
 
       // MRR
       renderMRR(data.members || []);
@@ -988,6 +1036,11 @@
 
       // Members Table + Expiry Panel
       renderMembersTable(data.members || []);
+      renderExpiryPanel(data.members || []);
+
+      // Activity Views
+      renderValidationLogs(data.validationLogs || []);
+      renderBenefitUses(data.benefitUses || []);
       renderExpiryPanel(data.members || []);
 
       // Partners Table
@@ -1172,43 +1225,41 @@
           bizCounts[l.partner_id] = (bizCounts[l.partner_id] || 0) + 1;
         }
       });
-      const topBiz = Object.entries(bizCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([id, count]) => {
-          const p = globalPartners.find(pp => pp.id === id);
-          return { name: p ? p.business_name : 'Desconocido', count };
-        });
+      const topBiz = Object.entries(bizCounts).sort((a, b) => b[1] - a[1]);
+      const topRows = topBiz.slice(0, 3).map(([id, count]) => {
+        const p = globalPartners.find(pp => pp.id === id);
+        const name = p ? p.business_name : '-';
+        return `<div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:0.25rem;">
+                  <span>${name}</span>
+                  <strong>${count}</strong>
+                </div>`;
+      }).join('');
 
       summary.innerHTML = `
-        <div class="activity-stats">
-          <div class="activity-stat">
-            <span class="activity-stat-value">${thisWeek}</span>
-            <span class="activity-stat-label">Esta semana</span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;">
+          <div style="padding:1rem;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);">
+            <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.5rem;">Tasas de Búsqueda</div>
+            <div style="display:flex;gap:1rem;">
+              <div><strong style="color:var(--success-color);font-size:1.25rem;">${successCount}</strong> <span style="font-size:0.75rem;color:var(--text-muted);">Exitosas</span></div>
+              <div><strong style="color:var(--danger-color);font-size:1.25rem;">${failCount}</strong> <span style="font-size:0.75rem;color:var(--text-muted);">Fallidas</span></div>
+            </div>
           </div>
-          <div class="activity-stat">
-            <span class="activity-stat-value" style="color: var(--success-color);">${successCount}</span>
-            <span class="activity-stat-label">Exitosas</span>
+          <div style="padding:1rem;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);">
+            <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.5rem;">Actividad Reciente</div>
+            <div><strong style="color:var(--primary-color);font-size:1.25rem;">${thisWeek}</strong> <span style="font-size:0.75rem;color:var(--text-muted);">búsquedas en los últimos 7 días</span></div>
           </div>
-          <div class="activity-stat">
-            <span class="activity-stat-value" style="color: var(--danger-color);">${failCount}</span>
-            <span class="activity-stat-label">Fallidas</span>
+          <div style="padding:1rem;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);">
+            <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:0.5rem;">Top 3 Comercios (Búsquedas)</div>
+            ${topRows || '<div style="font-size:0.875rem;color:var(--text-muted);">Sin datos</div>'}
           </div>
         </div>
-        ${topBiz.length > 0 ? `
-        <div class="top-businesses">
-          <span class="top-biz-label">Top comercios:</span>
-          ${topBiz.map((b, i) => `<span class="top-biz-chip">${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'} ${b.name} <strong>(${b.count})</strong></span>`).join('')}
-        </div>` : ''}
       `;
 
-      // Render rows
       logs.forEach(log => {
         const tr = document.createElement('tr');
         const dt = new Date(log.created_at);
         const dateStr = dt.toLocaleDateString('es-CL') + ' ' + dt.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
 
-        // Resolve partner name
         const partnerObj = globalPartners.find(p => p.id === log.partner_id);
         const bizName = partnerObj ? partnerObj.business_name : '-';
 
@@ -1232,6 +1283,63 @@
         tbody.appendChild(tr);
       });
     }
+
+    // Benefit Uses Rendering
+    function renderBenefitUses(uses) {
+      const tbody = document.getElementById('uses-body');
+      tbody.innerHTML = '';
+
+      if (!uses || uses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No hay usos confirmados aún.</td></tr>';
+        return;
+      }
+
+      uses.forEach(use => {
+        const tr = document.createElement('tr');
+        const dt = new Date(use.created_at);
+        const dateStr = dt.toLocaleDateString('es-CL') + ' ' + dt.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+
+        const partnerObj = globalPartners.find(p => p.id === use.partner_id);
+        const partnerName = partnerObj ? partnerObj.business_name : '-';
+
+        const memberName = use.members ? use.members.full_name : 'Socio Desconocido';
+        const benefitTitle = use.benefits ? use.benefits.title : 'Beneficio Desconocido';
+
+        tr.innerHTML = '<td>' + dateStr + '</td>' +
+          '<td><strong>' + partnerName + '</strong></td>' +
+          '<td><strong>' + memberName + '</strong></td>' +
+          '<td><span class="badge badge-active" style="background-color:rgba(59,130,246,0.1);color:var(--primary-color);border-color:rgba(59,130,246,0.2);">' + benefitTitle + '</span></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Activity Tabs logic
+    window.switchActivityTab = function(tab) {
+      const searchesTab = document.getElementById('atab-searches');
+      const usesTab = document.getElementById('atab-uses');
+      const searchesBtn = document.getElementById('atab-btn-searches');
+      const usesBtn = document.getElementById('atab-btn-uses');
+
+      if (tab === 'searches') {
+        searchesTab.style.display = 'block';
+        usesTab.style.display = 'none';
+        searchesBtn.style.borderBottomColor = 'var(--primary-color)';
+        searchesBtn.style.color = 'var(--primary-color)';
+        searchesBtn.style.fontWeight = '600';
+        usesBtn.style.borderBottomColor = 'transparent';
+        usesBtn.style.color = 'var(--text-muted)';
+        usesBtn.style.fontWeight = '500';
+      } else {
+        searchesTab.style.display = 'none';
+        usesTab.style.display = 'block';
+        usesBtn.style.borderBottomColor = 'var(--primary-color)';
+        usesBtn.style.color = 'var(--primary-color)';
+        usesBtn.style.fontWeight = '600';
+        searchesBtn.style.borderBottomColor = 'transparent';
+        searchesBtn.style.color = 'var(--text-muted)';
+        searchesBtn.style.fontWeight = '500';
+      }
+    };
 
     // Drawer Logic (shared for partners & members)
     const drawerOverlay = document.getElementById('drawer-overlay');
@@ -1557,6 +1665,10 @@
             <label class="edit-label">Vence el</label>
             <input type="date" id="edit-valid-until" class="form-control" value="${validUntilDate}">
           </div>
+          <div style="margin-bottom:1.25rem;">
+            <label class="edit-label">Email MercadoPago (opcional)</label>
+            <input type="email" id="edit-mp-email" class="form-control" value="${member.mp_email || ''}" placeholder="Si difiere del email principal">
+          </div>
           <button class="btn btn-sm" id="edit-save-btn" style="width:100%;" onclick="saveMemberEdit('${member.id}')">Guardar Cambios</button>
           <div id="edit-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
         </div>
@@ -1840,11 +1952,13 @@
     async function saveMemberEdit(memberId) {
       const statusEl = document.getElementById('edit-status');
       const validUntilEl = document.getElementById('edit-valid-until');
+      const mpEmailEl = document.getElementById('edit-mp-email');
       const msgEl = document.getElementById('edit-msg');
       const btn = document.getElementById('edit-save-btn');
 
       const status = statusEl.value;
       const validUntil = validUntilEl.value ? validUntilEl.value + 'T12:00:00.000Z' : null;
+      const mp_email = mpEmailEl ? mpEmailEl.value.trim() : null;
 
       btn.disabled = true;
       btn.textContent = 'Guardando...';
@@ -1857,7 +1971,7 @@
             'Authorization': `Bearer ${currentToken}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ member_id: memberId, status, valid_until: validUntil })
+          body: JSON.stringify({ member_id: memberId, status, valid_until: validUntil, mp_email })
         });
 
         const data = await res.json();
@@ -1868,6 +1982,7 @@
           if (idx !== -1) {
             globalMembers[idx].status = status;
             globalMembers[idx].valid_until = validUntil;
+            globalMembers[idx].mp_email = mp_email;
           }
           renderMembersTable(globalMembers);
           renderExpiryPanel(globalMembers);
@@ -1923,9 +2038,12 @@
       }
     }
 
-    async function syncMemberMP(memberId, email) {
+    async function syncMemberMP(memberId, defaultEmail) {
       const btn = document.getElementById('sync-mp-btn');
       const msg = document.getElementById('welcome-email-msg'); // reuse the msg container
+      const mpEmailInput = document.getElementById('edit-mp-email');
+      const mp_email = mpEmailInput ? mpEmailInput.value.trim() : '';
+
       const originalHtml = btn.innerHTML;
 
       btn.disabled = true;
@@ -1939,7 +2057,7 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + currentToken
           },
-          body: JSON.stringify({ member_id: memberId, email })
+          body: JSON.stringify({ member_id: memberId, email: defaultEmail, mp_email })
         });
 
         const data = await res.json();
@@ -2531,6 +2649,23 @@ Cómo acceder: visítalos en [dirección] y dicta tu RUT al momento de pagar.
 Después de esa fecha vuelve al beneficio regular — así que no lo dejes pasar.`,
         cta_text: '',
         cta_url: ''
+      },
+      pending_recovery: {
+        subject: '{nombre}, te faltó un solo paso para activar tu membresía',
+        heading: 'Tu descuento está casi listo',
+        body: `Hola {nombre},
+
+Hace un par de días registraste tus datos en Club Hogga — gracias por el interés.
+
+Notamos que el proceso quedó incompleto antes de confirmar el pago. Puede haber pasado cualquier cosa, así que te lo recordamos.
+
+Unirte toma menos de 2 minutos, y desde el primer día puedes usar tu descuento en toda nuestra red de comercios aliados en Puerto Varas. Sin tarjetas físicas, sin apps — solo tu RUT al pagar.
+
+El precio de lanzamiento de $2.990/mes está disponible por tiempo limitado. Cuando se agoten los cupos, sube.
+
+Si tuviste algún problema en el proceso, responde este correo y te ayudamos.`,
+        cta_text: 'Completar mi suscripción',
+        cta_url: 'TU_LINK_MERCADOPAGO_AQUI'
       },
       blank: { subject: '', heading: '', body: '', cta_text: '', cta_url: '' }
     };
