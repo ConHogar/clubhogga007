@@ -339,7 +339,7 @@
       opacity: 0.65;
     }
 
-    /* ── 7. Partner logo scroll row ────────────────────────────────── */
+    /* ── 7. Partner logo marquee carousel ─────────────────────────── */
     .partners {
       margin-bottom: 20px;
     }
@@ -354,36 +354,27 @@
       margin-bottom: 14px;
     }
 
-    /* Wrapper holds the scroll row + the right-edge fade hint */
-    .partners-wrap {
-      position: relative;
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .carousel-outer {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
       margin-bottom: 10px;
     }
 
-    .partners-wrap::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 8px;
-      /* aligns with scroll area, above scrollbar padding */
-      width: 48px;
-      background: linear-gradient(to right, transparent, var(--navy));
-      pointer-events: none;
-    }
-
-    .partners-scroll {
+    .carousel-track {
       display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
       gap: 10px;
-      padding-bottom: 8px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      width: max-content;
+      animation: marquee 38s linear infinite;
     }
 
-    .partners-scroll::-webkit-scrollbar {
-      display: none;
+    .carousel-track:hover {
+      animation-play-state: paused;
     }
 
     .carousel-logo {
@@ -516,47 +507,67 @@
     <!-- 7. Partner logo carousel -->
     <div class="partners a a7">
       <p class="section-label">Comercios que ya son parte</p>
-      <div class="partners-wrap">
-        <div class="partners-scroll">
+      <div class="carousel-outer">
+        <div class="carousel-track">
+          <!-- set 1 -->
           <div class="carousel-logo"><img src="/images/asociados/mosto-pv-clubhogga.webp" alt="Mosto"></div>
           <div class="carousel-logo"><img src="/images/asociados/recorcholis-pv-clubhogga.webp" alt="Recórcholis"></div>
           <div class="carousel-logo"><img src="/images/asociados/stoffe-pv-clubhogga.webp" alt="Stoffe"></div>
-          <div class="carousel-logo"><img src="/images/asociados/espacioblu-frutillar-clubhogga.webp" alt="Espacio Blu">
-          </div>
+          <div class="carousel-logo"><img src="/images/asociados/espacioblu-frutillar-clubhogga.webp" alt="Espacio Blu"></div>
           <div class="carousel-logo"><img src="/images/asociados/lepark-pv-clubhogga.webp" alt="Le Park"></div>
           <div class="carousel-logo"><img src="/images/asociados/tenispv-pv-clubhogga.webp" alt="Tenis PV"></div>
-          <div class="carousel-logo"><img src="/images/asociados/estacion-rock-pv-clubhogga.webp" alt="Estación Rock">
-          </div>
-          <div class="carousel-logo"><img src="/images/asociados/losvolcanes-llanquihue-clubhogga.webp"
-              alt="Los Volcanes"></div>
+          <div class="carousel-logo"><img src="/images/asociados/estacion-rock-pv-clubhogga.webp" alt="Estación Rock"></div>
+          <div class="carousel-logo"><img src="/images/asociados/losvolcanes-llanquihue-clubhogga.webp" alt="Los Volcanes"></div>
           <div class="carousel-logo"><img src="/images/asociados/fortamascotas-pv-clubhogga.webp" alt="Forta"></div>
           <div class="carousel-logo"><img src="/images/asociados/happylake-pv-clubhogga.webp" alt="Happy Lake"></div>
           <div class="carousel-logo"><img src="/images/asociados/harter-pv-clubhogga.webp" alt="Óptica Harter"></div>
-          <div class="carousel-logo"><img src="/images/asociados/clinicadelalto-pv-clubhogga.webp"
-              alt="Clínica del Alto"></div>
+          <div class="carousel-logo"><img src="/images/asociados/clinicadelalto-pv-clubhogga.webp" alt="Clínica del Alto"></div>
           <div class="carousel-logo"><img src="/images/asociados/lagrey-pv-clubhogga.webp" alt="La Grey"></div>
-          <div class="carousel-logo"><img src="/images/asociados/panconchancho-pv-clubhogga.webp" alt="Pan con Chancho">
-          </div>
+          <div class="carousel-logo"><img src="/images/asociados/panconchancho-pv-clubhogga.webp" alt="Pan con Chancho"></div>
           <div class="carousel-logo"><img src="/images/asociados/manduca-nvabraunau-clubhogga.webp" alt="Manduca"></div>
           <div class="carousel-logo"><img src="/images/asociados/freunde-llanquihue-clubhogga.webp" alt="Freunde"></div>
           <div class="carousel-logo"><img src="/images/asociados/farmacias-pv-clubhogga.webp" alt="Farmacias PV"></div>
           <div class="carousel-logo"><img src="/images/asociados/canclan-pv-clubhogga.webp" alt="Canclan"></div>
-          <div class="carousel-logo"><img src="/images/asociados/rinconensenada-pv-clubhogga.webp"
-              alt="Rincón Ensenada"></div>
+          <div class="carousel-logo"><img src="/images/asociados/rinconensenada-pv-clubhogga.webp" alt="Rincón Ensenada"></div>
           <div class="carousel-logo"><img src="/images/asociados/grunpadel-pv-clubhogga.webp" alt="Grün Pádel"></div>
-          <div class="carousel-logo"><img src="/images/asociados/autlosvolcanes-llanquihue-clubhogga.webp"
-              alt="Auto Los Volcanes"></div>
+          <div class="carousel-logo"><img src="/images/asociados/autlosvolcanes-llanquihue-clubhogga.webp" alt="Auto Los Volcanes"></div>
           <div class="carousel-logo"><img src="/images/asociados/climbhouse-pv-clubhogga.webp" alt="Climbhouse"></div>
-          <div class="carousel-logo"><img src="/images/asociados/farmaciamirador-pv-clubhogga.webp"
-              alt="Farmacia Mirador"></div>
-          <div class="carousel-logo"><img src="/images/asociados/lavalentina-pv-clubhogga.webp" alt="La Valentina">
-          </div>
+          <div class="carousel-logo"><img src="/images/asociados/farmaciamirador-pv-clubhogga.webp" alt="Farmacia Mirador"></div>
+          <div class="carousel-logo"><img src="/images/asociados/lavalentina-pv-clubhogga.webp" alt="La Valentina"></div>
           <div class="carousel-logo"><img src="/images/asociados/bargual-pv-clubhogga.webp" alt="Bar Gual"></div>
-          <div class="carousel-logo"><img src="/images/asociados/cathykinast-pv-clubhogga.webp" alt="Cathy Kinast">
-          </div>
+          <div class="carousel-logo"><img src="/images/asociados/cathykinast-pv-clubhogga.webp" alt="Cathy Kinast"></div>
           <div class="carousel-logo"><img src="/images/asociados/chester-llanquihue-clubhogga.webp" alt="Chester"></div>
-          <div class="carousel-logo"><img src="/images/asociados/creamtoriosf-llanquihue-clubhogga.webp"
-              alt="Crematorio SF"></div>
+          <div class="carousel-logo"><img src="/images/asociados/creamtoriosf-llanquihue-clubhogga.webp" alt="Crematorio SF"></div>
+          <div class="carousel-logo"><img src="/images/asociados/dmoov-pv-clubhogga.webp" alt="Dmoov"></div>
+          <!-- set 2 — duplicate for seamless loop -->
+          <div class="carousel-logo"><img src="/images/asociados/mosto-pv-clubhogga.webp" alt="Mosto"></div>
+          <div class="carousel-logo"><img src="/images/asociados/recorcholis-pv-clubhogga.webp" alt="Recórcholis"></div>
+          <div class="carousel-logo"><img src="/images/asociados/stoffe-pv-clubhogga.webp" alt="Stoffe"></div>
+          <div class="carousel-logo"><img src="/images/asociados/espacioblu-frutillar-clubhogga.webp" alt="Espacio Blu"></div>
+          <div class="carousel-logo"><img src="/images/asociados/lepark-pv-clubhogga.webp" alt="Le Park"></div>
+          <div class="carousel-logo"><img src="/images/asociados/tenispv-pv-clubhogga.webp" alt="Tenis PV"></div>
+          <div class="carousel-logo"><img src="/images/asociados/estacion-rock-pv-clubhogga.webp" alt="Estación Rock"></div>
+          <div class="carousel-logo"><img src="/images/asociados/losvolcanes-llanquihue-clubhogga.webp" alt="Los Volcanes"></div>
+          <div class="carousel-logo"><img src="/images/asociados/fortamascotas-pv-clubhogga.webp" alt="Forta"></div>
+          <div class="carousel-logo"><img src="/images/asociados/happylake-pv-clubhogga.webp" alt="Happy Lake"></div>
+          <div class="carousel-logo"><img src="/images/asociados/harter-pv-clubhogga.webp" alt="Óptica Harter"></div>
+          <div class="carousel-logo"><img src="/images/asociados/clinicadelalto-pv-clubhogga.webp" alt="Clínica del Alto"></div>
+          <div class="carousel-logo"><img src="/images/asociados/lagrey-pv-clubhogga.webp" alt="La Grey"></div>
+          <div class="carousel-logo"><img src="/images/asociados/panconchancho-pv-clubhogga.webp" alt="Pan con Chancho"></div>
+          <div class="carousel-logo"><img src="/images/asociados/manduca-nvabraunau-clubhogga.webp" alt="Manduca"></div>
+          <div class="carousel-logo"><img src="/images/asociados/freunde-llanquihue-clubhogga.webp" alt="Freunde"></div>
+          <div class="carousel-logo"><img src="/images/asociados/farmacias-pv-clubhogga.webp" alt="Farmacias PV"></div>
+          <div class="carousel-logo"><img src="/images/asociados/canclan-pv-clubhogga.webp" alt="Canclan"></div>
+          <div class="carousel-logo"><img src="/images/asociados/rinconensenada-pv-clubhogga.webp" alt="Rincón Ensenada"></div>
+          <div class="carousel-logo"><img src="/images/asociados/grunpadel-pv-clubhogga.webp" alt="Grün Pádel"></div>
+          <div class="carousel-logo"><img src="/images/asociados/autlosvolcanes-llanquihue-clubhogga.webp" alt="Auto Los Volcanes"></div>
+          <div class="carousel-logo"><img src="/images/asociados/climbhouse-pv-clubhogga.webp" alt="Climbhouse"></div>
+          <div class="carousel-logo"><img src="/images/asociados/farmaciamirador-pv-clubhogga.webp" alt="Farmacia Mirador"></div>
+          <div class="carousel-logo"><img src="/images/asociados/lavalentina-pv-clubhogga.webp" alt="La Valentina"></div>
+          <div class="carousel-logo"><img src="/images/asociados/bargual-pv-clubhogga.webp" alt="Bar Gual"></div>
+          <div class="carousel-logo"><img src="/images/asociados/cathykinast-pv-clubhogga.webp" alt="Cathy Kinast"></div>
+          <div class="carousel-logo"><img src="/images/asociados/chester-llanquihue-clubhogga.webp" alt="Chester"></div>
+          <div class="carousel-logo"><img src="/images/asociados/creamtoriosf-llanquihue-clubhogga.webp" alt="Crematorio SF"></div>
           <div class="carousel-logo"><img src="/images/asociados/dmoov-pv-clubhogga.webp" alt="Dmoov"></div>
         </div>
       </div>
