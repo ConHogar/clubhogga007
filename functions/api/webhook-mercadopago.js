@@ -54,18 +54,15 @@ export async function onRequestPost({ request, env }) {
   try {
     const bodyText = await request.text();
 
-    // --- Signature verification ---
-    // If MP_WEBHOOK_SECRET is set, enforce verification.
-    // If not set yet (e.g. local dev), log a warning and continue.
-    if (env.MP_WEBHOOK_SECRET) {
-      const valid = await verifyMPSignature(request, bodyText, env.MP_WEBHOOK_SECRET);
-      if (!valid) {
-        // Return 200 so MP doesn't retry — we just discard the invalid request silently.
-        console.warn('Webhook rejected: invalid signature');
-        return new Response('Invalid signature', { status: 200 });
-      }
-    } else {
-      console.warn('MP_WEBHOOK_SECRET not set — skipping signature verification');
+    // --- Signature verification (fail closed) ---
+    if (!env.MP_WEBHOOK_SECRET) {
+      console.error('MP_WEBHOOK_SECRET not set — refusing to process webhook');
+      return new Response('Server misconfiguration', { status: 503 });
+    }
+    const valid = await verifyMPSignature(request, bodyText, env.MP_WEBHOOK_SECRET);
+    if (!valid) {
+      console.warn('Webhook rejected: invalid signature');
+      return new Response('Invalid signature', { status: 401 });
     }
 
     // --- Parse body ---

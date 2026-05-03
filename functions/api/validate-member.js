@@ -1,7 +1,22 @@
+// Reduce a full name to "Firstname L." for at-counter verification.
+// The merchant needs to recognize the customer in front of them, not store
+// or correlate the full name. Returning full names on every successful lookup
+// turns any leaked partner token into a name-harvesting oracle over the
+// ~10M Chilean RUT space.
+function abbreviateName(fullName) {
+  if (!fullName) return 'Socio';
+  const parts = String(fullName).trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'Socio';
+  if (parts.length === 1) return parts[0];
+  const first = parts[0];
+  const lastInitial = parts[parts.length - 1][0].toUpperCase();
+  return `${first} ${lastInitial}.`;
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const data = await request.json();
-    
+
     if (!data.validation_token || !data.rut) {
       return new Response(JSON.stringify({ error: 'Token y RUT son obligatorios.' }), { status: 400 });
     }
@@ -40,12 +55,12 @@ export async function onRequestPost({ request, env }) {
       const member = members[0];
       if (member.status === 'active') {
         resultLog = 'active';
-        responsePayload = { 
-          status: 'active', 
+        responsePayload = {
+          status: 'active',
           message: 'Socio activo',
           member: {
             id: member.id,
-            full_name: member.full_name,
+            full_name: abbreviateName(member.full_name),
             is_test: member.is_test
           },
           partner: {
@@ -97,7 +112,8 @@ export async function onRequestPost({ request, env }) {
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Error procesando solicitud: ' + error.message }), { 
+    console.error('validate-member error:', error);
+    return new Response(JSON.stringify({ error: 'Error procesando solicitud.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
