@@ -1125,7 +1125,7 @@
       const tiers = [];
       let mrr = 0;
       const preCount = Math.min(count, PRE_LIMIT);
-      if (preCount > 0) { mrr += preCount * P_PRE; tiers.push({ name: 'Pre-lanzamiento', count: preCount, price: P_PRE }); }
+      if (preCount > 0) { mrr += preCount * P_PRE; tiers.push({ name: 'Lanzamiento', count: preCount, price: P_PRE }); }
       const foundCount = Math.min(Math.max(count - PRE_LIMIT, 0), FOUND_LIMIT - PRE_LIMIT);
       if (foundCount > 0) { mrr += foundCount * P_FOUND; tiers.push({ name: 'Fundadores', count: foundCount, price: P_FOUND }); }
       const regCount = Math.max(count - FOUND_LIMIT, 0);

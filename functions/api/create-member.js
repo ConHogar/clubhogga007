@@ -1,7 +1,7 @@
 export async function onRequestPost({ request, env }) {
   try {
     const data = await request.json();
-    
+
     // 0. Verificar Turnstile Anti-Spam Invisible
     const turnstileToken = data['cf-turnstile-response'];
     if (!turnstileToken) {
@@ -26,7 +26,7 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ error: 'RUT y Correo son obligatorios.' }), { status: 400 });
     }
     const rut_norm = data.rut.replace(/[\.\-]/g, '').toUpperCase();
-    
+
     const supabaseHeaders = {
       'apikey': env.SUPABASE_SERVICE_ROLE_KEY,
       'Authorization': `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
@@ -40,7 +40,7 @@ export async function onRequestPost({ request, env }) {
     let city_id = null;
 
     // 2. Definir precio según la cantidad de socios activos (Sistema de Tramos)
-    // - Tramo 1 (Pre-lanzamiento): Primeros 50 socios ($2.990)
+    // - Tramo 1 (Lanzamiento): Primeros 50 socios ($2.990)
     // - Tramo 2 (Fundadores): Hasta 150 socios ($3.990)
     // - Tramo 3 (Regular): Más de 150 socios ($5.990)
     const PRE_LAUNCH_LIMIT = 50;
@@ -91,19 +91,19 @@ export async function onRequestPost({ request, env }) {
       // Intentar actualizar a este miembro si existe y esta en pending (por si abandonó el pago antes)
       const existingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&rut_normalized=eq.${rut_norm}`, { headers: supabaseHeaders });
       const existing = await existingRes.json();
-      
+
       if (existing && existing.length > 0 && existing[0].status === 'active') {
         return new Response(JSON.stringify({ error: 'Esta cuenta ya existe y tiene una membresía activa.' }), { status: 400 });
       } else {
         // Estaba en Pending, le re-enviamos el link de pago sin error
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: 'Usuario ya existía en estado inicial. Redirigiendo al pago...', 
-          payment_url: checkoutUrl 
+        return new Response(JSON.stringify({
+          success: true,
+          message: 'Usuario ya existía en estado inicial. Redirigiendo al pago...',
+          payment_url: checkoutUrl
         }), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
     }
-    
+
     if (!insertRes.ok) {
       const err = await insertRes.json();
       return new Response(JSON.stringify({ error: 'Error interno: ' + err.message }), { status: 500 });
@@ -111,18 +111,18 @@ export async function onRequestPost({ request, env }) {
 
     const createdMember = await insertRes.json();
 
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       member_id: createdMember[0].id,
       payment_url: checkoutUrl,
       offer_type: offerType
-    }), { 
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Error procesando solicitud: ' + error.message }), { 
+    return new Response(JSON.stringify({ error: 'Error procesando solicitud: ' + error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
