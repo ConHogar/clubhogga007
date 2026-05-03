@@ -52,7 +52,7 @@
     .page {
       max-width: 480px;
       margin: 0 auto;
-      padding: 28px 20px 0;
+      padding: 28px 20px 52px;
     }
 
     /* ── Animations ────────────────────────────────────────────────── */
@@ -84,7 +84,7 @@
       margin-bottom: 26px;
     }
     .logo-wrap img {
-      height: 64px;
+      height: 74px;
       width: auto;
       filter: brightness(0) invert(1);
     }
@@ -105,8 +105,11 @@
     h1 {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 1.55rem;
+      /* clamp: 20px on 320px screens, scales up, caps at 28px on wide screens.
+         Keeps "Igual ibas a gastar." on one line at all sizes ≥ 320px. */
+      font-size: clamp(1.25rem, 5.5vw, 1.75rem);
       line-height: 1.2;
+      letter-spacing: -0.01em;
       color: var(--white);
       margin-bottom: 10px;
     }
@@ -194,7 +197,7 @@
       font-size: 0.73rem;
       color: var(--muted);
       margin-top: 8px;
-      margin-bottom: 28px;
+      margin-bottom: 6px;
     }
 
     /* ── 6. Math card ──────────────────────────────────────────────── */
@@ -248,7 +251,19 @@
       margin-top: 14px;
     }
 
-    /* ── 7. Partner logo carousel ──────────────────────────────────── */
+    /* ── 5. Text link (replaces first CTA) ────────────────────────── */
+    .link-comercios {
+      display: block;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #0E7A7A;
+      text-decoration: none;
+      margin-bottom: 28px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .link-comercios:active { opacity: 0.65; }
+
+    /* ── 7. Partner logo scroll row ────────────────────────────────── */
     .partners { margin-bottom: 20px; }
     .section-label {
       font-size: 0.63rem;
@@ -259,34 +274,42 @@
       text-align: center;
       margin-bottom: 14px;
     }
-    .carousel-outer {
-      overflow: hidden;
+    /* Wrapper holds the scroll row + the right-edge fade hint */
+    .partners-wrap {
+      position: relative;
       margin-bottom: 10px;
-      /* Fade logos out at edges so the loop looks seamless */
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-              mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
     }
-    .carousel-track {
+    .partners-wrap::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 8px; /* aligns with scroll area, above scrollbar padding */
+      width: 48px;
+      background: linear-gradient(to right, transparent, var(--navy));
+      pointer-events: none;
+    }
+    .partners-scroll {
       display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 10px;
-      width: max-content;
-      animation: marquee 30s linear infinite;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .carousel-track:hover { animation-play-state: paused; }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
+    .partners-scroll::-webkit-scrollbar { display: none; }
     .carousel-logo {
-      width: 54px;
-      height: 54px;
+      width: 72px;
+      height: 72px;
       flex-shrink: 0;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.07);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 7px;
+      padding: 8px;
       overflow: hidden;
     }
     .carousel-logo img {
@@ -300,6 +323,14 @@
       font-size: 0.82rem;
       color: var(--teal-text);
       font-style: italic;
+    }
+
+    /* ── Bottom CTA urgency line ────────────────────────────────────── */
+    .cta-urgency {
+      text-align: center;
+      font-size: 0.6875rem;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 5px;
     }
 
     /* ── 8. Second primary CTA — no pulse so both don't fire together ── */
@@ -357,11 +388,10 @@
     <!-- 4. Social proof -->
     <p class="social-proof a a4">Garantía total el primer mes — si no ahorras, te devolvemos el 100%.</p>
 
-    <!-- 5. Primary CTA -->
-    <a href="/hazte-socio/" class="cta-primary a a5" data-track="cta-primary">
-      Activar membresía →
+    <!-- 5. Soft link — low friction, keeps focus on bottom CTA -->
+    <a href="/beneficios/" class="link-comercios a a5" target="_blank">
+      Ver todos los comercios asociados →
     </a>
-    <p class="cta-sub a a5">Actívate en menos de 2 minutos</p>
 
     <!-- 6. Math card -->
     <div class="math-card a a6">
@@ -391,39 +421,8 @@
     <!-- 7. Partner logo carousel -->
     <div class="partners a a7">
       <p class="section-label">Comercios que ya son parte</p>
-      <div class="carousel-outer">
-        <div class="carousel-track">
-          <!-- Set 1 -->
-          <div class="carousel-logo"><img src="/images/asociados/mosto-pv-clubbhogga.webp"           alt="Mosto"></div>
-          <div class="carousel-logo"><img src="/images/asociados/recorcholis-pv-clubhogga.webp"      alt="Recórcholis"></div>
-          <div class="carousel-logo"><img src="/images/asociados/stoffe-pv-clubhogga.webp"           alt="Stoffe"></div>
-          <div class="carousel-logo"><img src="/images/asociados/espacioblu-frutillar-clubhogga.webp" alt="Espacio Blu"></div>
-          <div class="carousel-logo"><img src="/images/asociados/lepark-pv-clubhogga.webp"           alt="Le Park"></div>
-          <div class="carousel-logo"><img src="/images/asociados/tenispv-pv-clubhogga.webp"          alt="Tenis PV"></div>
-          <div class="carousel-logo"><img src="/images/asociados/estacion-rock-pv-clubhogga.webp"    alt="Estación Rock"></div>
-          <div class="carousel-logo"><img src="/images/asociados/losvolcanes-llanquihue-clubhogga.webp" alt="Los Volcanes"></div>
-          <div class="carousel-logo"><img src="/images/asociados/fortamascotas-pv-clubhogga.webp"    alt="Forta"></div>
-          <div class="carousel-logo"><img src="/images/asociados/happylake-pv-clubhogga.webp"        alt="Happy Lake"></div>
-          <div class="carousel-logo"><img src="/images/asociados/harter-pv-clubhogga.webp"           alt="Óptica Harter"></div>
-          <div class="carousel-logo"><img src="/images/asociados/clinicadelalto-pv-clubhogga.webp"   alt="Clínica del Alto"></div>
-          <div class="carousel-logo"><img src="/images/asociados/lagrey-pv-clubhogga.webp"           alt="La Grey"></div>
-          <div class="carousel-logo"><img src="/images/asociados/panconchancho-pv-clubhogga.webp"    alt="Pan con Chancho"></div>
-          <div class="carousel-logo"><img src="/images/asociados/manduca-nvabraunau-clubhogga.webp"  alt="Manduca"></div>
-          <div class="carousel-logo"><img src="/images/asociados/freunde-llanquihue-clubhogga.webp"  alt="Freunde"></div>
-          <div class="carousel-logo"><img src="/images/asociados/farmacias-pv-clubhogga.webp"        alt="Farmacias PV"></div>
-          <div class="carousel-logo"><img src="/images/asociados/canclan-pv-clubhogga.webp"          alt="Canclan"></div>
-          <div class="carousel-logo"><img src="/images/asociados/rinconensenada-pv-clubhogga.webp"   alt="Rincón Ensenada"></div>
-          <div class="carousel-logo"><img src="/images/asociados/grunpadel-pv-clubhogga.webp"        alt="Grün Pádel"></div>
-          <div class="carousel-logo"><img src="/images/asociados/autlosvolcanes-llanquihue-clubhogga.webp" alt="Auto Los Volcanes"></div>
-          <div class="carousel-logo"><img src="/images/asociados/climbhouse-pv-clubhogga.webp"       alt="Climbhouse"></div>
-          <div class="carousel-logo"><img src="/images/asociados/farmaciamirador-pv-clubhogga.webp"  alt="Farmacia Mirador"></div>
-          <div class="carousel-logo"><img src="/images/asociados/lavalentina-pv-clubhogga.webp"      alt="La Valentina"></div>
-          <div class="carousel-logo"><img src="/images/asociados/bargual-pv-clubhogga.webp"          alt="Bar Gual"></div>
-          <div class="carousel-logo"><img src="/images/asociados/cathykinast-pv-clubhogga.webp"      alt="Cathy Kinast"></div>
-          <div class="carousel-logo"><img src="/images/asociados/chester-llanquihue-clubhogga.webp"  alt="Chester"></div>
-          <div class="carousel-logo"><img src="/images/asociados/creamtoriosf-llanquihue-clubhogga.webp" alt="Crematorio SF"></div>
-          <div class="carousel-logo"><img src="/images/asociados/dmoov-pv-clubhogga.webp"            alt="Dmoov"></div>
-          <!-- Set 2 — exact duplicate for seamless infinite loop -->
+      <div class="partners-wrap">
+        <div class="partners-scroll">
           <div class="carousel-logo"><img src="/images/asociados/mosto-pv-clubbhogga.webp"           alt="Mosto"></div>
           <div class="carousel-logo"><img src="/images/asociados/recorcholis-pv-clubhogga.webp"      alt="Recórcholis"></div>
           <div class="carousel-logo"><img src="/images/asociados/stoffe-pv-clubhogga.webp"           alt="Stoffe"></div>
@@ -463,6 +462,7 @@
       Activar membresía →
     </a>
     <p class="cta-sub a a8">Actívate en menos de 2 minutos</p>
+    <p class="cta-urgency a a8">Precio lanzamiento · Por pocos días</p>
 
   </main>
 
