@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error("Error fetching benefits:", error);
+      loadingEl.style.display = '';
       loadingEl.innerHTML = `<span style="color:red">No pudimos cargar los beneficios. Intenta recargar la página.</span>`;
     }
   }

@@ -133,11 +133,299 @@
         </select>
       </div>
 
-      <!-- Benefits Grid — content rendered by benefits.js from live Supabase data -->
-      <!-- SEO: partner data is in the JSON-LD schema above, readable without JS -->
-      <div id="benefits-loading">Cargando beneficios...</div>
+      <!-- Benefits Grid — static cards pre-rendered for crawlers.
+           benefits.js replaces these with live Supabase data on load.
+           When adding a new partner, also update the JSON-LD block above. -->
+      <div id="benefits-loading" style="display:none;"></div>
 
-      <div class="grid-3" id="benefits-grid" style="display: none;">
+      <div class="grid-3" id="benefits-grid">
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>MP</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Mosto Puerto Varas</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>20% de descuento en la carta.</strong> Cafetería y restaurante.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Diego Portales 204, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>ÓH</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Óptica Harter</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>30% dcto. lente monofocal, 20% con tratamiento especial, 15% bifocal o multifocal.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Pío Nono 410, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>CA</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Clínica del Alto</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>15% de descuento en odontología, 10% en medicina general, estética y bienestar.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Nra. Sra. del Carmen 980, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>RE</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Recorcholis</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>15% de descuento en tienda.</strong> Toy store, juguetes, dulces americanos y vestuario infantil.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>San Francisco 666, Local S106, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>ER</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Estación Rock</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>50% de descuento en matrícula anual.</strong> Sala de ensayo y estudio de grabación.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Estación 48, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>SD</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Stoffe Deco</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>15% de descuento en toda la tienda.</strong> Telas, decoración y confecciones para el hogar.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Av. Gramado 7, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>TS</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Tienda Stoffe</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>15% de descuento en toda la tienda.</strong> Telas, decoración y confecciones para el hogar.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>San Francisco 540, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>RI</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Rincón de la Ensenada</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en la carta de miércoles a domingo.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Ruta 225 km43, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>EB</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Frutillar</span></div>
+              <h3 class="card-title">Espacio Blu</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en membresía mensual de gimnasio y 10% en pádel.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>C. Anibal Pinto 251, Frutillar</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>FR</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Llanquihue</span></div>
+              <h3 class="card-title">Freunde (Club Gimnástico)</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>20% de descuento en la carta.</strong> Cocina chilena y alemana junto al Lago Llanquihue.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Camino Totoral s/n, Llanquihue</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>LV</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Llanquihue</span></div>
+              <h3 class="card-title">Los Volcanes Servicio Automotriz</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>5% de descuento en neumáticos.</strong> Montaje y balanceo sin costo.</p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Candelaria 490, Llanquihue</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>FP</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Farmacias Puerto Varas</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en higiene y cuidado dental, 10% en medicamentos veterinarios.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Pío Nono 420, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>FT</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Forta Tienda de Mascotas</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en alimentos para perros y gatos.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Baquedano 82, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>CP</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Canclan Parque Perros</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en todos los servicios.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>San Martín con Av. Los Arrayanes, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>LG</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">LaGrey, café bistró</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento entre 15:30 y 20:00 hrs.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Maipo 911, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>CS</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Llanquihue</span></div>
+              <h3 class="card-title">Crematorio San Francisco</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en servicio de cremación de mascotas.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Linea Nueva, Lote 17, Llanquihue</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>HL</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Happy Lake</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>20% de descuento en entradas generales y cumpleaños.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>La Laja - Ruta 5 505 km 2.5, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>HJ</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Happy Lake Junior</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>20% de descuento en entradas generales y cumpleaños.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Camino Ensenada - Ruta 225, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>PC</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Pan con Chancho</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento consumo en el local, 15% para llevar.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Tronador 1134, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>MA</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Manduca</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en la carta de café.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Luis Cruz Martínez 1, Local 5, Nueva Braunau, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>LP</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Le Park</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>10% de descuento en toda la carta los sábados y 10% en arriendo de canchas.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Av. las Torres 18, Puerto Varas</span></div>
+        </article>
+
+        <article class="card card-clickable relative" onclick="window.location.href='/hazte-socio/'">
+          <div class="badge-exclusive">🔒 Exclusivo</div>
+          <div class="card-header">
+            <div class="card-avatar" style="background:#eff6ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:#1e3a8a;border-radius:50%;"><span>TP</span></div>
+            <div>
+              <div class="card-tags"><span class="chip chip-secondary">Puerto Varas</span></div>
+              <h3 class="card-title">Tenis Puerto Varas</h3>
+            </div>
+          </div>
+          <p class="text-muted card-description" style="flex:1;">👉 <strong>5% cafetería, 7% tienda, 10% arriendo de canchas, 15% clases de tenis.</strong></p>
+          <div style="display:flex;gap:0.25rem;line-height:1.3;margin-top:auto;"><span>📍</span><span>Camino a Alerce km 1.5, ruta V505, Puerto Varas</span></div>
+        </article>
+
       </div>
     </div>
   </main>

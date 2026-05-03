@@ -1,0 +1,19 @@
+# Club Hogga — Cloudflare Pages response headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+# ── Global: every response ────────────────────────────────────────────────────
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# ── Admin portal ─────────────────────────────────────────────────────────────
+# connect-src 'self' blocks exfiltration even if an XSS payload slips through.
+# 'unsafe-inline' on script/style is required by inline onclick handlers and
+# inline style attributes throughout the SPA; tightening to a nonce is a
+# post-launch refactor.
+/babeclubadm/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.supabase.co data: blob:; connect-src 'self'; font-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Cache-Control: no-store

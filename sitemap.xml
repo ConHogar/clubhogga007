@@ -3,41 +3,41 @@
   <url>
     <loc>https://club.hogga.cl/</loc>
     <lastmod>2026-05-03</lastmod>
-    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://club.hogga.cl/beneficios/</loc>
+    <loc>https://club.hogga.cl/babeclubadm/</loc>
     <lastmod>2026-05-03</lastmod>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/ciudades/</loc>
-    <lastmod>2026-05-03</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/ciudades/puerto-varas/</loc>
-    <lastmod>2026-05-03</lastmod>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/hazte-socio/</loc>
-    <lastmod>2026-05-03</lastmod>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://club.hogga.cl/faq/</loc>
     <lastmod>2026-05-03</lastmod>
-    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/hazte-socio/</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/link-en-bio/</loc>
+    <lastmod>2026-05-03</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/terminos/</loc>
     <lastmod>2026-05-03</lastmod>
-    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/beneficios/</loc>
+    <lastmod>2026-05-03</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/privacidad/</loc>
     <lastmod>2026-05-03</lastmod>
-    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/ciudades/</loc>
+    <lastmod>2026-05-03</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/ciudades/puerto-varas/</loc>
+    <lastmod>2026-05-03</lastmod>
   </url>
 </urlset>

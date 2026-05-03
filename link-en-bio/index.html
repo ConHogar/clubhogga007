@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Club Hogga — Paga menos donde vayas</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Club Hogga — Paga menos donde vayas">
+  <meta property="og:description" content="Igual ibas a gastar. Ahora pagas menos. $2.990/mes.">
+  <meta property="og:image" content="https://club.hogga.cl/images/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://club.hogga.cl/link-en-bio/">
+  <meta name="theme-color" content="#0A1F33">
+
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Design tokens ─────────────────────────────────────────────── */
+    :root {
+      --navy:        #0A1F33;
+      --teal:        #0E5E5E;
+      --teal-card:   #0E5E5E;
+      --teal-text:   #4ECDC4;
+      --yellow:      #F5C518;
+      --cream:       #F5F1E8;
+      --white:       #FFFFFF;
+      --muted:       rgba(245, 241, 232, 0.55);
+      --card-bg:     rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.10);
+    }
+
+    /* ── Base ──────────────────────────────────────────────────────── */
+    html, body {
+      min-height: 100%;
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Layout ────────────────────────────────────────────────────── */
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 28px 20px 0;
+    }
+
+    /* ── Animations ────────────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.55); }
+      50%       { box-shadow: 0 0 0 16px rgba(245, 197, 24, 0); }
+    }
+
+    .a { animation: fadeInUp 0.5s ease both; }
+    .a1 { animation-delay: 0.05s; }
+    .a2 { animation-delay: 0.15s; }
+    .a3 { animation-delay: 0.25s; }
+    .a4 { animation-delay: 0.35s; }
+    .a5 { animation-delay: 0.45s; }
+    .a6 { animation-delay: 0.55s; }
+    .a7 { animation-delay: 0.65s; }
+    .a8 { animation-delay: 0.75s; }
+    .a9 { animation-delay: 0.85s; }
+
+    /* ── 1. Logo ───────────────────────────────────────────────────── */
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 26px;
+    }
+    .logo-wrap img {
+      height: 64px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    /* ── 2. Hero ───────────────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--teal-text);
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.55rem;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .subtext {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── 3. Price badge ────────────────────────────────────────────── */
+    .price-badge {
+      background: var(--teal-card);
+      border-radius: 16px;
+      padding: 14px 20px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .price-label {
+      font-size: 0.63rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 4px;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 5px;
+      line-height: 1;
+    }
+    .price-amount {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.75rem;
+      color: var(--yellow);
+    }
+    .price-per {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+    .price-note {
+      font-size: 0.73rem;
+      color: rgba(255, 255, 255, 0.55);
+      margin-top: 5px;
+    }
+    .price-urgency {
+      font-size: 0.73rem;
+      font-weight: 500;
+      color: var(--yellow);
+      margin-top: 7px;
+    }
+
+    /* ── 4. Social proof ───────────────────────────────────────────── */
+    .social-proof {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--teal-text);
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    /* ── 5. Primary CTA ────────────────────────────────────────────── */
+    .cta-primary {
+      display: block;
+      width: 100%;
+      background: var(--yellow);
+      color: var(--navy);
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 14px;
+      padding: 17px 20px;
+      animation: pulseGlow 2.5s ease-in-out infinite;
+      transition: transform 0.12s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-primary:active { transform: scale(0.97); }
+    .cta-sub {
+      text-align: center;
+      font-size: 0.73rem;
+      color: var(--muted);
+      margin-top: 8px;
+      margin-bottom: 28px;
+    }
+
+    /* ── 6. Math card ──────────────────────────────────────────────── */
+    .math-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .math-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .math-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.875rem;
+      color: var(--cream);
+      padding: 4px 0;
+    }
+    .math-row.saving {
+      color: var(--yellow);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .math-row.membership {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .math-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+      margin: 8px 0;
+    }
+    .verdict {
+      display: block;
+      width: 100%;
+      background: var(--teal-card);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* ── 7. Partners ───────────────────────────────────────────────── */
+    .partners { margin-bottom: 20px; }
+    .section-label {
+      font-size: 0.63rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .partner-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .partner-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 100px;
+      padding: 5px 13px;
+      font-size: 0.8rem;
+      color: var(--cream);
+    }
+    .partners-growing {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--teal-text);
+      font-style: italic;
+    }
+
+    /* ── 8. Second primary CTA — no pulse so both don't fire together ── */
+    .cta-primary.cta-bottom {
+      animation: none;
+      box-shadow: 0 4px 20px rgba(245, 197, 24, 0.20);
+    }
+
+    /* ── 9. Wave footer ────────────────────────────────────────────── */
+    .wave-wrap {
+      margin-top: 32px;
+      width: 100%;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 0;
+      overflow: hidden;
+    }
+    /* Full-bleed wave on wider screens */
+    @media (min-width: 480px) {
+      .wave-wrap {
+        max-width: 100%;
+      }
+    }
+    .wave-wrap svg { display: block; width: 100%; }
+  </style>
+</head>
+<body>
+
+  <main class="page">
+
+    <!-- 1. Logo -->
+    <div class="logo-wrap a a1">
+      <img src="/images/club.png" alt="Club Hogga">
+    </div>
+
+    <!-- 2. Hero -->
+    <div class="hero">
+      <p class="eyebrow a a2">Membresía de beneficios locales</p>
+      <h1 class="a a3">Igual ibas a gastar.<br>Ahora pagas menos.</h1>
+      <p class="subtext a a3">Sin app. Sin tarjeta. Solo tu RUT.</p>
+    </div>
+
+    <!-- 3. Price badge -->
+    <div class="price-badge a a4">
+      <p class="price-label">Precio lanzamiento</p>
+      <div class="price-row">
+        <span class="price-amount">$2.990</span>
+        <span class="price-per">/mes</span>
+      </div>
+      <p class="price-note">Mientras sigas activo como socio</p>
+      <p class="price-urgency">Por pocos días · Una vez que cierre, cierra para siempre.</p>
+    </div>
+
+    <!-- 4. Social proof -->
+    <p class="social-proof a a4">Garantía total el primer mes — si no ahorras, te devolvemos el 100%.</p>
+
+    <!-- 5. Primary CTA -->
+    <a href="/hazte-socio/" class="cta-primary a a5" data-track="cta-primary">
+      Activar membresía →
+    </a>
+    <p class="cta-sub a a5">Actívate en menos de 2 minutos</p>
+
+    <!-- 6. Math card -->
+    <div class="math-card a a6">
+      <p class="math-title">La membresía se paga sola</p>
+
+      <div class="math-row">
+        <span>Salida típica</span>
+        <span>$30.000</span>
+      </div>
+      <div class="math-row">
+        <span>Beneficio Club (10%)</span>
+        <span>−$3.000</span>
+      </div>
+      <hr class="math-divider">
+      <div class="math-row saving">
+        <span>Tu ahorro</span>
+        <span>$3.000</span>
+      </div>
+      <div class="math-row membership">
+        <span>Membresía Club Hogga</span>
+        <span>$2.990</span>
+      </div>
+      <hr class="math-divider">
+      <div class="verdict">✓ Ya se pagó sola.</div>
+    </div>
+
+    <!-- 7. Partner chips -->
+    <div class="partners a a7">
+      <p class="section-label">Comercios que ya son parte</p>
+      <div class="partner-chips">
+        <span class="partner-chip">Mosto</span>
+        <span class="partner-chip">Recórcholis</span>
+        <span class="partner-chip">Stoffe</span>
+        <span class="partner-chip">BLU</span>
+        <span class="partner-chip">Le Park</span>
+        <span class="partner-chip">Tenis Puerto Varas</span>
+        <span class="partner-chip">Estación Rock</span>
+        <span class="partner-chip">Los Volcanes</span>
+        <span class="partner-chip">Forta</span>
+      </div>
+      <p class="partners-growing">y sumando cada semana.</p>
+    </div>
+
+    <!-- 8. Second primary CTA -->
+    <a href="/hazte-socio/" class="cta-primary cta-bottom a a8" data-track="cta-primary">
+      Activar membresía →
+    </a>
+    <p class="cta-sub a a8">Actívate en menos de 2 minutos</p>
+
+  </main>
+
+  <!-- 9. Wave footer — teal on navy -->
+  <div class="wave-wrap a a9">
+    <svg viewBox="0 0 1440 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,70 C200,30 400,95 600,55 C800,15 1050,80 1280,50 C1350,38 1400,44 1440,42 L1440,110 L0,110 Z"
+            fill="#0E5E5E" opacity="0.45"/>
+      <path d="M0,85 C180,50 420,105 700,70 C920,42 1150,90 1440,62 L1440,110 L0,110 Z"
+            fill="#0E5E5E"/>
+    </svg>
+  </div>
+
+  <!-- Cloudflare Analytics -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token":"31af3fd8f9a9411ca2c2734daaa527b5"}'></script>
+
+</body>
+</html>
