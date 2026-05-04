@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let cities = [];
   let categories = [];
   let shuffledPartners = [];
+  let firstRender = true;
 
   // Utilities
   function shuffle(arr) {
