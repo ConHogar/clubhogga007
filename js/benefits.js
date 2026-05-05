@@ -253,16 +253,26 @@ document.addEventListener('DOMContentLoaded', () => {
       return cityMatch && catMatch;
     });
 
-    if (filtered.length === 0) {
-      gridEl.innerHTML = renderEmpty();
-    } else {
-      gridEl.innerHTML = filtered.map((p, i) => renderCard(p, i)).join('');
-    }
+    const doRender = () => {
+      if (filtered.length === 0) {
+        gridEl.innerHTML = renderEmpty();
+      } else {
+        gridEl.innerHTML = filtered.map((p, i) => renderCard(p, i)).join('');
+      }
+      gridEl.style.opacity = '1';
 
-    // Update count
-    const cityLabel = cityVal === 'all' ? 'todas las ciudades' : (cities.find(c => c.slug === cityVal)?.name || '');
-    if (resultsCount) {
-      resultsCount.innerHTML = `Mostrando <strong>${filtered.length}</strong> beneficio${filtered.length !== 1 ? 's' : ''} en ${cityLabel}`;
+      const cityLabel = cityVal === 'all' ? 'todas las ciudades' : (cities.find(c => c.slug === cityVal)?.name || '');
+      if (resultsCount) {
+        resultsCount.innerHTML = `Mostrando <strong>${filtered.length}</strong> beneficio${filtered.length !== 1 ? 's' : ''} en ${cityLabel}`;
+      }
+    };
+
+    if (firstRender) {
+      firstRender = false;
+      gridEl.style.opacity = '0';
+      setTimeout(doRender, 200);
+    } else {
+      doRender();
     }
   }
 
