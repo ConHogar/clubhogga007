@@ -1,0 +1,7 @@
+name = "supabase-keepalive"
+main = "index.js"
+compatibility_date = "2024-05-28"
+account_id = "decd1a34091f274e889f98f83777a17b"
+
+[triggers]
+crons = ["0 12 * * *"] # Runs every day at 12:00 PM UTC

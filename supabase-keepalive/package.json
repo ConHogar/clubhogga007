@@ -1,0 +1,12 @@
+{
+  "name": "supabase-keepalive",
+  "version": "1.0.0",
+  "description": "Cron trigger to keep Supabase project active",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
