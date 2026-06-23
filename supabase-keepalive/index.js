@@ -17,4 +17,10 @@ export default {
       console.log("Supabase keepalive successful", res.status);
     }
   },
+  
+  // Added this so you can manually test it via browser!
+  async fetch(request, env, ctx) {
+    await this.scheduled(null, env, ctx);
+    return new Response("Keepalive manually triggered! Check Supabase logs.", { status: 200 });
+  }
 };
