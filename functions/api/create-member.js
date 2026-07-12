@@ -39,31 +39,22 @@ export async function onRequestPost({ request, env }) {
     // guardamos su región y comuna geográfica real.
     let city_id = null;
 
-    // 2. Definir precio según la cantidad de socios activos (Sistema de Tramos)
-    // - Tramo 1 (Lanzamiento): Primeros 50 socios ($2.990)
-    // - Tramo 2 (Fundadores): Hasta 150 socios ($3.990)
-    // - Tramo 3 (Regular): Más de 150 socios ($5.990)
-    const PRE_LAUNCH_LIMIT = 50;
-    const FOUNDERS_LIMIT = 150; // Ajusta este número si quieres que dure más
+    // 2. Definir el link de pago según la frecuencia elegida por el socio.
+    //    - monthly  (Mensual):   $3.990 / mes
+    //    - semester (Semestral): $3.490 / mes  -> se cobra $20.940 cada 6 meses
+    //    - annual   (Anual):     $2.990 / mes  -> se cobra $35.880 cada 12 meses
+    //    Cada plan tiene su propio link de suscripción de MercadoPago (env vars).
+    const FALLBACK_MP_URL = 'https://www.mercadopago.cl/ayuda/19227';
+    const MP_LINKS = {
+      monthly: env.MP_LINK_MONTHLY || FALLBACK_MP_URL,
+      semester: env.MP_LINK_SEMESTER || FALLBACK_MP_URL,
+      annual: env.MP_LINK_ANNUAL || FALLBACK_MP_URL
+    };
 
-    const countRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id&status=eq.active&limit=${FOUNDERS_LIMIT + 1}`, { headers: supabaseHeaders });
-    const actives = await countRes.json();
-    const activeCount = actives ? actives.length : 0;
-
-    const MP_PRE_LAUNCH_URL = env.MP_LINK_PRE_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227';
-    const MP_LAUNCH_URL = env.MP_LINK_LAUNCH || 'https://www.mercadopago.cl/ayuda/19227';
-    const MP_REGULAR_URL = env.MP_LINK_REGULAR || 'https://www.mercadopago.cl/ayuda/19227';
-
-    let checkoutUrl = MP_REGULAR_URL;
-    let offerType = 'regular';
-
-    if (activeCount < PRE_LAUNCH_LIMIT) {
-      checkoutUrl = MP_PRE_LAUNCH_URL;
-      offerType = 'pre-launch';
-    } else if (activeCount < FOUNDERS_LIMIT) {
-      checkoutUrl = MP_LAUNCH_URL;
-      offerType = 'founders';
-    }
+    // Validar el plan recibido; si no es válido, usar 'monthly' por defecto.
+    const plan = ['monthly', 'semester', 'annual'].includes(data.plan) ? data.plan : 'monthly';
+    const checkoutUrl = MP_LINKS[plan];
+    const offerType = plan;
 
     // 3. Insertar Miembro como 'pending'
     const memberPayload = {
@@ -76,6 +67,7 @@ export async function onRequestPost({ request, env }) {
       region: data.region,
       comuna: data.comuna,
       status: 'pending', // Ahora nacen inactivos hasta que paguen
+      plan: plan,
       marketing_opt_in: data.marketing_opt_in || false,
       accepted_terms_at: new Date().toISOString(),
       accepted_privacy_at: new Date().toISOString()
@@ -95,7 +87,15 @@ export async function onRequestPost({ request, env }) {
       if (existing && existing.length > 0 && existing[0].status === 'active') {
         return new Response(JSON.stringify({ error: 'Esta cuenta ya existe y tiene una membresía activa.' }), { status: 400 });
       } else {
-        // Estaba en Pending, le re-enviamos el link de pago sin error
+        // Estaba en Pending: actualizamos el plan elegido (por si cambió de opinión)
+        // y le re-enviamos el link de pago correcto sin error.
+        if (existing && existing.length > 0) {
+          await fetch(`${env.SUPABASE_URL}/rest/v1/members?id=eq.${existing[0].id}`, {
+            method: 'PATCH',
+            headers: supabaseHeaders,
+            body: JSON.stringify({ plan: plan })
+          });
+        }
         return new Response(JSON.stringify({
           success: true,
           message: 'Usuario ya existía en estado inicial. Redirigiendo al pago...',

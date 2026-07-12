@@ -17,6 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Optional: filter to a single category (used by category×city landing pages).
+  // City pages omit this attribute, so their behaviour is unchanged.
+  const categorySlug = gridEl.dataset.category || null;
+
+  // Optional: keyword match on business name/description. Used by cross-cutting
+  // theme pages (e.g. farmacias, mascotas) that span several DB categories.
+  // Format: comma-separated terms, e.g. data-match="mascota,perro,veterinaria".
+  const matchTerms = (gridEl.dataset.match || '')
+    .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+
   let cities = [];
   let categories = [];
 
@@ -28,6 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function getInitials(name) {
     if (!name) return '';
     return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  }
+
+  // Lowercase + strip accents, so "farmacía" matches "farmacia".
+  function normalize(str) {
+    return (str || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
   function buildMapsUrl(partner) {
@@ -125,9 +140,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Filter to only this city's partners
       const cityObj = cities.find(c => c.slug === citySlug);
-      const cityPartners = cityObj
+      let cityPartners = cityObj
         ? allPartners.filter(p => p.city_id === cityObj.id)
         : [];
+
+      // If a category was requested, narrow down to it (category×city pages)
+      if (categorySlug) {
+        cityPartners = cityPartners.filter(p => {
+          const c = getCategory(p.category_id);
+          return c && c.slug === categorySlug;
+        });
+      }
+
+      // If keyword terms were given, keep partners whose name or description
+      // matches any of them (cross-cutting theme pages: farmacias, mascotas…).
+      if (matchTerms.length) {
+        cityPartners = cityPartners.filter(p => {
+          const hay = normalize(`${p.business_name} ${p.description || ''}`);
+          return matchTerms.some(t => hay.includes(normalize(t)));
+        });
+      }
 
       // Sort: confirmed benefits first (shuffled), pending last (shuffled)
       function shuffle(arr) {
@@ -149,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sorted.length === 0) {
         gridEl.innerHTML = `
           <div style="grid-column:1/-1; text-align:center; padding:4rem 1rem; background:var(--bg-muted,#f9fafb); border-radius:12px; color:var(--text-muted,#6b7280);">
-            <p>Aún no hay beneficios registrados para esta ciudad.</p>
+            <p>Estamos sumando comercios aquí. ¡Muy pronto habrá beneficios disponibles!</p>
           </div>`;
       } else {
         gridEl.innerHTML = sorted.map((p, i) => renderCard(p, i)).join('');

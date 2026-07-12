@@ -2,74 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://club.hogga.cl/</loc>
-    <lastmod>2026-05-03</lastmod>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/supabase-keepalive/node_modules/get-source/test/files/test.html</loc>
+    <lastmod>2026-06-23</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/babeclubadm/</loc>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/faq/</loc>
-    <lastmod>2026-05-03</lastmod>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/calculadora-ahorro/</loc>
+    <lastmod>2026-07-10</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/hazte-socio/</loc>
-    <lastmod>2026-05-03</lastmod>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/blog/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/blog/donde-comer-en-puerto-varas/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/blog/que-hacer-en-puerto-varas/</loc>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/link-en-bio/</loc>
-    <lastmod>2026-05-03</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/terminos/</loc>
-    <lastmod>2026-05-03</lastmod>
+    <lastmod>2026-07-10</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/beneficios/</loc>
-    <lastmod>2026-05-03</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/privacidad/</loc>
-    <lastmod>2026-05-03</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/ciudades/</loc>
-    <lastmod>2026-05-03</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/ciudades/puerto-varas/</loc>
-    <lastmod>2026-05-03</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/beneficios/gastronomia/</loc>
-    <lastmod>2026-05-07</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/beneficios/mascotas/</loc>
-    <lastmod>2026-05-07</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/ciudades/llanquihue/</loc>
     <lastmod>2026-05-14</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/beneficios/salud/</loc>
-    <lastmod>2026-05-14</lastmod>
-  </url>
-  <url>
-    <loc>https://club.hogga.cl/beneficios/deporte/</loc>
-    <lastmod>2026-05-14</lastmod>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
     <loc>https://club.hogga.cl/beneficios/familia/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/beneficios/gastronomia/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/beneficios/deporte/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/beneficios/mascotas/</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/privacidad/</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/ciudades/</loc>
     <lastmod>2026-05-14</lastmod>
   </url>
   <url>
-    <loc>https://club.hogga.cl/blog/</loc>
+    <loc>https://club.hogga.cl/ciudades/puerto-varas/</loc>
     <lastmod>2026-05-14</lastmod>
   </url>
   <url>
-    <loc>https://club.hogga.cl/blog/que-hacer-en-puerto-varas/</loc>
-    <lastmod>2026-05-14</lastmod>
+    <loc>https://club.hogga.cl/ciudades/llanquihue/</loc>
+    <lastmod>2026-07-08</lastmod>
   </url>
   <url>
-    <loc>https://club.hogga.cl/blog/donde-comer-en-puerto-varas/</loc>
-    <lastmod>2026-05-14</lastmod>
+    <loc>https://club.hogga.cl/descuentos/</loc>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/descuentos/mascotas-puerto-varas/</loc>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/descuentos/deporte-puerto-varas/</loc>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/descuentos/farmacias-puerto-varas/</loc>
+    <lastmod>2026-07-11</lastmod>
+  </url>
+  <url>
+    <loc>https://club.hogga.cl/descuentos/gastronomia-puerto-varas/</loc>
+    <lastmod>2026-07-11</lastmod>
   </url>
 </urlset>

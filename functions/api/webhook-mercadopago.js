@@ -133,7 +133,7 @@ export async function onRequestPost({ request, env }) {
 
       // 3. Obtener el usuario actual en la base de datos (por email o mp_email)
       const encodedEmail = encodeURIComponent(payerEmail);
-      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status&or=(email.eq.${encodedEmail},mp_email.eq.${encodedEmail})`, {
+      const getMembersRes = await fetch(`${env.SUPABASE_URL}/rest/v1/members?select=id,status,plan&or=(email.eq.${encodedEmail},mp_email.eq.${encodedEmail})`, {
         method: 'GET',
         headers: supabaseHeaders
       });
@@ -143,10 +143,23 @@ export async function onRequestPost({ request, env }) {
       if (members && members.length > 0) {
         let wasPending = members[0].status === 'pending';
         const memberId = members[0].id;
+        const plan = members[0].plan || 'monthly';
 
-        // 4. Actualizar estado y fecha de vencimiento (+31 días)
+        // 4. Actualizar estado y fecha de vencimiento según el plan.
+        //    MercadoPago vuelve a cobrar (y a disparar este webhook) al final de
+        //    cada período, por lo que extendemos valid_until por el largo del ciclo
+        //    + 3 días de gracia para cubrir demoras entre el cobro y la notificación.
         const validUntil = new Date();
-        validUntil.setDate(validUntil.getDate() + 31);
+        if (plan === 'annual') {
+          validUntil.setFullYear(validUntil.getFullYear() + 1);
+          validUntil.setDate(validUntil.getDate() + 3);
+        } else if (plan === 'semester') {
+          validUntil.setMonth(validUntil.getMonth() + 6);
+          validUntil.setDate(validUntil.getDate() + 3);
+        } else {
+          // 'monthly' y 'legacy_monthly' (socios antiguos a $2.990): cobro mensual
+          validUntil.setDate(validUntil.getDate() + 31);
+        }
 
         const updatePayload = {
           status: 'active',

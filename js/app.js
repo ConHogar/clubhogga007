@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="font-size:2.5rem; flex-shrink:0;">🎁</div>
           <div>
             <strong style="display:block; color:var(--text-main); font-size:1.05rem; margin-bottom:0.25rem;">Precio de Lanzamiento</strong>
-            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem; line-height:1.4;">Asegura tu membresía por solo <b>$2.990/mes</b> antes de que se agoten los primeros 50 cupos.</p>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem; line-height:1.4;">Empieza a ahorrar desde <b>$2.990/mes</b> con planes mensual, semestral o anual.</p>
             <a href="/hazte-socio/" id="snackbar-cta-btn" class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.9rem; width:100%; display:block;">Asegurar mi cupo</a>
           </div>
         </div>

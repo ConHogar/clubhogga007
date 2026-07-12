@@ -1116,20 +1116,22 @@
       updateAudienceCount();
     }
 
-    // MRR — tiered pricing mirrors create-member.js logic
+    // MRR — precio efectivo mensual según el plan de cada socio
     function computeMRR(members) {
       const active = members.filter(m => m.status === 'active');
       const count = active.length;
-      const PRE_LIMIT = 50, FOUND_LIMIT = 150;
-      const P_PRE = 2990, P_FOUND = 3990, P_REG = 5990;
-      const tiers = [];
+      const PLAN_PRICES = { legacy_monthly: 2990, monthly: 3990, semester: 3490, annual: 2990 };
+      const PLAN_NAMES  = { legacy_monthly: 'Mensual antiguo ($2.990)', monthly: 'Mensual', semester: 'Semestral', annual: 'Anual' };
+      const groups = {};
       let mrr = 0;
-      const preCount = Math.min(count, PRE_LIMIT);
-      if (preCount > 0) { mrr += preCount * P_PRE; tiers.push({ name: 'Lanzamiento', count: preCount, price: P_PRE }); }
-      const foundCount = Math.min(Math.max(count - PRE_LIMIT, 0), FOUND_LIMIT - PRE_LIMIT);
-      if (foundCount > 0) { mrr += foundCount * P_FOUND; tiers.push({ name: 'Fundadores', count: foundCount, price: P_FOUND }); }
-      const regCount = Math.max(count - FOUND_LIMIT, 0);
-      if (regCount > 0) { mrr += regCount * P_REG; tiers.push({ name: 'Regular', count: regCount, price: P_REG }); }
+      active.forEach(m => {
+        const plan = PLAN_PRICES[m.plan] ? m.plan : 'monthly';
+        const price = PLAN_PRICES[plan];
+        mrr += price;
+        if (!groups[plan]) groups[plan] = { name: PLAN_NAMES[plan], count: 0, price };
+        groups[plan].count++;
+      });
+      const tiers = ['legacy_monthly', 'monthly', 'semester', 'annual'].filter(p => groups[p]).map(p => groups[p]);
       return { mrr, tiers, count };
     }
 
@@ -2733,7 +2735,7 @@ Ya hay comercios en Puerto Varas donde puedes empezar a usarlo desde hoy.
 
 Mientras antes lo actives, antes empiezas a ahorrar.
 
-El precio de lanzamiento de $2.990/mes sigue disponible, pero es por cupos limitados.
+Elige el plan que más te acomode: mensual, semestral o anual, desde $2.990/mes.
 
 Si tuviste algún problema en el proceso, respóndenos y lo vemos contigo.`,
         cta_text: 'Completar mi suscripción',

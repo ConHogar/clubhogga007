@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmacias con Descuento en Puerto Varas | Club Hogga</title>
+  <meta name="description"
+    content="Descuentos en farmacias de Puerto Varas con Club Hogga: ahorra en medicamentos y remedios. Sin app, solo dices tu RUT. Desde $2.990/mes.">
+  <link rel="canonical" href="https://club.hogga.cl/descuentos/farmacias-puerto-varas/">
+
+  <!-- Open Graph / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://club.hogga.cl/descuentos/farmacias-puerto-varas/">
+  <meta property="og:title" content="Farmacias con descuento en Puerto Varas — Club Hogga">
+  <meta property="og:description"
+    content="Ahorra en medicamentos y remedios en farmacias de Puerto Varas con Club Hogga. Sin app, solo tu RUT. Desde $2.990/mes.">
+  <meta property="og:image" content="https://club.hogga.cl/images/og-image.jpg">
+  <meta property="og:site_name" content="Club Hogga">
+
+  <!-- Twitter / X Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Farmacias con descuento en Puerto Varas | Club Hogga">
+  <meta name="twitter:description" content="Ahorra en medicamentos en farmacias de Puerto Varas. Sin app, solo tu RUT.">
+  <meta name="twitter:image" content="https://club.hogga.cl/images/og-image.jpg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://club.hogga.cl/"},
+      {"@type": "ListItem", "position": 2, "name": "Descuentos", "item": "https://club.hogga.cl/descuentos/"},
+      {"@type": "ListItem", "position": 3, "name": "Farmacias en Puerto Varas", "item": "https://club.hogga.cl/descuentos/farmacias-puerto-varas/"}
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "¿Qué farmacias tienen descuento en Puerto Varas?", "acceptedAnswer": {"@type": "Answer", "text": "Con Club Hogga accedes a descuentos en farmacias independientes de Puerto Varas. Los socios ahorran en medicamentos y otros productos de cuidado, y sumamos nuevos comercios cada semana."}},
+      {"@type": "Question", "name": "¿Cómo consigo descuentos en medicamentos en Puerto Varas?", "acceptedAnswer": {"@type": "Answer", "text": "Hazte socio de Club Hogga y, al pagar en la farmacia asociada, solo dictas tu RUT. Confirman que eres socio activo y aplican el descuento al instante. No necesitas app, tarjeta ni cupón."}},
+      {"@type": "Question", "name": "¿Cuánto cuesta la membresía?", "acceptedAnswer": {"@type": "Answer", "text": "La membresía parte desde $2.990 al mes (plan anual) o $3.990 al mes en el plan mensual. Con el ahorro en medicamentos y en el resto de comercios de la red, la membresía se paga sola."}}
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="/css/styles.css?v=20260430">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="/" class="logo"><img src="/images/logo.webp" alt="Club Hogga"
+          style="height:32px; margin-right:8px; display:inline-block; vertical-align:middle;"><span
+          class="logo-club">Club</span>hogga</a>
+      <nav class="nav-links">
+        <a href="/beneficios/">Beneficios</a>
+        <a href="/ciudades/">Ciudades</a>
+        <a href="/faq/">Preguntas Frecuentes</a>
+        <a href="/hazte-socio/" class="btn btn-primary btn-sm">Hazte Socio</a>
+      </nav>
+      <button class="mobile-menu-btn" aria-label="Abrir menú">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="section">
+      <div class="container" style="max-width: 760px; text-align: center;">
+        <p class="text-primary font-bold"
+          style="text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; margin-bottom: 0.5rem;">
+          Farmacias · Puerto Varas</p>
+        <h1 class="heading-lg mb-4">Farmacias con descuento en Puerto Varas</h1>
+        <!-- TL;DR: satisface la intención de búsqueda arriba del pliegue -->
+        <p class="text-muted text-lg mb-6">Con <strong>Club Hogga</strong> ahorras en medicamentos y remedios en las
+          farmacias asociadas de Puerto Varas. Beneficios exclusivos para socios, <strong>sin app</strong> — solo dices
+          tu RUT al pagar. Desde $2.990/mes, y la membresía se paga sola.</p>
+        <a href="/hazte-socio/" class="btn btn-accent" style="font-size: 1.1rem; padding: 0.85rem 1.75rem;">Quiero mis
+          descuentos</a>
+      </div>
+    </section>
+
+    <!-- Comercios (dinámico desde la base de datos) -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div style="margin-bottom: var(--space-8); text-align: center;">
+          <h2 style="font-size: 1.8rem;">Farmacias asociadas en Puerto Varas</h2>
+          <p class="text-muted" style="margin-top: 0.5rem;">Beneficios exclusivos para socios Club Hogga. Sumamos
+            nuevos comercios cada semana.</p>
+        </div>
+
+        <div id="ciudad-benefits-loading" style="text-align:center; padding: 3rem 1rem; color: var(--text-muted);">
+          Cargando comercios...
+        </div>
+
+        <div class="grid-3" id="ciudad-benefits-grid" data-city="puerto-varas" data-match="farmacia"
+          style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- Calculadora "se paga sola" -->
+    <section class="section" style="background: var(--bg-surface); padding-top: var(--space-12);">
+      <div class="container">
+        <div class="text-center mb-8">
+          <h2 class="mb-2">¿Cuánto ahorras al mes?</h2>
+          <p class="text-muted max-w-600 mx-auto">Mueve las barras según tu consumo y compruébalo tú mismo.</p>
+        </div>
+        <div class="savings-calculator" data-title="Tu ahorro estimado con Club Hogga"></div>
+      </div>
+    </section>
+
+    <!-- Preguntas frecuentes (variantes de búsqueda + rich snippet) -->
+    <section class="section">
+      <div class="container" style="max-width: 720px;">
+        <h2 class="mb-6 text-center">Preguntas frecuentes</h2>
+        <div style="display:flex; flex-direction:column; gap: var(--space-4);">
+          <div class="card">
+            <h3 style="margin-bottom: var(--space-2);">¿Qué farmacias tienen descuento en Puerto Varas?</h3>
+            <p class="text-muted">Con Club Hogga accedes a descuentos en farmacias independientes de Puerto Varas. Los
+              socios ahorran en medicamentos y otros productos de cuidado, y sumamos nuevos comercios cada semana.</p>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: var(--space-2);">¿Cómo consigo descuentos en medicamentos en Puerto Varas?</h3>
+            <p class="text-muted">Hazte socio de Club Hogga y, al pagar en la farmacia asociada, solo dictas tu RUT.
+              Confirman que eres socio activo y aplican el descuento al instante. Sin app, tarjeta ni cupón.</p>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: var(--space-2);">¿Cuánto cuesta la membresía?</h3>
+            <p class="text-muted">La membresía parte desde $2.990 al mes (plan anual) o $3.990 al mes en el plan mensual.
+              Con el ahorro en medicamentos y en el resto de comercios de la red, la membresía se paga sola.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contenido de apoyo (claridad + SEO) -->
+    <section class="section">
+      <div class="container" style="max-width: 720px;">
+        <h2 class="mb-4">Cómo funcionan los descuentos en farmacias</h2>
+        <p class="text-muted mb-4">Club Hogga es la membresía de descuentos locales de Puerto Varas. Al pagar en una
+          farmacia asociada, solo dictas tu RUT: confirman que eres socio activo y aplican el descuento en el momento.
+          No necesitas app, tarjeta ni cupón.</p>
+        <p class="text-muted mb-4">Además de farmacias, tu membresía sirve en salud, gastronomía, deporte y más, así que
+          el ahorro se acumula en todo lo que haces en tu ciudad.</p>
+
+        <div class="text-center mt-8">
+          <a href="/hazte-socio/" class="btn btn-accent" style="font-size: 1.1rem; padding: 0.85rem 1.75rem;">Activar mi
+            membresía</a>
+          <p class="text-muted mt-2" style="font-size: 0.9rem;">Activo en minutos · Sin contratos · Cancelas cuando
+            quieras</p>
+          <p class="mt-4" style="font-size: 0.95rem;">
+            <a href="/descuentos/" class="text-primary font-bold">Ver todas las categorías de descuentos &rarr;</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/ciudad-benefits.js"></script>
+  <script defer src="/js/savings-calculator.js"></script>
+  <script defer src="/js/layout.js"></script>
+</body>
+
+</html>

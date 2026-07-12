@@ -6,6 +6,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const regionSelect = document.getElementById('region');
   const comunaSelect = document.getElementById('comuna');
 
+  // --- Selector de planes (Mensual / Semestral / Anual) ---
+  const PLAN_INFO = {
+    monthly:  { label: 'Mensual',   summary: 'Plan Mensual — $3.990/mes, se cobra $3.990 cada mes.' },
+    semester: { label: 'Semestral', summary: 'Plan Semestral — $3.490/mes, se cobra $20.940 cada 6 meses.' },
+    annual:   { label: 'Anual',     summary: 'Plan Anual — $2.990/mes (3 meses gratis), se cobra $35.880 cada 12 meses.' }
+  };
+
+  const planInputs = document.querySelectorAll('input[name="plan"]');
+  const planSummary = document.getElementById('plan-summary');
+
+  function getSelectedPlan() {
+    const checked = document.querySelector('input[name="plan"]:checked');
+    return checked ? checked.value : 'monthly';
+  }
+
+  function refreshPlanUI() {
+    const plan = getSelectedPlan();
+    // Marcar visualmente la tarjeta elegida (respaldo para navegadores sin :has())
+    document.querySelectorAll('.plan-card').forEach(card => {
+      const input = card.querySelector('input[name="plan"]');
+      card.classList.toggle('is-selected', !!input && input.checked);
+    });
+    if (planSummary && PLAN_INFO[plan]) {
+      planSummary.textContent = PLAN_INFO[plan].summary;
+    }
+  }
+
+  if (planInputs.length) {
+    planInputs.forEach(input => input.addEventListener('change', refreshPlanUI));
+    refreshPlanUI();
+  }
+
   // Populate Regions and Comunas if the element exists
   if (regionSelect && comunaSelect && typeof chileData !== 'undefined') {
     Object.keys(chileData).forEach(region => {
@@ -63,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
           region: document.getElementById('region').value,
           comuna: document.getElementById('comuna').value,
           marketing_opt_in: document.getElementById('marketing').checked,
+          plan: getSelectedPlan(),
           'cf-turnstile-response': document.querySelector('[name="cf-turnstile-response"]')?.value || ''
         };
 
