@@ -9,8 +9,17 @@ BASE_URL = "https://club.hogga.cl"
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 SITEMAP_PATH = os.path.join(ROOT_DIR, "sitemap.xml")
 
-# Directories and files to exclude from the sitemap
-EXCLUDE_DIRS = {'.git', 'partials', 'css', 'js', 'images', 'functions', 'exito', 'validacion', 'db-updates'}
+# Directories and files to exclude from the sitemap.
+# NOTE: any directory whose NAME matches is pruned at every level of the tree,
+# so 'node_modules' excludes nested node_modules anywhere.
+EXCLUDE_DIRS = {
+    '.git', 'partials', 'css', 'js', 'images', 'functions', 'exito', 'validacion', 'db-updates',
+    'node_modules',        # third-party packages (incl. their test .html files)
+    'babeclubadm',         # private admin panel — must never be indexed
+    'supabase-keepalive',  # internal Cloudflare Worker subproject
+    '.wrangler',           # Wrangler build/cache artifacts
+    'scratch',             # scratch/experimental files
+}
 EXCLUDE_FILES = {'404.html', 'og-image.html'}
 
 def generate_sitemap():
