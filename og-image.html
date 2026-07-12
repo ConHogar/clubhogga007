@@ -6,268 +6,172 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de OG Image | Club Hogga</title>
   <meta name="robots" content="noindex, nofollow">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       padding: 0;
-      background: #e2e8f0;
+      background: #05101a;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      overflow: hidden;
     }
 
-    p.instruction {
-      margin-bottom: 20px;
-      font-size: 18px;
-      color: #334155;
-      font-weight: 500;
-    }
-
-    /* Exact 1200x630 container for perfect OG Image ratio */
+    /* Exact 1200x630 for perfect OG ratio */
     .og-container {
       width: 1200px;
       height: 630px;
-      background: linear-gradient(135deg, #0a2e46 0%, #104263 100%);
+      background: radial-gradient(circle at 78% 18%, #0e2c44 0%, #05101a 62%);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      display: flex;
-    }
-
-    /* Abstract background shapes */
-    .shape-1 {
-      position: absolute;
-      width: 800px;
-      height: 800px;
-      background: #108f8e;
-      border-radius: 50%;
-      top: -200px;
-      right: -100px;
-      opacity: 0.15;
-      filter: blur(80px);
-    }
-
-    .shape-2 {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: #f6be32;
-      border-radius: 50%;
-      bottom: -300px;
-      left: -200px;
-      opacity: 0.15;
-      filter: blur(60px);
-    }
-
-    .content-main {
-      flex: 1.15;
-      padding: 80px 80px 80px 90px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-      z-index: 10;
-    }
-
-    .pre-title {
-      font-size: 25px;
-      color: #94a3b8;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: -15px;
-    }
-
-    .title-mega {
-      font-size: 155px;
-      font-weight: 900;
-      color: #f6be32;
-      /* Amarillo para máximo contraste y foco */
-      line-height: 1;
-      letter-spacing: -6px;
-      margin: 0 0 5px;
-    }
-
-    .title-mega span {
-      font-size: 75px;
-      color: #ffffff;
-      letter-spacing: -2px;
-      vertical-align: super;
-      margin-left: 5px;
-    }
-
-    .subtitle-mega {
-      font-size: 60px;
-      color: #ffffff;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      margin: 0 0 15px;
-    }
-
-    .third-title {
-      font-size: 32px;
-      color: #a5c3d8;
-      font-weight: 500;
-      margin: 0 0 60px;
-    }
-
-    .logo-bottom {
-      margin-top: auto;
       display: flex;
       align-items: center;
-      gap: 15px;
     }
 
-    .logo-bottom img {
-      height: 55px;
+    .glow { position: absolute; border-radius: 50%; pointer-events: none; }
+    .glow-1 { width: 560px; height: 560px; top: -170px; right: -120px;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.30) 0%, rgba(45, 212, 191, 0) 70%); filter: blur(40px); }
+    .glow-2 { width: 640px; height: 640px; bottom: -260px; left: -160px;
+      background: radial-gradient(circle, rgba(246, 190, 50, 0.13) 0%, rgba(246, 190, 50, 0) 70%); filter: blur(60px); }
+
+    /* Brand — top left */
+    .brand {
+      position: absolute; top: 50px; left: 80px;
+      display: flex; align-items: center; gap: 12px; z-index: 20;
+    }
+    .brand img { height: 50px; width: auto; }
+    .brand-name { font-size: 38px; font-weight: 800; color: #fff; letter-spacing: -1.5px; }
+    .brand-accent { color: #2dd4bf; }
+
+    /* Left: headline (the star) */
+    .content-main {
+      flex: 1.2;
+      padding: 0 30px 0 80px;
+      display: flex; flex-direction: column; justify-content: center;
+      height: 100%; position: relative; z-index: 10;
     }
 
-    .logo-bottom span {
-      font-size: 46px;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -1.5px;
+    .headline {
+      font-size: 64px; font-weight: 900; line-height: 1.05;
+      letter-spacing: -2.5px; margin: 0 0 18px 0; color: #ffffff;
+    }
+    .headline .highlight { color: #f6be32; }
+
+    .subtitle {
+      font-size: 23px; color: #b3c2d4; font-weight: 500;
+      margin: 0 0 28px 0; line-height: 1.4; max-width: 540px;
+    }
+    .subtitle b { color: #ffffff; font-weight: 700; }
+
+    /* Category pills — breadth = desire */
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; max-width: 540px; }
+    .pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(45, 212, 191, 0.32);
+      color: #e2e8f0; border-radius: 50px;
+      padding: 9px 17px; font-size: 16px; font-weight: 600;
+      display: flex; align-items: center; gap: 7px;
     }
 
-    .social-proof-divider {
-      width: 2px;
-      height: 45px;
-      background: rgba(255, 255, 255, 0.2);
-      margin: 0 15px;
+    /* Right: bold discount card */
+    .content-card-wrapper {
+      flex: 0.82;
+      display: flex; justify-content: center; align-items: center;
+      position: relative; z-index: 10; padding-right: 60px; height: 100%;
     }
 
-    .social-proof {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .member-card {
+      width: 372px;
+      background: linear-gradient(150deg, rgba(17, 44, 62, 0.95) 0%, rgba(6, 20, 31, 0.98) 100%);
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      border-radius: 28px;
+      padding: 36px 34px 32px;
+      box-shadow: 0 45px 90px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      transform: rotate(-2deg);
     }
 
-    .stars {
-      color: #f6be32;
-      font-size: 22px;
-      letter-spacing: 2px;
-      line-height: 1;
-      margin-bottom: 4px;
+    .card-tag {
+      font-size: 13px; font-weight: 800; color: #2dd4bf;
+      text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px;
     }
 
-    .proof-text {
-      color: #cbd5e1;
-      font-size: 16px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .mega-pct { display: flex; flex-direction: column; align-items: flex-start; }
+    .mega-pre { font-size: 21px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 4px; }
+    .mega-num { font-size: 94px; font-weight: 900; color: #f6be32; line-height: 0.92; letter-spacing: -4px; }
+    .mega-num .sym { font-size: 56px; }
+    .mega-suf { font-size: 21px; font-weight: 700; color: #ffffff; margin-top: 8px; }
+
+    .card-divider { height: 1px; background: rgba(255, 255, 255, 0.1); margin: 22px 0 18px; }
+
+    .card-hook { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+    .card-hook b { color: #2dd4bf; }
+
+    .rut-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(45, 212, 191, 0.12); color: #2dd4bf;
+      border: 1px solid rgba(45, 212, 191, 0.45);
+      padding: 8px 15px; border-radius: 10px;
+      font-size: 15px; font-weight: 800; letter-spacing: 0.5px;
     }
 
-    .content-cards {
-      flex: 0.85;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* Floating mockups/cards */
-    .mockup-card {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 32px;
-      padding: 35px 40px;
-      box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5);
-      width: 310px;
-    }
-
-    .card-1 {
-      top: 50px;
-      right: 70px;
-      transform: rotate(6deg);
-      z-index: 2;
-    }
-
-    .card-2 {
-      bottom: 60px;
-      right: 170px;
-      transform: rotate(-4deg);
-      z-index: 3;
-    }
-
-    .card-icon {
-      font-size: 65px;
-      margin-bottom: 12px;
-      line-height: 1;
-    }
-
-    .card-title {
-      font-size: 32px;
-      font-weight: 800;
-      color: #0a2e46;
-      margin: 0 0 5px;
-      letter-spacing: -1px;
-    }
-
-    .card-discount {
-      font-size: 55px;
-      font-weight: 900;
-      color: #108f8e;
-      /* Teal para variar del rojo chillón y dar seriedad */
-      margin: 0;
-      letter-spacing: -2px;
-    }
-
-    .card-label {
-      font-size: 26px;
-      color: #64748b;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-left: 5px;
+    /* Floating risk-reversal badge — the "why not, nothing to lose" cue */
+    .floating-badge {
+      position: absolute; top: 58px; right: 12px;
+      background: rgba(10, 27, 41, 0.96);
+      border: 1px solid rgba(45, 212, 191, 0.55);
+      border-radius: 14px; padding: 11px 17px;
+      font-size: 15px; font-weight: 700; color: #ffffff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      display: flex; align-items: center; gap: 8px; z-index: 20;
     }
   </style>
 </head>
 
 <body>
 
-  <p class="instruction">Haz una captura de pantalla EXACTA del rectángulo azul de abajo (1200x630 píxeles).</p>
-
   <div class="og-container">
-    <div class="shape-1"></div>
-    <div class="shape-2"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
+    <!-- Brand -->
+    <div class="brand">
+      <img src="https://club.hogga.cl/images/logo.png" alt="Club Hogga" onerror="this.src='images/logo.png'">
+      <span class="brand-name"><span class="brand-accent">Club</span>hogga</span>
+    </div>
+
+    <!-- Risk-reversal badge -->
+    <div class="floating-badge"><span>🛡️</span> Garantía primer mes</div>
+
+    <!-- LEFT: the hook -->
     <div class="content-main">
-      <!-- Huge Hook UI/UX -->
-      <div class="pre-title">Hasta</div>
-      <h1 class="title-mega">25% <span>DSCTO</span></h1>
-      <h2 class="subtitle-mega">en tu ciudad.</h2>
-      <p class="third-title">en servicios, comida y más.</p>
-
-      <!-- Trust Factor Bottom -->
-      <div class="logo-bottom">
-        <img src="/images/logo.png" alt="Club Hogga Logo" onerror="this.src='https://club.hogga.cl/images/logo.png'">
-        <span>Clubhogga</span>
-        <div class="social-proof-divider"></div>
-        <div class="social-proof">
-          <div class="stars">★★★★★</div>
-          <div class="proof-text">La red local</div>
-        </div>
+      <h1 class="headline">Igual ibas a gastar.<br><span class="highlight">Ahora pagas menos.</span></h1>
+      <p class="subtitle">Descuentos en <b>+30 comercios</b> de Puerto Varas, Llanquihue y Frutillar. Sin app.</p>
+      <div class="pills">
+        <span class="pill">🍽️ Gastronomía</span>
+        <span class="pill">🏥 Salud</span>
+        <span class="pill">⚡ Deporte</span>
+        <span class="pill">🐾 Mascotas</span>
       </div>
     </div>
 
-    <!-- Right Side Cards -->
-    <div class="content-cards">
-      <!-- Card 1 -->
-      <div class="mockup-card card-1">
-        <div class="card-icon">🍔</div>
-        <h3 class="card-title">Gastronomía</h3>
-        <p class="card-discount">20% <span class="card-label">OFF</span></p>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="mockup-card card-2">
-        <div class="card-icon">💇‍♀️</div>
-        <h3 class="card-title">Estética</h3>
-        <p class="card-discount">25% <span class="card-label">OFF</span></p>
+    <!-- RIGHT: bold graphic -->
+    <div class="content-card-wrapper">
+      <div class="member-card">
+        <div class="card-tag">Beneficio socio</div>
+        <div class="mega-pct">
+          <span class="mega-pre">hasta</span>
+          <span class="mega-num">50<span class="sym">%</span></span>
+          <span class="mega-suf">de descuento</span>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card-hook">✓ Se paga sola con <b>una salida</b></div>
+        <span class="rut-chip">🔒 SOLO TU RUT</span>
       </div>
     </div>
   </div>
